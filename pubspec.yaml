@@ -23,6 +23,7 @@ dependencies:
   flutter_riverpod: ^3.0.3
   riverpod_annotation: ^3.0.3
   formz: ^0.8.0
+  animate_do: ^4.2.0
 
 dev_dependencies:
   flutter_test:

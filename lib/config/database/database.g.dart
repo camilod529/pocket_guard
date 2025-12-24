@@ -300,14 +300,14 @@ class $CategoriesTable extends Categories
         requiredDuringInsert: true,
       ).withConverter<CategoryOrigin>($CategoriesTable.$converterorigin);
   @override
-  late final GeneratedColumnWithTypeConverter<CategoryType, String> type =
+  late final GeneratedColumnWithTypeConverter<TransactionType, String> type =
       GeneratedColumn<String>(
         'type',
         aliasedName,
         false,
         type: DriftSqlType.string,
         requiredDuringInsert: true,
-      ).withConverter<CategoryType>($CategoriesTable.$convertertype);
+      ).withConverter<TransactionType>($CategoriesTable.$convertertype);
   @override
   List<GeneratedColumn> get $columns => [id, label, nameKey, origin, type];
   @override
@@ -382,7 +382,7 @@ class $CategoriesTable extends Categories
 
   static TypeConverter<CategoryOrigin, String> $converterorigin =
       CategoryOriginConverter();
-  static TypeConverter<CategoryType, String> $convertertype =
+  static TypeConverter<TransactionType, String> $convertertype =
       CategoryTypeConverter();
 }
 
@@ -391,7 +391,7 @@ class Category extends DataClass implements Insertable<Category> {
   final String label;
   final String? nameKey;
   final CategoryOrigin origin;
-  final CategoryType type;
+  final TransactionType type;
   const Category({
     required this.id,
     required this.label,
@@ -442,7 +442,7 @@ class Category extends DataClass implements Insertable<Category> {
       label: serializer.fromJson<String>(json['label']),
       nameKey: serializer.fromJson<String?>(json['nameKey']),
       origin: serializer.fromJson<CategoryOrigin>(json['origin']),
-      type: serializer.fromJson<CategoryType>(json['type']),
+      type: serializer.fromJson<TransactionType>(json['type']),
     );
   }
   @override
@@ -453,7 +453,7 @@ class Category extends DataClass implements Insertable<Category> {
       'label': serializer.toJson<String>(label),
       'nameKey': serializer.toJson<String?>(nameKey),
       'origin': serializer.toJson<CategoryOrigin>(origin),
-      'type': serializer.toJson<CategoryType>(type),
+      'type': serializer.toJson<TransactionType>(type),
     };
   }
 
@@ -462,7 +462,7 @@ class Category extends DataClass implements Insertable<Category> {
     String? label,
     Value<String?> nameKey = const Value.absent(),
     CategoryOrigin? origin,
-    CategoryType? type,
+    TransactionType? type,
   }) => Category(
     id: id ?? this.id,
     label: label ?? this.label,
@@ -510,7 +510,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
   final Value<String> label;
   final Value<String?> nameKey;
   final Value<CategoryOrigin> origin;
-  final Value<CategoryType> type;
+  final Value<TransactionType> type;
   final Value<int> rowid;
   const CategoriesCompanion({
     this.id = const Value.absent(),
@@ -525,7 +525,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     required String label,
     this.nameKey = const Value.absent(),
     required CategoryOrigin origin,
-    required CategoryType type,
+    required TransactionType type,
     this.rowid = const Value.absent(),
   }) : label = Value(label),
        origin = Value(origin),
@@ -553,7 +553,7 @@ class CategoriesCompanion extends UpdateCompanion<Category> {
     Value<String>? label,
     Value<String?>? nameKey,
     Value<CategoryOrigin>? origin,
-    Value<CategoryType>? type,
+    Value<TransactionType>? type,
     Value<int>? rowid,
   }) {
     return CategoriesCompanion(
@@ -1316,7 +1316,7 @@ typedef $$CategoriesTableCreateCompanionBuilder =
       required String label,
       Value<String?> nameKey,
       required CategoryOrigin origin,
-      required CategoryType type,
+      required TransactionType type,
       Value<int> rowid,
     });
 typedef $$CategoriesTableUpdateCompanionBuilder =
@@ -1325,7 +1325,7 @@ typedef $$CategoriesTableUpdateCompanionBuilder =
       Value<String> label,
       Value<String?> nameKey,
       Value<CategoryOrigin> origin,
-      Value<CategoryType> type,
+      Value<TransactionType> type,
       Value<int> rowid,
     });
 
@@ -1385,11 +1385,11 @@ class $$CategoriesTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<CategoryType, CategoryType, String> get type =>
-      $composableBuilder(
-        column: $table.type,
-        builder: (column) => ColumnWithTypeConverterFilters(column),
-      );
+  ColumnWithTypeConverterFilters<TransactionType, TransactionType, String>
+  get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
 
   Expression<bool> transactionsRefs(
     Expression<bool> Function($$TransactionsTableFilterComposer f) f,
@@ -1473,7 +1473,7 @@ class $$CategoriesTableAnnotationComposer
   GeneratedColumnWithTypeConverter<CategoryOrigin, String> get origin =>
       $composableBuilder(column: $table.origin, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<CategoryType, String> get type =>
+  GeneratedColumnWithTypeConverter<TransactionType, String> get type =>
       $composableBuilder(column: $table.type, builder: (column) => column);
 
   Expression<T> transactionsRefs<T extends Object>(
@@ -1534,7 +1534,7 @@ class $$CategoriesTableTableManager
                 Value<String> label = const Value.absent(),
                 Value<String?> nameKey = const Value.absent(),
                 Value<CategoryOrigin> origin = const Value.absent(),
-                Value<CategoryType> type = const Value.absent(),
+                Value<TransactionType> type = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => CategoriesCompanion(
                 id: id,
@@ -1550,7 +1550,7 @@ class $$CategoriesTableTableManager
                 required String label,
                 Value<String?> nameKey = const Value.absent(),
                 required CategoryOrigin origin,
-                required CategoryType type,
+                required TransactionType type,
                 Value<int> rowid = const Value.absent(),
               }) => CategoriesCompanion.insert(
                 id: id,

@@ -1,41 +1,67 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:money_manager_flutter/domain/entities/category.dart';
+import 'package:money_manager_flutter/domain/entities/transaction.dart';
+import 'package:money_manager_flutter/presentation/providers/category/categories_provider.dart';
+import 'package:money_manager_flutter/presentation/providers/selected_date_range_provider.dart';
+import 'package:money_manager_flutter/presentation/providers/transaction/transactions_provider.dart';
 
-class CalendarView extends StatefulWidget {
+class CalendarView extends ConsumerStatefulWidget {
   const CalendarView({super.key});
 
   @override
-  State<CalendarView> createState() => _CalendarViewState();
+  ConsumerState<CalendarView> createState() => _CalendarViewState();
 }
 
-class _CalendarViewState extends State<CalendarView> {
-  DateTime _selectedMonth = DateTime.now();
+class _CalendarViewState extends ConsumerState<CalendarView> {
+  DateTime _selectedDay = DateTime.now();
+  // Key to trigger animation on day selection
+  Key _selectedDayKey = UniqueKey();
 
   @override
   Widget build(BuildContext context) {
+    final dateRange = ref.watch(selectedDateRangeProvider);
+    final transactionsAsync = ref.watch(transactionsProvider);
+    final categoriesAsync = ref.watch(categoriesProvider);
+
     return Scaffold(
-      appBar: _buildCustomAppBar(),
+      appBar: _buildCustomAppBar(dateRange),
       body: Column(
         children: [
-          _buildMonthCalendar(),
+          _buildMonthCalendar(transactionsAsync),
           const Divider(height: 1),
-          Expanded(child: _buildTransactionsList()),
+          Expanded(
+            child: _buildTransactionsList(transactionsAsync, categoriesAsync),
+          ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // TODO: Navigate to create transaction
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
 
-  Widget _buildCalendarGrid() {
-    final firstDayOfMonth = DateTime(
-      _selectedMonth.year,
-      _selectedMonth.month,
-      1,
-    );
-    final lastDayOfMonth = DateTime(
-      _selectedMonth.year,
-      _selectedMonth.month + 1,
-      0,
-    );
+  @override
+  void initState() {
+    super.initState();
+    // Set initial month view
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final now = DateTime.now();
+      ref
+          .read(selectedDateRangeProvider.notifier)
+          .selectMonth(now.year, now.month);
+    });
+  }
+
+  Widget _buildCalendarGrid(List<TransactionEntity> transactions) {
+    final dateRange = ref.read(selectedDateRangeProvider);
+    final firstDayOfMonth = dateRange.start;
+    final lastDayOfMonth = dateRange.end;
 
     // Get the weekday of the first day (1 = Monday, 7 = Sunday)
     int firstWeekday = firstDayOfMonth.weekday;
@@ -49,6 +75,13 @@ class _CalendarViewState extends State<CalendarView> {
     final rows = (totalCells / 7).ceil();
 
     final today = DateTime.now();
+
+    // Group transactions by day
+    final transactionsByDay = <int, List<TransactionEntity>>{};
+    for (final transaction in transactions) {
+      final day = transaction.date.day;
+      transactionsByDay.putIfAbsent(day, () => []).add(transaction);
+    }
 
     return Column(
       children: List.generate(rows, (weekIndex) {
@@ -64,8 +97,8 @@ class _CalendarViewState extends State<CalendarView> {
             }
 
             final cellDate = DateTime(
-              _selectedMonth.year,
-              _selectedMonth.month,
+              firstDayOfMonth.year,
+              firstDayOfMonth.month,
               dayNumber,
             );
             final isToday =
@@ -73,14 +106,28 @@ class _CalendarViewState extends State<CalendarView> {
                 cellDate.month == today.month &&
                 cellDate.day == today.day;
 
-            // Placeholder: Check if day has transactions
-            final hasTransactions = dayNumber % 3 == 0; // Mock data
+            final isSelected =
+                cellDate.year == _selectedDay.year &&
+                cellDate.month == _selectedDay.month &&
+                cellDate.day == _selectedDay.day;
+
+            final hasTransactions = transactionsByDay.containsKey(dayNumber);
 
             return Expanded(
-              child: _buildDayCell(
-                dayNumber: dayNumber,
-                isToday: isToday,
-                hasTransactions: hasTransactions,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedDay = cellDate;
+                    _selectedDayKey = UniqueKey(); // Trigger animation
+                  });
+                },
+                child: _buildDayCell(
+                  key: isSelected ? _selectedDayKey : null,
+                  dayNumber: dayNumber,
+                  isToday: isToday,
+                  isSelected: isSelected,
+                  hasTransactions: hasTransactions,
+                ),
               ),
             );
           }),
@@ -89,11 +136,11 @@ class _CalendarViewState extends State<CalendarView> {
     );
   }
 
-  PreferredSizeWidget _buildCustomAppBar() {
-    final monthYear = DateFormat.yMMMM().format(_selectedMonth);
+  PreferredSizeWidget _buildCustomAppBar(DateRangeSelection dateRange) {
+    final monthYear = DateFormat.yMMMM().format(dateRange.start);
     final isCurrentMonth =
-        _selectedMonth.year == DateTime.now().year &&
-        _selectedMonth.month == DateTime.now().month;
+        dateRange.start.year == DateTime.now().year &&
+        dateRange.start.month == DateTime.now().month;
 
     return AppBar(
       title: Text(monthYear),
@@ -120,17 +167,32 @@ class _CalendarViewState extends State<CalendarView> {
   }
 
   Widget _buildDayCell({
+    Key? key,
     required int dayNumber,
     required bool isToday,
+    required bool isSelected,
     required bool hasTransactions,
   }) {
     final colors = Theme.of(context).colorScheme;
-    return Container(
+
+    Color? backgroundColor;
+    Color? textColor;
+
+    if (isSelected) {
+      backgroundColor = colors.primary;
+      textColor = colors.onPrimary;
+    } else if (isToday) {
+      backgroundColor = colors.primaryContainer;
+      textColor = colors.onPrimaryContainer;
+    }
+
+    final cell = Container(
       height: 48,
       margin: const EdgeInsets.all(2),
       decoration: BoxDecoration(
-        color: isToday ? colors.primaryContainer : null,
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(8),
+        border: isSelected ? Border.all(color: colors.primary, width: 2) : null,
       ),
       child: Stack(
         children: [
@@ -138,10 +200,10 @@ class _CalendarViewState extends State<CalendarView> {
             child: Text(
               '$dayNumber',
               style: TextStyle(
-                fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
-                color: isToday
-                    ? Theme.of(context).colorScheme.onPrimaryContainer
-                    : null,
+                fontWeight: isToday || isSelected
+                    ? FontWeight.bold
+                    : FontWeight.normal,
+                color: textColor,
               ),
             ),
           ),
@@ -155,7 +217,7 @@ class _CalendarViewState extends State<CalendarView> {
                   width: 4,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
+                    color: isSelected ? colors.onPrimary : colors.primary,
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -164,114 +226,168 @@ class _CalendarViewState extends State<CalendarView> {
         ],
       ),
     );
+
+    // Animate only when selected
+    if (isSelected && key != null) {
+      return FadeIn(
+        key: key,
+        duration: const Duration(milliseconds: 250),
+        child: cell,
+      );
+    }
+
+    return cell;
   }
 
-  Widget _buildMonthCalendar() {
+  Widget _buildMonthCalendar(
+    AsyncValue<List<TransactionEntity>> transactionsAsync,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           _buildWeekdayHeaders(),
           const SizedBox(height: 8),
-          _buildCalendarGrid(),
+          transactionsAsync.when(
+            data: (transactions) => _buildCalendarGrid(transactions),
+            loading: () => const SizedBox(
+              height: 300,
+              child: Center(child: CircularProgressIndicator()),
+            ),
+            error: (error, stack) => SizedBox(
+              height: 300,
+              child: Center(child: Text('Error loading calendar: $error')),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildTransactionItem(Map<String, dynamic> transaction) {
-    final type = transaction['type'] as String;
-    final amount = transaction['amount'] as double;
-    final description = transaction['description'] as String;
-    final date = transaction['date'] as DateTime;
-    final category = transaction['category'] as String;
+  Widget _buildTransactionItem(
+    TransactionEntity transaction,
+    CategoryEntity? category,
+  ) {
     final colors = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    // Determine transaction type from amount or category
+    final TransactionType type =
+        category?.type ??
+        (transaction.amount > 0
+            ? TransactionType.income
+            : TransactionType.expense);
 
     IconData icon;
-    Color iconColor = colors.onSurface;
+    Color iconColor;
     String amountPrefix;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final income = isDark ? Colors.green.shade300 : Colors.green.shade700;
     final expense = isDark ? Colors.red.shade300 : Colors.red.shade700;
     final transfer = colors.tertiary;
 
     switch (type) {
-      case 'in':
+      case TransactionType.income:
         icon = Icons.arrow_downward;
         iconColor = income;
         amountPrefix = '+';
         break;
-      case 'out':
+      case TransactionType.expense:
         icon = Icons.arrow_upward;
         iconColor = expense;
         amountPrefix = '-';
         break;
-      case 'transfer':
+      case TransactionType.transfer:
         icon = Icons.swap_horiz;
         iconColor = transfer;
         amountPrefix = '';
         break;
-      default:
-        icon = Icons.help_outline;
-        iconColor = Colors.grey;
-        amountPrefix = '';
     }
+
+    final displayAmount = transaction.amount.abs();
 
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: iconColor.withAlpha(30),
         child: Icon(icon, color: iconColor, size: 20),
       ),
-      title: Text(description),
-      subtitle: Text('${DateFormat.MMMd().format(date)} • $category'),
+      title: Text(transaction.description ?? 'No description'),
+      subtitle: Text(
+        '${DateFormat.jm().format(transaction.date)} • ${category?.label ?? 'Unknown'}',
+      ),
       trailing: Text(
-        '$amountPrefix\$${amount.toStringAsFixed(2)}',
+        '$amountPrefix\$${displayAmount.toStringAsFixed(2)}',
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 16,
-          color: type == 'out'
-              ? Colors.red
-              : (type == 'in' ? Colors.green : null),
+          color: type == TransactionType.expense
+              ? expense
+              : (type == TransactionType.income ? income : null),
         ),
       ),
       onTap: () {
-        // TODO: Navigate to transaction detail
+        // TODO: Navigate to transaction detail/edit
+        // context.push('/transactions/${transaction.id}');
       },
     );
   }
 
-  Widget _buildTransactionsList() {
-    // Placeholder transaction data
-    final transactions = _generatePlaceholderTransactions();
+  Widget _buildTransactionsList(
+    AsyncValue<List<TransactionEntity>> transactionsAsync,
+    AsyncValue<List<CategoryEntity>> categoriesAsync,
+  ) {
+    return transactionsAsync.when(
+      data: (allTransactions) {
+        // Filter transactions for selected day
+        final selectedDayTransactions = allTransactions.where((transaction) {
+          return transaction.date.year == _selectedDay.year &&
+              transaction.date.month == _selectedDay.month &&
+              transaction.date.day == _selectedDay.day;
+        }).toList()..sort((a, b) => b.date.compareTo(a.date));
 
-    if (transactions.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.receipt_long_outlined,
-              size: 64,
-              color: Colors.grey[400],
+        if (selectedDayTransactions.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.receipt_long_outlined,
+                  size: 64,
+                  color: Colors.grey[400],
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'No transactions on ${DateFormat.MMMd().format(_selectedDay)}',
+                  style: TextStyle(color: Colors.grey[600], fontSize: 16),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            Text(
-              'No transactions this month',
-              style: TextStyle(color: Colors.grey[600], fontSize: 16),
-            ),
-          ],
-        ),
-      );
-    }
+          );
+        }
 
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      itemCount: transactions.length,
-      itemBuilder: (context, index) {
-        final transaction = transactions[index];
-        return _buildTransactionItem(transaction);
+        return categoriesAsync.when(
+          data: (categories) {
+            // Create a map for quick category lookup
+            final categoryMap = {for (var cat in categories) cat.id: cat};
+
+            return ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              itemCount: selectedDayTransactions.length,
+              itemBuilder: (context, index) {
+                final transaction = selectedDayTransactions[index];
+                final category = categoryMap[transaction.categoryId];
+                return _buildTransactionItem(transaction, category);
+              },
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) =>
+              Center(child: Text('Error loading categories: $error')),
+        );
       },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) =>
+          Center(child: Text('Error loading transactions: $error')),
     );
   }
 
@@ -297,74 +413,54 @@ class _CalendarViewState extends State<CalendarView> {
     );
   }
 
-  List<Map<String, dynamic>> _generatePlaceholderTransactions() {
-    return List.generate(15, (index) {
-      final dayOffset = (index * 2) % 28 + 1;
-      final transactionDate = DateTime(
-        _selectedMonth.year,
-        _selectedMonth.month,
-        dayOffset,
-      );
-
-      final types = ['in', 'out', 'transfer'];
-      final type = types[index % 3];
-
-      final descriptions = {
-        'in': [
-          'Salary',
-          'Freelance payment',
-          'Gift',
-          'Refund',
-          'Investment return',
-        ],
-        'out': ['Groceries', 'Restaurant', 'Gas', 'Shopping', 'Utilities'],
-        'transfer': [
-          'Savings',
-          'Investment',
-          'Credit card payment',
-          'To checking',
-        ],
-      };
-
-      final categories = {
-        'in': ['Income', 'Work', 'Gift', 'Investment'],
-        'out': ['Food', 'Transport', 'Shopping', 'Bills'],
-        'transfer': ['Savings', 'Investment', 'Credit'],
-      };
-
-      final amounts = {
-        'in': [1500.00, 2500.00, 500.00, 150.00, 3000.00],
-        'out': [45.50, 125.00, 60.75, 200.00, 150.25],
-        'transfer': [500.00, 1000.00, 300.00, 750.00],
-      };
-
-      return {
-        'type': type,
-        'amount': amounts[type]![index % amounts[type]!.length],
-        'description': descriptions[type]![index % descriptions[type]!.length],
-        'date': transactionDate,
-        'category': categories[type]![index % categories[type]!.length],
-      };
-    })..sort(
-      (a, b) => (b['date'] as DateTime).compareTo(a['date'] as DateTime),
-    );
-  }
-
   void _goToToday() {
+    final now = DateTime.now();
     setState(() {
-      _selectedMonth = DateTime.now();
+      _selectedDay = now;
+      _selectedDayKey = UniqueKey(); // Trigger animation
     });
+    ref
+        .read(selectedDateRangeProvider.notifier)
+        .selectMonth(now.year, now.month);
   }
 
   void _nextMonth() {
+    final dateRange = ref.read(selectedDateRangeProvider);
+    final nextMonth = DateTime(dateRange.start.year, dateRange.start.month + 1);
+    final now = DateTime.now();
+
     setState(() {
-      _selectedMonth = DateTime(_selectedMonth.year, _selectedMonth.month + 1);
+      // If navigating to current month, select current day
+      if (nextMonth.year == now.year && nextMonth.month == now.month) {
+        _selectedDay = now;
+      } else {
+        _selectedDay = DateTime(nextMonth.year, nextMonth.month, 1);
+      }
+      _selectedDayKey = UniqueKey(); // Trigger animation
     });
+
+    ref
+        .read(selectedDateRangeProvider.notifier)
+        .selectMonth(nextMonth.year, nextMonth.month);
   }
 
   void _previousMonth() {
+    final dateRange = ref.read(selectedDateRangeProvider);
+    final prevMonth = DateTime(dateRange.start.year, dateRange.start.month - 1);
+    final now = DateTime.now();
+
     setState(() {
-      _selectedMonth = DateTime(_selectedMonth.year, _selectedMonth.month - 1);
+      // If navigating to current month, select current day
+      if (prevMonth.year == now.year && prevMonth.month == now.month) {
+        _selectedDay = now;
+      } else {
+        _selectedDay = DateTime(prevMonth.year, prevMonth.month, 1);
+      }
+      _selectedDayKey = UniqueKey(); // Trigger animation
     });
+
+    ref
+        .read(selectedDateRangeProvider.notifier)
+        .selectMonth(prevMonth.year, prevMonth.month);
   }
 }

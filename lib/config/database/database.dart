@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
+import 'package:money_manager_flutter/domain/entities/category.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -43,37 +44,37 @@ class AppDatabase extends _$AppDatabase {
       CategoriesCompanion.insert(
         nameKey: Value('category_income_salary'),
         label: 'Salary',
-        type: CategoryType.income,
+        type: TransactionType.income,
         origin: CategoryOrigin.system,
       ),
       CategoriesCompanion.insert(
         nameKey: Value('category_income_freelance'),
         label: 'Freelance',
-        type: CategoryType.income,
+        type: TransactionType.income,
         origin: CategoryOrigin.system,
       ),
       CategoriesCompanion.insert(
         nameKey: Value('category_expense_food_dining'),
         label: 'Food & Dining',
-        type: CategoryType.expense,
+        type: TransactionType.expense,
         origin: CategoryOrigin.system,
       ),
       CategoriesCompanion.insert(
         nameKey: Value('category_expense_transportation'),
         label: 'Transportation',
-        type: CategoryType.expense,
+        type: TransactionType.expense,
         origin: CategoryOrigin.system,
       ),
       CategoriesCompanion.insert(
         nameKey: Value('category_expense_rent'),
         label: 'Rent',
-        type: CategoryType.expense,
+        type: TransactionType.expense,
         origin: CategoryOrigin.system,
       ),
       CategoriesCompanion.insert(
         nameKey: Value('category_transfer'),
         label: 'Transfer',
-        type: CategoryType.transfer,
+        type: TransactionType.transfer,
         origin: CategoryOrigin.system,
       ),
     ];
@@ -105,6 +106,8 @@ class Categories extends Table {
   TextColumn get type => text().map(CategoryTypeConverter())();
 }
 
+// Define enums for type safety
+
 enum CategoryOrigin { system, user }
 
 class CategoryOriginConverter extends TypeConverter<CategoryOrigin, String> {
@@ -118,21 +121,18 @@ class CategoryOriginConverter extends TypeConverter<CategoryOrigin, String> {
   String toSql(CategoryOrigin value) => value.name;
 }
 
-// Define enums for type safety
-enum CategoryType { income, expense, transfer }
-
 // Converters for enums
-class CategoryTypeConverter extends TypeConverter<CategoryType, String> {
+class CategoryTypeConverter extends TypeConverter<TransactionType, String> {
   @override
-  CategoryType fromSql(String fromDb) {
-    return CategoryType.values.firstWhere(
+  TransactionType fromSql(String fromDb) {
+    return TransactionType.values.firstWhere(
       (e) => e.name == fromDb,
-      orElse: () => CategoryType.expense,
+      orElse: () => TransactionType.expense,
     );
   }
 
   @override
-  String toSql(CategoryType value) {
+  String toSql(TransactionType value) {
     return value.name;
   }
 }
