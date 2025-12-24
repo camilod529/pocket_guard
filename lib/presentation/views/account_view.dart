@@ -5,6 +5,7 @@ import 'package:money_manager_flutter/config/router/routes.dart';
 import 'package:money_manager_flutter/domain/entities/account.dart';
 import 'package:money_manager_flutter/l10n/app_localizations.dart';
 import 'package:money_manager_flutter/presentation/providers/account/accounts_provider.dart';
+import 'package:money_manager_flutter/utils/constants/global_constants.dart';
 
 class AccountView extends ConsumerWidget {
   const AccountView({super.key});
@@ -119,7 +120,7 @@ class AccountView extends ConsumerWidget {
           icon: const Icon(Icons.add),
           onPressed: () {
             // Navigate to create account screen
-            context.push(Routes.accountFormPage('create'));
+            context.push(Routes.accountFormPage(GlobalConstants.createId));
           },
           tooltip: localizations.accounts, // Reuse accounts as tooltip
         ),
@@ -150,7 +151,7 @@ class AccountView extends ConsumerWidget {
           ElevatedButton.icon(
             onPressed: () {
               // Navigate to create account screen
-              context.push(Routes.accountFormPage('create'));
+              context.push(Routes.accountFormPage(GlobalConstants.createId));
             },
             icon: const Icon(Icons.add),
             label: Text(localizations.accounts),

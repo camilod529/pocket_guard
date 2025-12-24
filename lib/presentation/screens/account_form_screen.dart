@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:money_manager_flutter/l10n/app_localizations.dart';
 import 'package:money_manager_flutter/presentation/providers/account/account_form_provider.dart';
 import 'package:money_manager_flutter/presentation/widgets/shared/forms/custom_form_field.dart';
+import 'package:money_manager_flutter/utils/constants/global_constants.dart';
 
 class AccountFormScreen extends ConsumerWidget {
   final String accountId; // "create" or real UUID
@@ -13,9 +14,8 @@ class AccountFormScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context)!;
-    final isCreating = accountId == 'create';
+    final isCreating = accountId == GlobalConstants.createId;
 
-    // Watch the form state - now using accountId as parameter
     final formStateAsync = ref.watch(accountFormProvider(accountId));
 
     return formStateAsync.when(
@@ -30,7 +30,7 @@ class AccountFormScreen extends ConsumerWidget {
                 onPressed: formState.isFormValid
                     ? () => _handleSubmit(context, ref)
                     : null,
-                child: Text(isCreating ? 'Create' : 'Update'),
+                child: Text(isCreating ? GlobalConstants.createId : 'Update'),
               ),
             ],
           ),
@@ -127,7 +127,7 @@ class AccountFormScreen extends ConsumerWidget {
         .onFormSubmit();
 
     if (success && context.mounted) {
-      final message = accountId == 'create'
+      final message = accountId == GlobalConstants.createId
           ? 'Account created successfully!'
           : 'Account updated successfully!';
 

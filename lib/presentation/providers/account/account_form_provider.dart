@@ -4,6 +4,7 @@ import 'package:money_manager_flutter/infrastructure/inputs/accounts/currency.da
 import 'package:money_manager_flutter/infrastructure/inputs/accounts/name.dart';
 import 'package:money_manager_flutter/presentation/providers/account/account_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/account/accounts_provider.dart';
+import 'package:money_manager_flutter/utils/constants/global_constants.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'account_form_provider.g.dart';
@@ -13,7 +14,7 @@ class AccountForm extends _$AccountForm {
   @override
   Future<AccountFormState> build(String accountId) async {
     // Load account data if editing
-    if (accountId != 'create') {
+    if (accountId != GlobalConstants.createId) {
       final account = await ref.watch(accountProvider(accountId).future);
 
       if (account != null) {
@@ -27,7 +28,7 @@ class AccountForm extends _$AccountForm {
     }
 
     // Return empty state for create mode
-    return const AccountFormState(id: 'create');
+    return const AccountFormState(id: GlobalConstants.createId);
   }
 
   void currencyChanged(String value) {
@@ -72,7 +73,7 @@ class AccountForm extends _$AccountForm {
         currency: validState.currency.value,
       );
 
-      final isEditing = validState.id != 'create';
+      final isEditing = validState.id != GlobalConstants.createId;
 
       if (isEditing) {
         await ref
@@ -113,7 +114,7 @@ class AccountFormState {
 
   const AccountFormState({
     this.isFormValid = false,
-    this.id = 'create',
+    this.id = GlobalConstants.createId,
     this.name = const AccountName.pure(),
     this.currency = const AccountCurrency.pure(),
   });
