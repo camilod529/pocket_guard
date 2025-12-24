@@ -25,14 +25,6 @@ class AccountFormScreen extends ConsumerWidget {
             title: Text(
               isCreating ? localizations.accountName : localizations.accounts,
             ),
-            actions: [
-              TextButton(
-                onPressed: formState.isFormValid
-                    ? () => _handleSubmit(context, ref)
-                    : null,
-                child: Text(isCreating ? GlobalConstants.createId : 'Update'),
-              ),
-            ],
           ),
           body: SafeArea(
             child: Padding(
@@ -44,11 +36,10 @@ class AccountFormScreen extends ConsumerWidget {
                     initialValue: formState.name.value,
                     label: localizations.accountName,
                     hintText: localizations.accountNameHint,
-                    errorText: formState.name.error != null
+                    errorText:
+                        formState.name.error != null && !formState.isFormPure
                         ? 'Name is required and must be 2-50 characters'
                         : null,
-                    showError:
-                        !formState.name.isPure && formState.name.error != null,
                     prefixIcon: const Icon(
                       Icons.account_balance_wallet_outlined,
                     ),
@@ -64,12 +55,11 @@ class AccountFormScreen extends ConsumerWidget {
                     initialValue: formState.currency.value,
                     label: localizations.accountCurrency,
                     hintText: localizations.accountCurrencyHint,
-                    errorText: formState.currency.error != null
+                    errorText:
+                        formState.currency.error != null &&
+                            !formState.isFormPure
                         ? 'Enter 3-letter currency code (USD, EUR, GBP)'
                         : null,
-                    showError:
-                        !formState.currency.isPure &&
-                        formState.currency.error != null,
                     prefixIcon: const Icon(Icons.currency_exchange_outlined),
                     keyboardType: TextInputType.text,
                     textCapitalization: TextCapitalization.characters,

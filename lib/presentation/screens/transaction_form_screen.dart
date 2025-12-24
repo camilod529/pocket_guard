@@ -44,159 +44,169 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
         return Scaffold(
           appBar: AppBar(
             title: Text(isCreating ? 'New Transaction' : 'Edit Transaction'),
-            actions: [
-              TextButton(
-                onPressed: formState.isFormValid
-                    ? () => _handleSubmit(context, ref)
-                    : null,
-                child: Text(
-                  isCreating ? 'Create' : 'Update',
-                  style: TextStyle(
-                    color: formState.isFormValid
-                        ? Theme.of(context).colorScheme.primary
-                        : Colors.grey,
-                  ),
-                ),
-              ),
-            ],
           ),
           body: SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // account Selector
-                  _buildAccountSelector(formState, accountsAsync),
-                  // Amount Field
-                  CustomFormField(
-                    initialValue: formState.amount.value,
-                    label: 'Amount',
-                    hintText: '0.00',
-                    errorText: formState.amount.error != null
-                        ? 'Amount must be greater than 0'
-                        : null,
-                    showError:
-                        !formState.amount.isPure &&
-                        formState.amount.error != null,
-                    prefixIcon: const Icon(Icons.attach_money),
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+\.?\d{0,2}'),
-                      ),
-                    ],
-                    onChanged: (value) {
-                      ref
-                          .read(
-                            transactionFormProvider(
-                              widget.transactionId,
-                            ).notifier,
-                          )
-                          .amountChanged(value);
-                    },
-                  ),
-                  const SizedBox(height: 16),
+              padding: MediaQuery.of(
+                context,
+              ).padding.copyWith(top: 0, bottom: 20),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height * 0.8,
+                ),
+                child: IntrinsicHeight(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // account Selector
+                        _buildAccountSelector(formState, accountsAsync),
+                        const SizedBox(height: 16),
 
-                  // Description Field
-                  CustomFormField(
-                    initialValue: formState.description.value,
-                    label: 'Description',
-                    hintText: 'Enter transaction description',
-                    errorText: formState.description.error != null
-                        ? 'Description is required (2-200 characters)'
-                        : null,
-                    showError:
-                        !formState.description.isPure &&
-                        formState.description.error != null,
-                    prefixIcon: const Icon(Icons.notes_outlined),
-                    keyboardType: TextInputType.text,
-                    maxLines: 2,
-                    onChanged: (value) {
-                      ref
-                          .read(
-                            transactionFormProvider(
-                              widget.transactionId,
-                            ).notifier,
-                          )
-                          .descriptionChanged(value);
-                    },
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Category Selector
-                  _buildCategorySelector(formState, categoriesAsync),
-                  const SizedBox(height: 16),
-
-                  // Date and Time Row
-                  Row(
-                    children: [
-                      // Date Picker
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () => _selectDate(context, formState.date),
-                          child: AbsorbPointer(
-                            child: CustomFormField(
-                              controller: _dateController,
-                              label: 'Date',
-                              hintText: 'Select date',
-                              prefixIcon: const Icon(Icons.calendar_today),
-                              readOnly: true,
-                              onChanged: (_) {},
+                        // Amount Field
+                        SizedBox(
+                          child: CustomFormField(
+                            initialValue: formState.amount.value,
+                            label: 'Amount',
+                            hintText: '0.00',
+                            errorText: formState.isFormPure
+                                ? null
+                                : formState.amountError,
+                            prefixIcon: const Icon(Icons.attach_money),
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
                             ),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                RegExp(r'^\d+\.?\d{0,2}'),
+                              ),
+                            ],
+                            onChanged: (value) {
+                              ref
+                                  .read(
+                                    transactionFormProvider(
+                                      widget.transactionId,
+                                    ).notifier,
+                                  )
+                                  .amountChanged(value);
+                            },
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      // Time Picker
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () => _selectTime(context, formState.date),
-                          child: AbsorbPointer(
-                            child: CustomFormField(
-                              controller: _timeController,
-                              label: 'Time',
-                              hintText: 'Select time',
-                              prefixIcon: const Icon(Icons.access_time),
-                              readOnly: true,
-                              onChanged: (_) {},
-                            ),
+                        const SizedBox(height: 16),
+
+                        // Description Field
+                        SizedBox(
+                          height: 100, // Fixed height for multi-line field
+                          child: CustomFormField(
+                            initialValue: formState.description.value,
+                            label: 'Description',
+                            hintText: 'Enter transaction description',
+                            errorText: formState.isFormPure
+                                ? null
+                                : formState.descriptionError,
+                            prefixIcon: const Icon(Icons.notes_outlined),
+                            keyboardType: TextInputType.text,
+                            maxLines: 2,
+                            onChanged: (value) {
+                              ref
+                                  .read(
+                                    transactionFormProvider(
+                                      widget.transactionId,
+                                    ).notifier,
+                                  )
+                                  .descriptionChanged(value);
+                            },
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
+                        const SizedBox(height: 16),
 
-                  // Transaction Type Selector
-                  _buildTransactionTypeSelector(formState),
-                  const SizedBox(height: 32),
+                        // Category Selector
+                        _buildCategorySelector(formState, categoriesAsync),
+                        const SizedBox(height: 16),
 
-                  // Submit Button
-                  ElevatedButton.icon(
-                    onPressed: formState.isFormValid
-                        ? () => _handleSubmit(context, ref)
-                        : null,
-                    icon: const Icon(Icons.save),
-                    label: Text(
-                      isCreating ? 'Create Transaction' : 'Update Transaction',
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                        // Date and Time Row
+                        Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () =>
+                                    _selectDate(context, formState.date),
+                                child: AbsorbPointer(
+                                  child: SizedBox(
+                                    height: 72,
+                                    child: CustomFormField(
+                                      controller: _dateController,
+                                      label: 'Date',
+                                      hintText: 'Select date',
+                                      prefixIcon: const Icon(
+                                        Icons.calendar_today,
+                                      ),
+                                      readOnly: true,
+                                      onChanged: (_) {},
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () =>
+                                    _selectTime(context, formState.date),
+                                child: AbsorbPointer(
+                                  child: SizedBox(
+                                    height: 72,
+                                    child: CustomFormField(
+                                      controller: _timeController,
+                                      label: 'Time',
+                                      hintText: 'Select time',
+                                      prefixIcon: const Icon(Icons.access_time),
+                                      readOnly: true,
+                                      onChanged: (_) {},
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+
+                        // Transaction Type Selector
+                        _buildTransactionTypeSelector(formState),
+                        const Spacer(), // Pushes button to bottom
+                        const SizedBox(height: 32),
+
+                        // Submit Button
+                        ElevatedButton.icon(
+                          onPressed:
+                              formState.isFormPure || formState.isFormValid
+                              ? () => _handleSubmit(context, ref)
+                              : null,
+                          icon: const Icon(Icons.save),
+                          label: Text(
+                            isCreating
+                                ? 'Create Transaction'
+                                : 'Update Transaction',
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
           ),
         );
       },
-      loading: () => Scaffold(
-        appBar: AppBar(title: const Text('Transaction')),
-        body: const Center(child: CircularProgressIndicator()),
-      ),
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (error, stack) => Scaffold(
         appBar: AppBar(title: const Text('Transaction')),
         body: Center(
@@ -205,7 +215,10 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
             children: [
               const Icon(Icons.error_outline, size: 48, color: Colors.red),
               const SizedBox(height: 16),
-              Text('Error loading transaction: $error'),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Text('Error loading transaction: $error'),
+              ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => context.pop(),
@@ -231,41 +244,64 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
   ) {
     return accountsAsync.when(
       data: (accounts) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Account',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(height: 8),
-            DropdownButtonFormField<String>(
-              initialValue: formState.accountId,
-              decoration: InputDecoration(
-                hintText: 'Select an account',
-                prefixIcon: const Icon(Icons.account_balance_wallet),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                filled: true,
+        return IntrinsicHeight(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'Account',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
-              items: accounts.map((account) {
-                return DropdownMenuItem(
-                  value: account.id,
-                  child: Text('${account.name} (${account.currency})'),
-                );
-              }).toList(),
-              onChanged: (value) {
-                if (value != null) {
-                  ref
-                      .read(
-                        transactionFormProvider(widget.transactionId).notifier,
-                      )
-                      .accountChanged(value);
-                }
-              },
-            ),
-          ],
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 72,
+                child: DropdownButtonFormField<String>(
+                  initialValue: formState.accountId,
+                  decoration: InputDecoration(
+                    hintText: 'Select an account',
+                    prefixIcon: const Icon(Icons.account_balance_wallet),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    filled: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 20,
+                    ),
+                  ),
+                  isExpanded: true,
+                  items: accounts.map((account) {
+                    return DropdownMenuItem(
+                      value: account.id,
+                      child: Text('${account.name} (${account.currency})'),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      ref
+                          .read(
+                            transactionFormProvider(
+                              widget.transactionId,
+                            ).notifier,
+                          )
+                          .accountChanged(value);
+                    }
+                  },
+                ),
+              ),
+              if (formState.accountId == null && !formState.isFormPure)
+                Padding(
+                  padding: const EdgeInsets.only(left: 12, top: 8),
+                  child: Text(
+                    'Please select an account',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+            ],
+          ),
         );
       },
       loading: () => const Column(
@@ -298,58 +334,70 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
           return cat.type == formState.type;
         }).toList();
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Category',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(height: 8),
-            DropdownButtonFormField<String>(
-              initialValue: formState.categoryId,
-              decoration: InputDecoration(
-                hintText: 'Select a category',
-                prefixIcon: Icon(_getCategoryIconByType(formState.type)),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                filled: true,
+        return IntrinsicHeight(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'Category',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
-              items: filteredCategories.map((category) {
-                return DropdownMenuItem(
-                  value: category.id,
-                  child: Row(
-                    children: [
-                      Icon(_getCategoryIconByType(category.type)),
-                      const SizedBox(width: 8),
-                      Text(category.label),
-                    ],
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 72,
+                child: DropdownButtonFormField<String>(
+                  initialValue: formState.categoryId,
+                  decoration: InputDecoration(
+                    hintText: 'Select a category',
+                    prefixIcon: Icon(_getCategoryIconByType(formState.type)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    filled: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 20,
+                    ),
                   ),
-                );
-              }).toList(),
-              onChanged: (value) {
-                if (value != null) {
-                  ref
-                      .read(
-                        transactionFormProvider(widget.transactionId).notifier,
-                      )
-                      .categoryChanged(value);
-                }
-              },
-            ),
-            if (formState.categoryId == null && !formState.isPure)
-              Padding(
-                padding: const EdgeInsets.only(left: 12, top: 8),
-                child: Text(
-                  'Please select a category',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.error,
-                    fontSize: 12,
-                  ),
+                  isExpanded: true,
+                  items: filteredCategories.map((category) {
+                    return DropdownMenuItem(
+                      value: category.id,
+                      child: Row(
+                        children: [
+                          Icon(_getCategoryIconByType(category.type)),
+                          const SizedBox(width: 8),
+                          Expanded(child: Text(category.label)),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      ref
+                          .read(
+                            transactionFormProvider(
+                              widget.transactionId,
+                            ).notifier,
+                          )
+                          .categoryChanged(value);
+                    }
+                  },
                 ),
               ),
-          ],
+              if (formState.categoryId == null && !formState.isFormPure)
+                Padding(
+                  padding: const EdgeInsets.only(left: 12, top: 8),
+                  child: Text(
+                    'Please select a category',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+            ],
+          ),
         );
       },
       loading: () => const Column(
@@ -371,45 +419,48 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
     );
   }
 
-  Widget _buildTransactionTypeSelector(dynamic formState) {
+  Widget _buildTransactionTypeSelector(TransactionFormState formState) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const Text(
           'Transaction Type',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 12),
-        SegmentedButton<TransactionType>(
-          segments: const [
-            ButtonSegment(
-              value: TransactionType.expense,
-              label: Text('Expense'),
-              icon: Icon(Icons.arrow_upward),
-            ),
-            ButtonSegment(
-              value: TransactionType.income,
-              label: Text('Income'),
-              icon: Icon(Icons.arrow_downward),
-            ),
-            ButtonSegment(
-              value: TransactionType.transfer,
-              label: Text('Transfer'),
-              icon: Icon(Icons.swap_horiz),
-            ),
-          ],
-          selected: {formState.type},
-          onSelectionChanged: (Set<TransactionType> newSelection) {
-            ref
-                .read(transactionFormProvider(widget.transactionId).notifier)
-                .typeChanged(newSelection.first);
-          },
+        SizedBox(
+          height: 56,
+          child: SegmentedButton<TransactionType>(
+            segments: const [
+              ButtonSegment(
+                value: TransactionType.expense,
+                label: Text('Expense'),
+                icon: Icon(Icons.arrow_upward),
+              ),
+              ButtonSegment(
+                value: TransactionType.income,
+                label: Text('Income'),
+                icon: Icon(Icons.arrow_downward),
+              ),
+              ButtonSegment(
+                value: TransactionType.transfer,
+                label: Text('Transfer'),
+                icon: Icon(Icons.swap_horiz),
+              ),
+            ],
+            selected: {formState.type},
+            onSelectionChanged: (Set<TransactionType> newSelection) {
+              ref
+                  .read(transactionFormProvider(widget.transactionId).notifier)
+                  .typeChanged(newSelection.first);
+            },
+          ),
         ),
       ],
     );
   }
 
-  dynamic _getCategoryIconByType(TransactionType type) {
+  IconData _getCategoryIconByType(TransactionType type) {
     switch (type) {
       case TransactionType.expense:
         return Icons.arrow_upward;
@@ -430,15 +481,19 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
           ? 'Transaction created successfully!'
           : 'Transaction updated successfully!';
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: Colors.green,
-          duration: const Duration(seconds: 2),
-        ),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
 
-      context.pop();
+      if (context.mounted) {
+        context.pop();
+      }
     } else if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -457,7 +512,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
       lastDate: DateTime(2101),
     );
 
-    if (picked != null) {
+    if (picked != null && mounted) {
       // Combine picked date with current time
       final newDateTime = DateTime(
         picked.year,
@@ -479,7 +534,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
       initialTime: TimeOfDay.fromDateTime(currentDate),
     );
 
-    if (picked != null) {
+    if (picked != null && mounted) {
       // Combine current date with picked time
       final newDateTime = DateTime(
         currentDate.year,

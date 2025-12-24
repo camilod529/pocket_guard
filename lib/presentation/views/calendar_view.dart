@@ -4,8 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:money_manager_flutter/config/router/routes.dart';
+import 'package:money_manager_flutter/domain/entities/account.dart';
 import 'package:money_manager_flutter/domain/entities/category.dart';
 import 'package:money_manager_flutter/domain/entities/transaction.dart';
+import 'package:money_manager_flutter/presentation/providers/account/accounts_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/category/categories_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/selected_date_range_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/transaction/transactions_provider.dart';
@@ -28,6 +30,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
     final dateRange = ref.watch(selectedDateRangeProvider);
     final transactionsAsync = ref.watch(transactionsProvider);
     final categoriesAsync = ref.watch(categoriesProvider);
+    final accountsAsync = ref.watch(accountsProvider);
 
     return Scaffold(
       appBar: _buildCustomAppBar(dateRange),
@@ -36,7 +39,11 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
           _buildMonthCalendar(transactionsAsync),
           const Divider(height: 1),
           Expanded(
-            child: _buildTransactionsList(transactionsAsync, categoriesAsync),
+            child: _buildTransactionsList(
+              transactionsAsync,
+              categoriesAsync,
+              accountsAsync,
+            ),
           ),
         ],
       ),
@@ -270,9 +277,11 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
   Widget _buildTransactionItem(
     TransactionEntity transaction,
     CategoryEntity? category,
+    AccountEntity? account,
   ) {
     final colors = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textTheme = Theme.of(context).textTheme;
 
     // Determine transaction type from amount or category
     final TransactionType type =
@@ -315,8 +324,22 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
         child: Icon(icon, color: iconColor, size: 20),
       ),
       title: Text(transaction.description ?? 'No description'),
-      subtitle: Text(
-        '${DateFormat.jm().format(transaction.date)} • ${category?.label ?? 'Unknown'}',
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${DateFormat.jm().format(transaction.date)} • ${category?.label ?? 'Unknown'}',
+            style: textTheme.bodyMedium?.copyWith(
+              color: colors.onSurfaceVariant,
+            ),
+          ),
+          Text(
+            account != null ? 'Account: ${account.name}' : 'No account info',
+            style: textTheme.bodySmall?.copyWith(
+              color: colors.onSurfaceVariant,
+            ),
+          ),
+        ],
       ),
       trailing: Text(
         '$amountPrefix\$${displayAmount.toStringAsFixed(2)}',
@@ -338,6 +361,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
   Widget _buildTransactionsList(
     AsyncValue<List<TransactionEntity>> transactionsAsync,
     AsyncValue<List<CategoryEntity>> categoriesAsync,
+    AsyncValue<List<AccountEntity>> accountsAsync,
   ) {
     return transactionsAsync.when(
       data: (allTransactions) {
@@ -373,14 +397,27 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
             // Create a map for quick category lookup
             final categoryMap = {for (var cat in categories) cat.id: cat};
 
-            return ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              itemCount: selectedDayTransactions.length,
-              itemBuilder: (context, index) {
-                final transaction = selectedDayTransactions[index];
-                final category = categoryMap[transaction.categoryId];
-                return _buildTransactionItem(transaction, category);
+            return accountsAsync.when(
+              data: (accounts) {
+                final accountMap = {for (var acc in accounts) acc.id: acc};
+                return ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  itemCount: selectedDayTransactions.length,
+                  itemBuilder: (context, index) {
+                    final transaction = selectedDayTransactions[index];
+                    final category = categoryMap[transaction.categoryId];
+                    final account = accountMap[transaction.accountId];
+                    return _buildTransactionItem(
+                      transaction,
+                      category,
+                      account,
+                    );
+                  },
+                );
               },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stack) =>
+                  Center(child: Text('Error loading accounts: $error')),
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),

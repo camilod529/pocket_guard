@@ -100,6 +100,7 @@ class AccountForm extends _$AccountForm {
       currentState.copyWith(
         name: name,
         currency: currency,
+        isFormPure: false,
         isFormValid: Formz.validate([name, currency]),
       ),
     );
@@ -111,9 +112,11 @@ class AccountFormState {
   final String id;
   final AccountName name;
   final AccountCurrency currency;
+  final bool isFormPure;
 
   const AccountFormState({
     this.isFormValid = false,
+    this.isFormPure = true,
     this.id = GlobalConstants.createId,
     this.name = const AccountName.pure(),
     this.currency = const AccountCurrency.pure(),
@@ -124,12 +127,14 @@ class AccountFormState {
     String? id,
     AccountName? name,
     AccountCurrency? currency,
+    bool? isFormPure,
   }) {
     return AccountFormState(
       isFormValid: isFormValid ?? this.isFormValid,
       id: id ?? this.id,
       name: name ?? this.name,
       currency: currency ?? this.currency,
+      isFormPure: isFormPure ?? this.isFormPure,
     );
   }
 }

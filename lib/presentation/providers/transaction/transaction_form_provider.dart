@@ -236,6 +236,7 @@ class TransactionForm extends _$TransactionForm {
         description: description,
         category: category,
         account: account,
+        isFormPure: false,
         isFormValid: Formz.validate([amount, description, category, account]),
       ),
     );
@@ -253,7 +254,7 @@ class TransactionFormState {
   final String? accountId;
   final DateTime date;
   final TransactionType type;
-  final bool isPure;
+  final bool isFormPure;
 
   const TransactionFormState({
     this.isFormValid = false,
@@ -266,7 +267,7 @@ class TransactionFormState {
     this.accountId,
     required this.date,
     required this.type,
-    this.isPure = true,
+    this.isFormPure = true,
   });
 
   String? get amountError =>
@@ -287,7 +288,7 @@ class TransactionFormState {
     String? categoryId,
     DateTime? date,
     TransactionType? type,
-    bool? isPure,
+    bool? isFormPure,
     String? accountId,
   }) {
     return TransactionFormState(
@@ -300,7 +301,7 @@ class TransactionFormState {
       categoryId: categoryId ?? this.categoryId,
       date: date ?? this.date,
       type: type ?? this.type,
-      isPure: isPure ?? this.isPure,
+      isFormPure: isFormPure ?? this.isFormPure,
       accountId: accountId ?? this.accountId,
     );
   }
