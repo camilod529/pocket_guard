@@ -4,7 +4,9 @@ import 'package:money_manager_flutter/config/theme/app_theme.dart';
 
 import 'l10n/app_localizations.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MainApp());
 }
 

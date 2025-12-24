@@ -118,6 +118,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'More'**
   String get more;
+
+  /// Category for income from salary
+  ///
+  /// In en, this message translates to:
+  /// **'Salary'**
+  String get category_income_salary;
+
+  /// Category for income from freelance work
+  ///
+  /// In en, this message translates to:
+  /// **'Freelance'**
+  String get category_income_freelance;
+
+  /// Category for expenses on food and dining
+  ///
+  /// In en, this message translates to:
+  /// **'Food'**
+  String get category_expense_food_dining;
+
+  /// Category for expenses on transportation
+  ///
+  /// In en, this message translates to:
+  /// **'Transportation'**
+  String get category_expense_transportation;
+
+  /// Category for expenses on rent
+  ///
+  /// In en, this message translates to:
+  /// **'Rent'**
+  String get category_expense_rent;
+
+  /// Category for money transfers
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get category_transfer;
+
+  /// Generic database constraint violation message
+  ///
+  /// In en, this message translates to:
+  /// **'A database constraint was violated. This might be a duplicate entry or invalid reference.'**
+  String get error_db_constraint_violation;
+
+  /// Shown when the database is closed or not available
+  ///
+  /// In en, this message translates to:
+  /// **'Database connection is not available. Please restart the app.'**
+  String get error_db_closed;
+
+  /// Generic database operation failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Database operation failed. Please try again.'**
+  String get error_db_operation_failed;
+
+  /// Database operation failure message with the operation name
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to {operation}. Please try again.'**
+  String error_db_operation_failed_operation(String operation);
+
+  /// Generic data not found error
+  ///
+  /// In en, this message translates to:
+  /// **'The requested data was not found.'**
+  String get error_data_not_found;
+
+  /// Data not found error with the entity name
+  ///
+  /// In en, this message translates to:
+  /// **'The requested {entity} was not found.'**
+  String error_data_not_found_entity(String entity);
+
+  /// Foreign key violation without specifying the table
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot complete operation because it references data that no longer exists.'**
+  String get error_foreign_key_violation;
+
+  /// Foreign key violation specifying the referenced table
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot complete operation because it references a {table} that no longer exists.'**
+  String error_foreign_key_violation_table(String table);
+
+  /// Device storage is full
+  ///
+  /// In en, this message translates to:
+  /// **'Device storage is full. Please free up space and try again.'**
+  String get error_storage_full;
+
+  /// Unique constraint violation without specifying the field
+  ///
+  /// In en, this message translates to:
+  /// **'This record already exists.'**
+  String get error_unique_constraint_violation;
+
+  /// Unique constraint violation for a specific field
+  ///
+  /// In en, this message translates to:
+  /// **'A record with this {field} already exists.'**
+  String error_unique_constraint_violation_field(String field);
+
+  /// Unknown or unexpected data-related error
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong with the data operation. Please try again.'**
+  String get error_unknown_data;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

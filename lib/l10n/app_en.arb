@@ -15,5 +15,101 @@
   "more": "More",
   "@more": {
     "description": "Label for the more options view"
+  },
+  "category_income_salary": "Salary",
+  "@category_income_salary": {
+    "description": "Category for income from salary"
+  },
+  "category_income_freelance": "Freelance",
+  "@category_income_freelance": {
+    "description": "Category for income from freelance work"
+  },
+  "category_expense_food_dining": "Food",
+  "@category_expense_food_dining": {
+    "description": "Category for expenses on food and dining"
+  },
+  "category_expense_transportation": "Transportation",
+  "@category_expense_transportation": {
+    "description": "Category for expenses on transportation"
+  },
+  "category_expense_rent": "Rent",
+  "@category_expense_rent": {
+    "description": "Category for expenses on rent"
+  },
+  "category_transfer": "Transfer",
+  "@category_transfer": {
+    "description": "Category for money transfers"
+  },
+  "error_db_constraint_violation": "A database constraint was violated. This might be a duplicate entry or invalid reference.",
+  "@error_db_constraint_violation": {
+    "description": "Generic database constraint violation message"
+  },
+  "error_db_closed": "Database connection is not available. Please restart the app.",
+  "@error_db_closed": {
+    "description": "Shown when the database is closed or not available"
+  },
+  "error_db_operation_failed": "Database operation failed. Please try again.",
+  "@error_db_operation_failed": {
+    "description": "Generic database operation failure message"
+  },
+  "error_db_operation_failed_operation": "Failed to {operation}. Please try again.",
+  "@error_db_operation_failed_operation": {
+    "description": "Database operation failure message with the operation name",
+    "placeholders": {
+      "operation": {
+        "type": "String",
+        "example": "save transaction"
+      }
+    }
+  },
+  "error_data_not_found": "The requested data was not found.",
+  "@error_data_not_found": {
+    "description": "Generic data not found error"
+  },
+  "error_data_not_found_entity": "The requested {entity} was not found.",
+  "@error_data_not_found_entity": {
+    "description": "Data not found error with the entity name",
+    "placeholders": {
+      "entity": {
+        "type": "String",
+        "example": "transaction"
+      }
+    }
+  },
+  "error_foreign_key_violation": "Cannot complete operation because it references data that no longer exists.",
+  "@error_foreign_key_violation": {
+    "description": "Foreign key violation without specifying the table"
+  },
+  "error_foreign_key_violation_table": "Cannot complete operation because it references a {table} that no longer exists.",
+  "@error_foreign_key_violation_table": {
+    "description": "Foreign key violation specifying the referenced table",
+    "placeholders": {
+      "table": {
+        "type": "String",
+        "example": "category"
+      }
+    }
+  },
+  "error_storage_full": "Device storage is full. Please free up space and try again.",
+  "@error_storage_full": {
+    "description": "Device storage is full"
+  },
+  "error_unique_constraint_violation": "This record already exists.",
+  "@error_unique_constraint_violation": {
+    "description": "Unique constraint violation without specifying the field"
+  },
+  "error_unique_constraint_violation_field": "A record with this {field} already exists.",
+  "@error_unique_constraint_violation_field": {
+    "description": "Unique constraint violation for a specific field",
+    "placeholders": {
+      "field": {
+        "type": "String",
+        "example": "email"
+      }
+    }
+  },
+  "error_unknown_data": "Something went wrong with the data operation. Please try again.",
+  "@error_unknown_data": {
+    "description": "Unknown or unexpected data-related error"
   }
 }

@@ -3,5 +3,59 @@
     "appTitle": "Administrador de Dinero",
     "helloWorld": "¡Hola Mundo!",
     "calendar": "Calendario",
-    "more": "Más"
+    "more": "Más",
+    "category_income_salary": "Salario",
+    "category_income_freelance": "Freelance",
+    "category_expense_food_dining": "Comida",
+    "category_expense_transportation": "Transporte",
+    "category_expense_rent": "Alquiler",
+    "category_transfer": "Transferencia",
+    "error_db_constraint_violation": "Se violó una restricción de la base de datos. Puede ser una entrada duplicada o una referencia no válida.",
+    "error_db_closed": "La conexión con la base de datos no está disponible. Por favor, reinicia la aplicación.",
+    "error_db_operation_failed": "La operación en la base de datos falló. Inténtalo de nuevo.",
+    "error_db_operation_failed_operation": "No se pudo {operation}. Inténtalo de nuevo.",
+    "@error_db_operation_failed_operation": {
+        "description": "Error de operación de base de datos con el nombre de la operación",
+        "placeholders": {
+            "operation": {
+                "type": "String",
+                "example": "guardar la transacción"
+            }
+        }
+    },
+    "error_data_not_found": "Los datos solicitados no fueron encontrados.",
+    "error_data_not_found_entity": "La {entity} solicitada no fue encontrada.",
+    "@error_data_not_found_entity": {
+        "description": "Error de datos no encontrados con el nombre de la entidad",
+        "placeholders": {
+            "entity": {
+                "type": "String",
+                "example": "transacción"
+            }
+        }
+    },
+    "error_foreign_key_violation": "No se puede completar la operación porque hace referencia a datos que ya no existen.",
+    "error_foreign_key_violation_table": "No se puede completar la operación porque hace referencia a una {table} que ya no existe.",
+    "@error_foreign_key_violation_table": {
+        "description": "Violación de clave foránea con el nombre de la tabla",
+        "placeholders": {
+            "table": {
+                "type": "String",
+                "example": "categoría"
+            }
+        }
+    },
+    "error_storage_full": "El almacenamiento del dispositivo está lleno. Libera espacio e inténtalo de nuevo.",
+    "error_unique_constraint_violation": "Este registro ya existe.",
+    "error_unique_constraint_violation_field": "Ya existe un registro con este {field}.",
+    "@error_unique_constraint_violation_field": {
+        "description": "Violación de restricción única para un campo específico",
+        "placeholders": {
+            "field": {
+                "type": "String",
+                "example": "correo electrónico"
+            }
+        }
+    },
+    "error_unknown_data": "Algo salió mal con la operación de datos. Inténtalo de nuevo."
 }
