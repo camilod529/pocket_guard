@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 
 const List<Color> appColors = [
+  Colors.indigo,
   Colors.deepPurple,
   Colors.blue,
-  Colors.red,
-  Colors.green,
-  Colors.orange,
   Colors.purple,
   Colors.yellow,
   Colors.cyan,
-  Colors.pink,
   Colors.teal,
   Colors.lime,
 ];

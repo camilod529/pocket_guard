@@ -13,12 +13,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final int selectedColorIndex = 0;
     return MaterialApp.router(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
-      theme: AppTheme().lightTheme,
-      darkTheme: AppTheme().darkTheme,
+      theme: AppTheme(selectedColorIndex: selectedColorIndex).lightTheme,
+      darkTheme: AppTheme(selectedColorIndex: selectedColorIndex).darkTheme,
       themeMode: ThemeMode.system,
       routerConfig: appRouter,
     );
