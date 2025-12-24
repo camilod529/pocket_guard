@@ -1,12 +1,15 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:money_manager_flutter/config/router/routes.dart';
 import 'package:money_manager_flutter/domain/entities/category.dart';
 import 'package:money_manager_flutter/domain/entities/transaction.dart';
 import 'package:money_manager_flutter/presentation/providers/category/categories_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/selected_date_range_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/transaction/transactions_provider.dart';
+import 'package:money_manager_flutter/utils/constants/global_constants.dart';
 
 class CalendarView extends ConsumerStatefulWidget {
   const CalendarView({super.key});
@@ -39,7 +42,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // TODO: Navigate to create transaction
+          context.push(Routes.transactionFormPage(GlobalConstants.createId));
         },
         child: const Icon(Icons.add),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CustomFormField extends ConsumerWidget {
@@ -8,6 +9,7 @@ class CustomFormField extends ConsumerWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final String? initialValue;
+  final TextEditingController? controller;
   final String? errorText;
   final void Function(String)? onChanged;
   final String? Function(String?)? validator;
@@ -15,14 +17,19 @@ class CustomFormField extends ConsumerWidget {
   final TextCapitalization textCapitalization;
   final bool autocorrect;
   final bool enableSuggestions;
+  final List<TextInputFormatter>? inputFormatters;
   final int maxLines;
   final int? minLines;
+  final bool readOnly;
   final bool showError;
   const CustomFormField({
     super.key,
     this.showError = false,
     required this.label,
+    this.readOnly = false,
+    this.inputFormatters,
     this.hintText,
+    this.controller,
     this.errorText,
     this.initialValue,
     this.helperText,
@@ -53,6 +60,9 @@ class CustomFormField extends ConsumerWidget {
           onChanged: (value) {
             onChanged?.call(value);
           },
+          controller: controller,
+          readOnly: readOnly,
+          inputFormatters: inputFormatters,
           validator: validator,
           keyboardType: keyboardType,
           textCapitalization: textCapitalization,
