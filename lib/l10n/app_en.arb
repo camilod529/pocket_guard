@@ -7,5 +7,13 @@
   "helloWorld": "Hello World!",
   "@helloWorld": {
     "description": "A simple greeting message"
+  },
+  "calendar": "Calendar",
+  "@calendar": {
+    "description": "Label for the calendar view"
+  },
+  "more": "More",
+  "@more": {
+    "description": "Label for the more options view"
   }
 }

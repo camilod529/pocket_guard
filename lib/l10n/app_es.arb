@@ -1,5 +1,7 @@
 {
     "@@locale": "es",
     "appTitle": "Administrador de Dinero",
-    "helloWorld": "¡Hola Mundo!"
+    "helloWorld": "¡Hola Mundo!",
+    "calendar": "Calendario",
+    "more": "Más"
 }

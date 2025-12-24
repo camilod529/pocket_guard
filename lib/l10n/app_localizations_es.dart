@@ -13,4 +13,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get helloWorld => '¡Hola Mundo!';
+
+  @override
+  String get calendar => 'Calendario';
+
+  @override
+  String get more => 'Más';
 }

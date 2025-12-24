@@ -13,4 +13,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helloWorld => 'Hello World!';
+
+  @override
+  String get calendar => 'Calendar';
+
+  @override
+  String get more => 'More';
 }

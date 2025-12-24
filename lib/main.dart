@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager_flutter/config/router/router.dart';
 import 'package:money_manager_flutter/config/theme/app_theme.dart';
 
 import 'l10n/app_localizations.dart';
@@ -12,14 +13,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
       theme: AppTheme().lightTheme,
       darkTheme: AppTheme().darkTheme,
       themeMode: ThemeMode.system,
-      home: MyHomePage(),
+      routerConfig: appRouter,
     );
   }
 }
