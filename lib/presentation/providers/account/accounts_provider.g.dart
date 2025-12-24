@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'account_providers.dart';
+part of 'accounts_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -103,33 +103,33 @@ final class AccountRepositoryProvider
 
 String _$accountRepositoryHash() => r'ec57ab2266c5f1ba5a246a736f51e7f142cce7af';
 
-@ProviderFor(AccountNotifier)
-const accountProvider = AccountNotifierProvider._();
+@ProviderFor(AccountsNotifier)
+const accountsProvider = AccountsNotifierProvider._();
 
-final class AccountNotifierProvider
-    extends $AsyncNotifierProvider<AccountNotifier, List<AccountEntity>> {
-  const AccountNotifierProvider._()
+final class AccountsNotifierProvider
+    extends $AsyncNotifierProvider<AccountsNotifier, List<AccountEntity>> {
+  const AccountsNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'accountProvider',
+        name: r'accountsProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$accountNotifierHash();
+  String debugGetCreateSourceHash() => _$accountsNotifierHash();
 
   @$internal
   @override
-  AccountNotifier create() => AccountNotifier();
+  AccountsNotifier create() => AccountsNotifier();
 }
 
-String _$accountNotifierHash() => r'd55a563a07c010ea64b489570fcdfa2ea0b9b1ba';
+String _$accountsNotifierHash() => r'30bf634b0a40c3d0bf06f5a8833c488a2745ecb4';
 
-abstract class _$AccountNotifier extends $AsyncNotifier<List<AccountEntity>> {
+abstract class _$AccountsNotifier extends $AsyncNotifier<List<AccountEntity>> {
   FutureOr<List<AccountEntity>> build();
   @$mustCallSuper
   @override

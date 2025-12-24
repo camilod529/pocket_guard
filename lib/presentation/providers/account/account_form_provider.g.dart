@@ -9,53 +9,90 @@ part of 'account_form_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(AccountFormNotifier)
-const accountFormProvider = AccountFormNotifierProvider._();
+@ProviderFor(AccountForm)
+const accountFormProvider = AccountFormFamily._();
 
-final class AccountFormNotifierProvider
-    extends $NotifierProvider<AccountFormNotifier, AccountFormState> {
-  const AccountFormNotifierProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'accountFormProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+final class AccountFormProvider
+    extends $AsyncNotifierProvider<AccountForm, AccountFormState> {
+  const AccountFormProvider._({
+    required AccountFormFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'accountFormProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
-  String debugGetCreateSourceHash() => _$accountFormNotifierHash();
+  String debugGetCreateSourceHash() => _$accountFormHash();
+
+  @override
+  String toString() {
+    return r'accountFormProvider'
+        ''
+        '($argument)';
+  }
 
   @$internal
   @override
-  AccountFormNotifier create() => AccountFormNotifier();
+  AccountForm create() => AccountForm();
 
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(AccountFormState value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<AccountFormState>(value),
-    );
+  @override
+  bool operator ==(Object other) {
+    return other is AccountFormProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
   }
 }
 
-String _$accountFormNotifierHash() =>
-    r'f919f4cc4192348e7cea5eae5d5a5ec665d54008';
+String _$accountFormHash() => r'6030a4eadbc1c30116e462f78f8eaf0b2503bc32';
 
-abstract class _$AccountFormNotifier extends $Notifier<AccountFormState> {
-  AccountFormState build();
+final class AccountFormFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          AccountForm,
+          AsyncValue<AccountFormState>,
+          AccountFormState,
+          FutureOr<AccountFormState>,
+          String
+        > {
+  const AccountFormFamily._()
+    : super(
+        retry: null,
+        name: r'accountFormProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  AccountFormProvider call(String accountId) =>
+      AccountFormProvider._(argument: accountId, from: this);
+
+  @override
+  String toString() => r'accountFormProvider';
+}
+
+abstract class _$AccountForm extends $AsyncNotifier<AccountFormState> {
+  late final _$args = ref.$arg as String;
+  String get accountId => _$args;
+
+  FutureOr<AccountFormState> build(String accountId);
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
-    final ref = this.ref as $Ref<AccountFormState, AccountFormState>;
+    final created = build(_$args);
+    final ref =
+        this.ref as $Ref<AsyncValue<AccountFormState>, AccountFormState>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AccountFormState, AccountFormState>,
-              AccountFormState,
+              AnyNotifier<AsyncValue<AccountFormState>, AccountFormState>,
+              AsyncValue<AccountFormState>,
               Object?,
               Object?
             >;

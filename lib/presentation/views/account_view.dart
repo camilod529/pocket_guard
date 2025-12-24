@@ -4,14 +4,14 @@ import 'package:go_router/go_router.dart';
 import 'package:money_manager_flutter/config/router/routes.dart';
 import 'package:money_manager_flutter/domain/entities/account.dart';
 import 'package:money_manager_flutter/l10n/app_localizations.dart';
-import 'package:money_manager_flutter/presentation/providers/account/account_providers.dart';
+import 'package:money_manager_flutter/presentation/providers/account/accounts_provider.dart';
 
 class AccountView extends ConsumerWidget {
   const AccountView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final accountsAsync = ref.watch(accountProvider);
+    final accountsAsync = ref.watch(accountsProvider);
     final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -179,7 +179,7 @@ class AccountView extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () => ref.invalidate(accountProvider),
+            onPressed: () => ref.invalidate(accountsProvider),
             child: Text(localizations.error_db_operation_failed),
           ),
         ],
@@ -226,7 +226,7 @@ class AccountView extends ConsumerWidget {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              ref.read(accountProvider.notifier).deleteAccount(accountId);
+              ref.read(accountsProvider.notifier).deleteAccount(accountId);
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: const Text('Delete'), // Add this key later
@@ -234,11 +234,5 @@ class AccountView extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  void _showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
   }
 }

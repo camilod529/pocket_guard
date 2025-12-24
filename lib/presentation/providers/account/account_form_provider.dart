@@ -2,118 +2,131 @@ import 'package:formz/formz.dart';
 import 'package:money_manager_flutter/domain/entities/account.dart';
 import 'package:money_manager_flutter/infrastructure/inputs/accounts/currency.dart';
 import 'package:money_manager_flutter/infrastructure/inputs/accounts/name.dart';
-import 'package:money_manager_flutter/presentation/providers/account/account_providers.dart';
+import 'package:money_manager_flutter/presentation/providers/account/account_provider.dart';
+import 'package:money_manager_flutter/presentation/providers/account/accounts_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'account_form_provider.g.dart';
 
 @riverpod
-class AccountFormNotifier extends _$AccountFormNotifier {
+class AccountForm extends _$AccountForm {
   @override
-  AccountFormState build() {
-    return const AccountFormState();
+  Future<AccountFormState> build(String accountId) async {
+    // Load account data if editing
+    if (accountId != 'create') {
+      final account = await ref.watch(accountProvider(accountId).future);
+
+      if (account != null) {
+        return AccountFormState(
+          id: account.id,
+          name: AccountName.dirty(account.name),
+          currency: AccountCurrency.dirty(account.currency),
+          isFormValid: true,
+        );
+      }
+    }
+
+    // Return empty state for create mode
+    return const AccountFormState(id: 'create');
   }
 
   void currencyChanged(String value) {
+    final currentState = state.value;
+    if (currentState == null) return;
+
     final currency = AccountCurrency.dirty(value.toUpperCase());
-    state = state.copyWith(
-      currency: currency,
-      isValid: Formz.validate([state.name, currency]),
+    state = AsyncValue.data(
+      currentState.copyWith(
+        currency: currency,
+        isFormValid: Formz.validate([currentState.name, currency]),
+      ),
     );
   }
 
   void nameChanged(String value) {
+    final currentState = state.value;
+    if (currentState == null) return;
+
     final name = AccountName.dirty(value);
-    state = state.copyWith(
-      name: name,
-      isValid: Formz.validate([name, state.currency]),
+    state = AsyncValue.data(
+      currentState.copyWith(
+        name: name,
+        isFormValid: Formz.validate([name, currentState.currency]),
+      ),
     );
   }
 
-  void setEditing(String accountId) {
-    state = state.copyWith(accountId: accountId, isEditing: true);
-  }
-
-  Future<void> submit() async {
-    if (!state.isValid || state.isSubmitting) return;
+  Future<bool> onFormSubmit() async {
+    final currentState = state.value;
+    if (currentState == null) return false;
 
     _touchAllFields();
-    if (!state.isValid) return;
 
-    state = state.copyWith(isSubmitting: true);
+    final validState = state.value;
+    if (validState == null || !validState.isFormValid) return false;
 
     try {
       final account = AccountEntity(
-        id: state.accountId,
-        name: state.name.value,
-        currency: state.currency.value,
+        id: validState.id,
+        name: validState.name.value,
+        currency: validState.currency.value,
       );
 
-      final isEditing = state.accountId != 'create';
+      final isEditing = validState.id != 'create';
 
-      if (isEditing && state.accountId != 'create') {
+      if (isEditing) {
         await ref
-            .read(accountProvider.notifier)
-            .updateAccount(state.accountId, account);
+            .read(accountsProvider.notifier)
+            .updateAccount(validState.id, account);
       } else {
-        await ref.read(accountProvider.notifier).createAccount(account);
+        await ref.read(accountsProvider.notifier).createAccount(account);
       }
-      await ref.read(accountProvider.notifier).refresh();
-    } finally {
-      state = state.copyWith(isSubmitting: false);
+
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 
   void _touchAllFields() {
-    final name = AccountName.dirty(state.name.value);
-    final currency = AccountCurrency.dirty(state.currency.value);
-    state = state.copyWith(
-      hasSubmitted: true,
-      name: name,
-      currency: currency,
-      isValid: Formz.validate([name, currency]),
+    final currentState = state.value;
+    if (currentState == null) return;
+
+    final name = AccountName.dirty(currentState.name.value);
+    final currency = AccountCurrency.dirty(currentState.currency.value);
+
+    state = AsyncValue.data(
+      currentState.copyWith(
+        name: name,
+        currency: currency,
+        isFormValid: Formz.validate([name, currency]),
+      ),
     );
   }
 }
 
 class AccountFormState {
-  final bool hasSubmitted;
-  final bool isSubmitting;
-  final bool isLoading;
-  final bool isEditing;
-  final bool isValid;
-  final String accountId;
+  final bool isFormValid;
+  final String id;
   final AccountName name;
   final AccountCurrency currency;
 
   const AccountFormState({
-    this.hasSubmitted = false,
-    this.isSubmitting = false,
-    this.isLoading = false,
-    this.isEditing = false,
-    this.isValid = false,
-    this.accountId = 'create',
+    this.isFormValid = false,
+    this.id = 'create',
     this.name = const AccountName.pure(),
     this.currency = const AccountCurrency.pure(),
   });
 
   AccountFormState copyWith({
-    bool? hasSubmitted,
-    bool? isSubmitting,
-    bool? isLoading,
-    bool? isEditing,
-    bool? isValid,
-    String? accountId,
+    bool? isFormValid,
+    String? id,
     AccountName? name,
     AccountCurrency? currency,
   }) {
     return AccountFormState(
-      hasSubmitted: hasSubmitted ?? this.hasSubmitted,
-      isSubmitting: isSubmitting ?? this.isSubmitting,
-      isLoading: isLoading ?? this.isLoading,
-      isEditing: isEditing ?? this.isEditing,
-      isValid: isValid ?? this.isValid,
-      accountId: accountId ?? this.accountId,
+      isFormValid: isFormValid ?? this.isFormValid,
+      id: id ?? this.id,
       name: name ?? this.name,
       currency: currency ?? this.currency,
     );
