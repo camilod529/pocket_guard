@@ -119,6 +119,30 @@ abstract class AppLocalizations {
   /// **'More'**
   String get more;
 
+  /// Delete action/button
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// Cancel action/button
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// Add new account button
+  ///
+  /// In en, this message translates to:
+  /// **'Add Account'**
+  String get addAccount;
+
+  /// Label for the accounts view
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts'**
+  String get accounts;
+
   /// Category for income from salary
   ///
   /// In en, this message translates to:

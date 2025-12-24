@@ -5,6 +5,22 @@
     "description": "The title of the application"
   },
   "helloWorld": "Hello World!",
+  "accountName": "Account Name",
+  "@accountName": {
+    "description": "Label for account name input"
+  },
+  "accountCurrency": "Currency",
+  "@accountCurrency": {
+    "description": "Label for account currency input"
+  },
+  "accountNameHint": "Enter account name",
+  "@accountNameHint": {
+    "description": "Hint text for account name input"
+  },
+  "accountCurrencyHint": "USD, EUR, GBP",
+  "@accountCurrencyHint": {
+    "description": "Hint text for account currency input"
+  },
   "@helloWorld": {
     "description": "A simple greeting message"
   },
@@ -15,6 +31,22 @@
   "more": "More",
   "@more": {
     "description": "Label for the more options view"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete action/button"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel action/button"
+  },
+  "addAccount": "Add Account",
+  "@addAccount": {
+    "description": "Add new account button"
+  },
+  "accounts": "Accounts",
+  "@accounts": {
+    "description": "Label for the accounts view"
   },
   "category_income_salary": "Salary",
   "@category_income_salary": {

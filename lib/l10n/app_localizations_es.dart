@@ -21,6 +21,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get more => 'Más';
 
   @override
+  String get delete => 'Eliminar';
+
+  @override
+  String get cancel => 'Cancelar';
+
+  @override
+  String get addAccount => 'Agregar Cuenta';
+
+  @override
+  String get accounts => 'Cuentas';
+
+  @override
   String get category_income_salary => 'Salario';
 
   @override

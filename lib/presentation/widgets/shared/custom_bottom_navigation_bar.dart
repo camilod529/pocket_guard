@@ -21,6 +21,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
           label: localizations.calendar,
         ),
         BottomNavigationBarItem(
+          icon: Icon(Icons.account_circle_outlined),
+          label: localizations.accounts,
+        ),
+        BottomNavigationBarItem(
           icon: Icon(Icons.category_outlined),
           label: localizations.more,
         ),

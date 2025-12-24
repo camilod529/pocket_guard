@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_manager_flutter/config/router/router.dart';
 import 'package:money_manager_flutter/config/theme/app_theme.dart';
 
@@ -7,7 +8,7 @@ import 'l10n/app_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const MainApp());
+  runApp(ProviderScope(child: const MainApp()));
 }
 
 class MainApp extends StatelessWidget {
@@ -20,6 +21,7 @@ class MainApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
+      // locale: Locale('es'), // Uncomment to test a specific locale
       theme: AppTheme(selectedColorIndex: selectedColorIndex).lightTheme,
       darkTheme: AppTheme(selectedColorIndex: selectedColorIndex).darkTheme,
       themeMode: ThemeMode.system,
