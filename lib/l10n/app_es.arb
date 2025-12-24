@@ -1,36 +1,21 @@
 {
     "@@locale": "es",
-    "appTitle": "Administrador de Dinero",
-    "helloWorld": "¡Hola Mundo!",
-    "calendar": "Calendario",
-    "more": "Más",
-    "delete": "Eliminar",
-    "accountName": "Nombre de Cuenta",
     "accountCurrency": "Moneda",
-    "accountNameHint": "Ingrese nombre de cuenta",
     "accountCurrencyHint": "USD, EUR, GBP",
-    "cancel": "Cancelar",
-    "addAccount": "Agregar Cuenta",
+    "accountName": "Nombre de Cuenta",
+    "accountNameHint": "Ingrese nombre de cuenta",
     "accounts": "Cuentas",
-    "category_income_salary": "Salario",
-    "category_income_freelance": "Freelance",
+    "addAccount": "Agregar Cuenta",
+    "appTitle": "Administrador de Dinero",
+    "calendar": "Calendario",
+    "cancel": "Cancelar",
     "category_expense_food_dining": "Comida",
-    "category_expense_transportation": "Transporte",
     "category_expense_rent": "Alquiler",
+    "category_expense_transportation": "Transporte",
+    "category_income_freelance": "Freelance",
+    "category_income_salary": "Salario",
     "category_transfer": "Transferencia",
-    "error_db_constraint_violation": "Se violó una restricción de la base de datos. Puede ser una entrada duplicada o una referencia no válida.",
-    "error_db_closed": "La conexión con la base de datos no está disponible. Por favor, reinicia la aplicación.",
-    "error_db_operation_failed": "La operación en la base de datos falló. Inténtalo de nuevo.",
-    "error_db_operation_failed_operation": "No se pudo {operation}. Inténtalo de nuevo.",
-    "@error_db_operation_failed_operation": {
-        "description": "Error de operación de base de datos con el nombre de la operación",
-        "placeholders": {
-            "operation": {
-                "type": "String",
-                "example": "guardar la transacción"
-            }
-        }
-    },
+    "delete": "Eliminar",
     "error_data_not_found": "Los datos solicitados no fueron encontrados.",
     "error_data_not_found_entity": "La {entity} solicitada no fue encontrada.",
     "@error_data_not_found_entity": {
@@ -39,6 +24,19 @@
             "entity": {
                 "type": "String",
                 "example": "transacción"
+            }
+        }
+    },
+    "error_db_closed": "La conexión con la base de datos no está disponible. Por favor, reinicia la aplicación.",
+    "error_db_constraint_violation": "Se violó una restricción de la base de datos. Puede ser una entrada duplicada o una referencia no válida.",
+    "error_db_operation_failed": "La operación en la base de datos falló. Inténtalo de nuevo.",
+    "error_db_operation_failed_operation": "No se pudo {operation}. Inténtalo de nuevo.",
+    "@error_db_operation_failed_operation": {
+        "description": "Error de operación de base de datos con el nombre de la operación",
+        "placeholders": {
+            "operation": {
+                "type": "String",
+                "example": "guardar la transacción"
             }
         }
     },
@@ -65,5 +63,7 @@
             }
         }
     },
-    "error_unknown_data": "Algo salió mal con la operación de datos. Inténtalo de nuevo."
+    "error_unknown_data": "Algo salió mal con la operación de datos. Inténtalo de nuevo.",
+    "helloWorld": "¡Hola Mundo!",
+    "more": "Más"
 }

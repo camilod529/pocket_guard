@@ -95,47 +95,29 @@ abstract class AppLocalizations {
     Locale('es')
   ];
 
-  /// The title of the application
+  /// Label for account currency input
   ///
   /// In en, this message translates to:
-  /// **'Money Manager'**
-  String get appTitle;
+  /// **'Currency'**
+  String get accountCurrency;
 
-  /// A simple greeting message
+  /// Hint text for account currency input
   ///
   /// In en, this message translates to:
-  /// **'Hello World!'**
-  String get helloWorld;
+  /// **'USD, EUR, GBP'**
+  String get accountCurrencyHint;
 
-  /// Label for the calendar view
+  /// Label for account name input
   ///
   /// In en, this message translates to:
-  /// **'Calendar'**
-  String get calendar;
+  /// **'Account Name'**
+  String get accountName;
 
-  /// Label for the more options view
+  /// Hint text for account name input
   ///
   /// In en, this message translates to:
-  /// **'More'**
-  String get more;
-
-  /// Delete action/button
-  ///
-  /// In en, this message translates to:
-  /// **'Delete'**
-  String get delete;
-
-  /// Cancel action/button
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get cancel;
-
-  /// Add new account button
-  ///
-  /// In en, this message translates to:
-  /// **'Add Account'**
-  String get addAccount;
+  /// **'Enter account name'**
+  String get accountNameHint;
 
   /// Label for the accounts view
   ///
@@ -143,17 +125,29 @@ abstract class AppLocalizations {
   /// **'Accounts'**
   String get accounts;
 
-  /// Category for income from salary
+  /// Add new account button
   ///
   /// In en, this message translates to:
-  /// **'Salary'**
-  String get category_income_salary;
+  /// **'Add Account'**
+  String get addAccount;
 
-  /// Category for income from freelance work
+  /// The title of the application
   ///
   /// In en, this message translates to:
-  /// **'Freelance'**
-  String get category_income_freelance;
+  /// **'Money Manager'**
+  String get appTitle;
+
+  /// Label for the calendar view
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get calendar;
+
+  /// Cancel action/button
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
 
   /// Category for expenses on food and dining
   ///
@@ -161,17 +155,29 @@ abstract class AppLocalizations {
   /// **'Food'**
   String get category_expense_food_dining;
 
+  /// Category for expenses on rent
+  ///
+  /// In en, this message translates to:
+  /// **'Rent'**
+  String get category_expense_rent;
+
   /// Category for expenses on transportation
   ///
   /// In en, this message translates to:
   /// **'Transportation'**
   String get category_expense_transportation;
 
-  /// Category for expenses on rent
+  /// Category for income from freelance work
   ///
   /// In en, this message translates to:
-  /// **'Rent'**
-  String get category_expense_rent;
+  /// **'Freelance'**
+  String get category_income_freelance;
+
+  /// Category for income from salary
+  ///
+  /// In en, this message translates to:
+  /// **'Salary'**
+  String get category_income_salary;
 
   /// Category for money transfers
   ///
@@ -179,29 +185,11 @@ abstract class AppLocalizations {
   /// **'Transfer'**
   String get category_transfer;
 
-  /// Generic database constraint violation message
+  /// Delete action/button
   ///
   /// In en, this message translates to:
-  /// **'A database constraint was violated. This might be a duplicate entry or invalid reference.'**
-  String get error_db_constraint_violation;
-
-  /// Shown when the database is closed or not available
-  ///
-  /// In en, this message translates to:
-  /// **'Database connection is not available. Please restart the app.'**
-  String get error_db_closed;
-
-  /// Generic database operation failure message
-  ///
-  /// In en, this message translates to:
-  /// **'Database operation failed. Please try again.'**
-  String get error_db_operation_failed;
-
-  /// Database operation failure message with the operation name
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to {operation}. Please try again.'**
-  String error_db_operation_failed_operation(String operation);
+  /// **'Delete'**
+  String get delete;
 
   /// Generic data not found error
   ///
@@ -214,6 +202,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The requested {entity} was not found.'**
   String error_data_not_found_entity(String entity);
+
+  /// Shown when the database is closed or not available
+  ///
+  /// In en, this message translates to:
+  /// **'Database connection is not available. Please restart the app.'**
+  String get error_db_closed;
+
+  /// Generic database constraint violation message
+  ///
+  /// In en, this message translates to:
+  /// **'A database constraint was violated. This might be a duplicate entry or invalid reference.'**
+  String get error_db_constraint_violation;
+
+  /// Generic database operation failure message
+  ///
+  /// In en, this message translates to:
+  /// **'Database operation failed. Please try again.'**
+  String get error_db_operation_failed;
+
+  /// Database operation failure message with the operation name
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to {operation}. Please try again.'**
+  String error_db_operation_failed_operation(String operation);
 
   /// Foreign key violation without specifying the table
   ///
@@ -250,6 +262,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong with the data operation. Please try again.'**
   String get error_unknown_data;
+
+  /// A simple greeting message
+  ///
+  /// In en, this message translates to:
+  /// **'Hello World!'**
+  String get helloWorld;
+
+  /// Label for the more options view
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get more;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

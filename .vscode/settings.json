@@ -1,4 +1,11 @@
 {
   "workbench.colorTheme": "One Dark Pro Darker",
-  "cSpell.words": ["sqlite", "uuid"]
+  "cSpell.words": ["sqlite", "uuid"],
+  "[json]": {
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.suggest.insertMode": "replace",
+    "editor.codeActionsOnSave": ["source.arbSort"]
+  }
 }
