@@ -23,43 +23,59 @@ class AccountNotifier extends _$AccountNotifier {
   @override
   Future<List<AccountEntity>> build() async {
     final repository = ref.read(accountRepositoryProvider);
-    return repository.getAllAccounts();
+    final accounts = await repository.getAllAccounts();
+    return accounts;
   }
 
   Future<void> createAccount(AccountEntity account) async {
+    if (!ref.mounted) return;
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
+    try {
       final repository = ref.read(accountRepositoryProvider);
       await repository.createAccount(account);
-      // Don't invalidate here - let the UI refresh via listen
-      return ref.read(accountRepositoryProvider).getAllAccounts();
-    });
+      if (!ref.mounted) return;
+      state = AsyncValue.data(await repository.getAllAccounts());
+    } catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
+    }
   }
 
   Future<void> deleteAccount(String id) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
+      if (!ref.mounted) return <AccountEntity>[];
       final repository = ref.read(accountRepositoryProvider);
       await repository.deleteAccount(id);
-      return ref.read(accountRepositoryProvider).getAllAccounts();
-    });
-  }
-
-  Future<AccountEntity?> getAccountById(String id) async {
-    final repository = ref.read(accountRepositoryProvider);
-    return repository.getAccountById(id);
-  }
-
-  /// Manual refresh - call this after form submission
-  Future<void> refresh() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      final repository = ref.read(accountRepositoryProvider);
       return repository.getAllAccounts();
     });
   }
 
+  Future<AccountEntity?> getAccountById(String id) async {
+    if (!ref.mounted) return null;
+    final repository = ref.read(accountRepositoryProvider);
+    return repository.getAccountById(id);
+  }
+
+  Future<void> refresh() async {
+    if (!ref.mounted) return;
+    // state = const AsyncLoading();
+    // state = await AsyncValue.guard(() async {
+    //   if (!ref.mounted) return <AccountEntity>[];
+    //   final repository = ref.read(accountRepositoryProvider);
+    //   return repository.getAllAccounts();
+    // });
+    try {
+      final repository = ref.read(accountRepositoryProvider);
+      final accounts = await repository.getAllAccounts();
+      if (!ref.mounted) return;
+      state = AsyncValue.data(accounts);
+    } catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
+    }
+  }
+
   Future<List<AccountEntity>> searchAccounts(String query) async {
+    if (!ref.mounted) return [];
     final repository = ref.read(accountRepositoryProvider);
     return repository.searchAccounts(query);
   }
@@ -67,9 +83,10 @@ class AccountNotifier extends _$AccountNotifier {
   Future<void> updateAccount(String id, AccountEntity account) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
+      if (!ref.mounted) return <AccountEntity>[];
       final repository = ref.read(accountRepositoryProvider);
       await repository.updateAccount(id, account);
-      return ref.read(accountRepositoryProvider).getAllAccounts();
+      return repository.getAllAccounts();
     });
   }
 }

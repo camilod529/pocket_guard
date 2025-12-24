@@ -102,7 +102,7 @@ class AccountView extends ConsumerWidget {
       ),
       onTap: () {
         // Navigate to account details or edit screen
-        context.go(Routes.accountFormPage(account.id));
+        context.push(Routes.accountFormPage(account.id));
       },
     );
   }
@@ -119,7 +119,7 @@ class AccountView extends ConsumerWidget {
           icon: const Icon(Icons.add),
           onPressed: () {
             // Navigate to create account screen
-            context.go(Routes.accountFormPage('create'));
+            context.push(Routes.accountFormPage('create'));
           },
           tooltip: localizations.accounts, // Reuse accounts as tooltip
         ),
@@ -150,7 +150,7 @@ class AccountView extends ConsumerWidget {
           ElevatedButton.icon(
             onPressed: () {
               // Navigate to create account screen
-              context.go(Routes.accountFormPage('create'));
+              context.push(Routes.accountFormPage('create'));
             },
             icon: const Icon(Icons.add),
             label: Text(localizations.accounts),
@@ -197,7 +197,7 @@ class AccountView extends ConsumerWidget {
     switch (action) {
       case 'edit':
         // Navigate to edit account screen
-        context.go(Routes.accountFormPage(accountId));
+        context.push(Routes.accountFormPage(accountId));
         break;
       case 'delete':
         _showDeleteConfirmation(context, accountId, ref, localizations);

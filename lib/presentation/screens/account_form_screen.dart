@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:money_manager_flutter/l10n/app_localizations.dart';
 import 'package:money_manager_flutter/presentation/providers/account/account_form_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/account/account_providers.dart';
@@ -19,6 +20,31 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final formState = ref.watch(accountFormProvider);
+
+    // 🚀 SUCCESS NAVIGATION LISTENER
+    ref.listen<AccountFormState>(accountFormProvider, (previous, next) {
+      // Detect successful submission: was submitting → now not submitting
+      if (previous?.isSubmitting == true &&
+          next.isSubmitting == false &&
+          next.isValid == true &&
+          mounted &&
+          context.mounted) {
+        final message = widget.accountId == 'create'
+            ? 'Account created successfully!'
+            : 'Account updated successfully!';
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+
+        // Navigate back to accounts list
+        context.pop();
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(

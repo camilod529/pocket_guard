@@ -58,8 +58,6 @@ class AccountFormNotifier extends _$AccountFormNotifier {
       } else {
         await ref.read(accountProvider.notifier).createAccount(account);
       }
-
-      // Refresh the accounts list after successful operation
       await ref.read(accountProvider.notifier).refresh();
     } finally {
       state = state.copyWith(isSubmitting: false);
