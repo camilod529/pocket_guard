@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:money_manager_flutter/config/router/routes.dart';
 import 'package:money_manager_flutter/domain/entities/account.dart';
 import 'package:money_manager_flutter/l10n/app_localizations.dart';
-import 'package:money_manager_flutter/presentation/providers/account_providers.dart';
+import 'package:money_manager_flutter/presentation/providers/account/account_providers.dart';
 
 class AccountView extends ConsumerWidget {
   const AccountView({super.key});
@@ -99,8 +101,8 @@ class AccountView extends ConsumerWidget {
         ],
       ),
       onTap: () {
-        // TODO: Navigate to edit account screen
-        _showSnackBar(context, 'Edit account: ${account.name} (TODO)');
+        // Navigate to account details or edit screen
+        context.go(Routes.accountFormPage(account.id));
       },
     );
   }
@@ -116,8 +118,8 @@ class AccountView extends ConsumerWidget {
         IconButton(
           icon: const Icon(Icons.add),
           onPressed: () {
-            // TODO: Navigate to create account screen
-            _showSnackBar(context, 'Create new account (TODO)');
+            // Navigate to create account screen
+            context.go(Routes.accountFormPage('create'));
           },
           tooltip: localizations.accounts, // Reuse accounts as tooltip
         ),
@@ -147,8 +149,8 @@ class AccountView extends ConsumerWidget {
           const SizedBox(height: 8),
           ElevatedButton.icon(
             onPressed: () {
-              // TODO: Navigate to create account screen
-              _showSnackBar(context, 'Create first account (TODO)');
+              // Navigate to create account screen
+              context.go(Routes.accountFormPage('create'));
             },
             icon: const Icon(Icons.add),
             label: Text(localizations.accounts),
@@ -194,8 +196,8 @@ class AccountView extends ConsumerWidget {
   ) {
     switch (action) {
       case 'edit':
-        // TODO: Navigate to edit account screen
-        _showSnackBar(context, 'Edit account ID: $accountId (TODO)');
+        // Navigate to edit account screen
+        context.go(Routes.accountFormPage(accountId));
         break;
       case 'delete':
         _showDeleteConfirmation(context, accountId, ref, localizations);

@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:money_manager_flutter/config/router/routes.dart';
+import 'package:money_manager_flutter/presentation/screens/account_form_screen.dart';
 import 'package:money_manager_flutter/presentation/screens/home_screen.dart';
 
 final appRouter = GoRouter(
@@ -12,6 +13,14 @@ final appRouter = GoRouter(
             int.tryParse(state.pathParameters['page'] ?? '0') ?? 0;
 
         return HomeScreen(pageIndex: pageIndex);
+      },
+    ),
+
+    GoRoute(
+      path: Routes.accountForm,
+      builder: (context, state) {
+        final accountId = state.pathParameters['id'];
+        return AccountFormScreen(accountId: accountId ?? 'create');
       },
     ),
   ],

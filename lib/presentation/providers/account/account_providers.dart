@@ -31,8 +31,8 @@ class AccountNotifier extends _$AccountNotifier {
     state = await AsyncValue.guard(() async {
       final repository = ref.read(accountRepositoryProvider);
       await repository.createAccount(account);
-      ref.invalidateSelf();
-      return repository.getAllAccounts();
+      // Don't invalidate here - let the UI refresh via listen
+      return ref.read(accountRepositoryProvider).getAllAccounts();
     });
   }
 
@@ -41,14 +41,22 @@ class AccountNotifier extends _$AccountNotifier {
     state = await AsyncValue.guard(() async {
       final repository = ref.read(accountRepositoryProvider);
       await repository.deleteAccount(id);
-      ref.invalidateSelf();
-      return repository.getAllAccounts();
+      return ref.read(accountRepositoryProvider).getAllAccounts();
     });
   }
 
   Future<AccountEntity?> getAccountById(String id) async {
     final repository = ref.read(accountRepositoryProvider);
     return repository.getAccountById(id);
+  }
+
+  /// Manual refresh - call this after form submission
+  Future<void> refresh() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      final repository = ref.read(accountRepositoryProvider);
+      return repository.getAllAccounts();
+    });
   }
 
   Future<List<AccountEntity>> searchAccounts(String query) async {
@@ -61,8 +69,7 @@ class AccountNotifier extends _$AccountNotifier {
     state = await AsyncValue.guard(() async {
       final repository = ref.read(accountRepositoryProvider);
       await repository.updateAccount(id, account);
-      ref.invalidateSelf();
-      return repository.getAllAccounts();
+      return ref.read(accountRepositoryProvider).getAllAccounts();
     });
   }
 }

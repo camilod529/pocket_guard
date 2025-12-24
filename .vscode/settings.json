@@ -1,6 +1,6 @@
 {
   "workbench.colorTheme": "One Dark Pro Darker",
-  "cSpell.words": ["sqlite", "uuid"],
+  "cSpell.words": ["formz", "sqlite", "uuid"],
   "[json]": {
     "editor.quickSuggestions": {
       "strings": true
