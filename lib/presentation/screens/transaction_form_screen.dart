@@ -65,59 +65,54 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                         const SizedBox(height: 16),
 
                         // Amount Field
-                        SizedBox(
-                          child: CustomFormField(
-                            initialValue: formState.amount.value,
-                            label: 'Amount',
-                            hintText: '0.00',
-                            errorText: formState.isFormPure
-                                ? null
-                                : formState.amountError,
-                            prefixIcon: const Icon(Icons.attach_money),
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true,
-                            ),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                RegExp(r'^\d+\.?\d{0,2}'),
-                              ),
-                            ],
-                            onChanged: (value) {
-                              ref
-                                  .read(
-                                    transactionFormProvider(
-                                      widget.transactionId,
-                                    ).notifier,
-                                  )
-                                  .amountChanged(value);
-                            },
+                        CustomFormField(
+                          initialValue: formState.amount.value,
+                          label: 'Amount',
+                          hintText: '0.00',
+                          errorText: formState.isFormPure
+                              ? null
+                              : formState.amountError,
+                          prefixIcon: const Icon(Icons.attach_money),
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
                           ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d+\.?\d{0,2}'),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            ref
+                                .read(
+                                  transactionFormProvider(
+                                    widget.transactionId,
+                                  ).notifier,
+                                )
+                                .amountChanged(value);
+                          },
                         ),
                         const SizedBox(height: 16),
 
                         // Description Field
-                        SizedBox(
-                          height: 100, // Fixed height for multi-line field
-                          child: CustomFormField(
-                            initialValue: formState.description.value,
-                            label: 'Description',
-                            hintText: 'Enter transaction description',
-                            errorText: formState.isFormPure
-                                ? null
-                                : formState.descriptionError,
-                            prefixIcon: const Icon(Icons.notes_outlined),
-                            keyboardType: TextInputType.text,
-                            maxLines: 2,
-                            onChanged: (value) {
-                              ref
-                                  .read(
-                                    transactionFormProvider(
-                                      widget.transactionId,
-                                    ).notifier,
-                                  )
-                                  .descriptionChanged(value);
-                            },
-                          ),
+                        CustomFormField(
+                          initialValue: formState.description.value,
+                          label: 'Description',
+                          hintText: 'Enter transaction description',
+                          errorText: formState.isFormPure
+                              ? null
+                              : formState.descriptionError,
+                          prefixIcon: const Icon(Icons.notes_outlined),
+                          keyboardType: TextInputType.text,
+                          maxLines: 2,
+                          onChanged: (value) {
+                            ref
+                                .read(
+                                  transactionFormProvider(
+                                    widget.transactionId,
+                                  ).notifier,
+                                )
+                                .descriptionChanged(value);
+                          },
                         ),
                         const SizedBox(height: 16),
 
@@ -126,50 +121,38 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                         const SizedBox(height: 16),
 
                         // Date and Time Row
-                        Row(
-                          children: [
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () =>
-                                    _selectDate(context, formState.date),
-                                child: AbsorbPointer(
-                                  child: SizedBox(
-                                    height: 72,
-                                    child: CustomFormField(
-                                      controller: _dateController,
-                                      label: 'Date',
-                                      hintText: 'Select date',
-                                      prefixIcon: const Icon(
-                                        Icons.calendar_today,
-                                      ),
-                                      readOnly: true,
-                                      onChanged: (_) {},
-                                    ),
-                                  ),
-                                ),
+                        GestureDetector(
+                          onTap: () => _selectDate(context, formState.date),
+                          child: AbsorbPointer(
+                            child: SizedBox(
+                              height: 72,
+                              child: CustomFormField(
+                                controller: _dateController,
+                                label: 'Date',
+                                hintText: 'Select date',
+                                prefixIcon: const Icon(Icons.calendar_today),
+                                readOnly: true,
+                                onChanged: (_) {},
                               ),
                             ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () =>
-                                    _selectTime(context, formState.date),
-                                child: AbsorbPointer(
-                                  child: SizedBox(
-                                    height: 72,
-                                    child: CustomFormField(
-                                      controller: _timeController,
-                                      label: 'Time',
-                                      hintText: 'Select time',
-                                      prefixIcon: const Icon(Icons.access_time),
-                                      readOnly: true,
-                                      onChanged: (_) {},
-                                    ),
-                                  ),
-                                ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        GestureDetector(
+                          onTap: () => _selectTime(context, formState.date),
+                          child: AbsorbPointer(
+                            child: SizedBox(
+                              height: 72,
+                              child: CustomFormField(
+                                controller: _timeController,
+                                label: 'Time',
+                                hintText: 'Select time',
+                                prefixIcon: const Icon(Icons.access_time),
+                                readOnly: true,
+                                onChanged: (_) {},
                               ),
                             ),
-                          ],
+                          ),
                         ),
                         const SizedBox(height: 24),
 
@@ -334,6 +317,11 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
           return cat.type == formState.type;
         }).toList();
 
+        final validCategoryId =
+            filteredCategories.any((cat) => cat.id == formState.categoryId)
+            ? formState.categoryId
+            : null;
+
         return IntrinsicHeight(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -346,7 +334,10 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
               SizedBox(
                 height: 72,
                 child: DropdownButtonFormField<String>(
-                  initialValue: formState.categoryId,
+                  key: ValueKey(
+                    filteredCategories.map((c) => c.id).join(','),
+                  ), // To refresh when categories change
+                  initialValue: validCategoryId,
                   decoration: InputDecoration(
                     hintText: 'Select a category',
                     prefixIcon: Icon(_getCategoryIconByType(formState.type)),
@@ -363,13 +354,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                   items: filteredCategories.map((category) {
                     return DropdownMenuItem(
                       value: category.id,
-                      child: Row(
-                        children: [
-                          Icon(_getCategoryIconByType(category.type)),
-                          const SizedBox(width: 8),
-                          Expanded(child: Text(category.label)),
-                        ],
-                      ),
+                      child: Text(category.label),
                     );
                   }).toList(),
                   onChanged: (value) {
@@ -428,33 +413,31 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 12),
-        SizedBox(
-          height: 56,
-          child: SegmentedButton<TransactionType>(
-            segments: const [
-              ButtonSegment(
-                value: TransactionType.expense,
-                label: Text('Expense'),
-                icon: Icon(Icons.arrow_upward),
-              ),
-              ButtonSegment(
-                value: TransactionType.income,
-                label: Text('Income'),
-                icon: Icon(Icons.arrow_downward),
-              ),
-              ButtonSegment(
-                value: TransactionType.transfer,
-                label: Text('Transfer'),
-                icon: Icon(Icons.swap_horiz),
-              ),
-            ],
-            selected: {formState.type},
-            onSelectionChanged: (Set<TransactionType> newSelection) {
-              ref
-                  .read(transactionFormProvider(widget.transactionId).notifier)
-                  .typeChanged(newSelection.first);
-            },
-          ),
+        SegmentedButton<TransactionType>(
+          showSelectedIcon: false,
+          segments: [
+            ButtonSegment(
+              value: TransactionType.expense,
+              label: Text('Expense'),
+              icon: Icon(_getCategoryIconByType(TransactionType.expense)),
+            ),
+            ButtonSegment(
+              value: TransactionType.income,
+              label: Text('Income'),
+              icon: Icon(_getCategoryIconByType(TransactionType.income)),
+            ),
+            ButtonSegment(
+              value: TransactionType.transfer,
+              label: Text('Transfer'),
+              icon: Icon(_getCategoryIconByType(TransactionType.transfer)),
+            ),
+          ],
+          selected: {formState.type},
+          onSelectionChanged: (Set<TransactionType> newSelection) {
+            ref
+                .read(transactionFormProvider(widget.transactionId).notifier)
+                .typeChanged(newSelection.first);
+          },
         ),
       ],
     );

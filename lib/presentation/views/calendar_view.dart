@@ -352,8 +352,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
         ),
       ),
       onTap: () {
-        // TODO: Navigate to transaction detail/edit
-        // context.push('/transactions/${transaction.id}');
+        context.push(Routes.transactionFormPage(transaction.id));
       },
     );
   }
