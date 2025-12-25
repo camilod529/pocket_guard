@@ -8,6 +8,8 @@ import 'package:money_manager_flutter/domain/entities/category.dart';
 import 'package:money_manager_flutter/presentation/providers/account/accounts_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/category/categories_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/transaction/transaction_form_provider.dart';
+import 'package:money_manager_flutter/presentation/providers/transaction/transactions_provider.dart';
+import 'package:money_manager_flutter/presentation/widgets/shared/delete_confirmation_modal.dart';
 import 'package:money_manager_flutter/presentation/widgets/shared/forms/custom_form_field.dart';
 import 'package:money_manager_flutter/utils/constants/global_constants.dart';
 
@@ -52,6 +54,15 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
         return Scaffold(
           appBar: AppBar(
             title: Text(isCreating ? 'New Transaction' : 'Edit Transaction'),
+            actions: [
+              if (!isCreating)
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    _handleDelete(context, formState);
+                  },
+                ),
+            ],
           ),
           body: SafeArea(
             child: SingleChildScrollView(
@@ -474,6 +485,47 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
       case TransactionType.transfer:
         return Icons.swap_horiz;
     }
+  }
+
+  Future<void> _handleDelete(
+    BuildContext context,
+    TransactionFormState formState,
+  ) async {
+    await DeleteConfirmationModal.show(
+      context: context,
+      title: 'Delete Transaction',
+      entity: formState.description.value.isEmpty
+          ? 'this transaction'
+          : formState.description.value,
+      description: 'This action cannot be undone.',
+      onConfirm: () async {
+        try {
+          await ref
+              .read(transactionsProvider.notifier)
+              .deleteTransaction(widget.transactionId);
+
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Transaction deleted successfully'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 2),
+              ),
+            );
+            context.pop();
+          }
+        } catch (e) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Failed to delete transaction: $e'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        }
+      },
+    );
   }
 
   Future<void> _handleSubmit(BuildContext context, WidgetRef ref) async {
