@@ -21,7 +21,7 @@ class MainApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
-      // locale: Locale('es'), // Uncomment to test a specific locale
+      locale: Locale('es'), // Uncomment to test a specific locale
       theme: AppTheme(selectedColorIndex: selectedColorIndex).lightTheme,
       darkTheme: AppTheme(selectedColorIndex: selectedColorIndex).darkTheme,
       themeMode: ThemeMode.system,

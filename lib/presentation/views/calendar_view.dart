@@ -7,11 +7,13 @@ import 'package:money_manager_flutter/config/router/routes.dart';
 import 'package:money_manager_flutter/domain/entities/account.dart';
 import 'package:money_manager_flutter/domain/entities/category.dart';
 import 'package:money_manager_flutter/domain/entities/transaction.dart';
+import 'package:money_manager_flutter/l10n/app_localizations.dart';
 import 'package:money_manager_flutter/presentation/providers/account/accounts_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/category/categories_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/selected_date_range_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/transaction/transactions_provider.dart';
 import 'package:money_manager_flutter/utils/constants/global_constants.dart';
+import 'package:money_manager_flutter/utils/shared/dates/calendar_date_formatter.dart';
 
 class CalendarView extends ConsumerStatefulWidget {
   const CalendarView({super.key});
@@ -27,6 +29,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final dateRange = ref.watch(selectedDateRangeProvider);
     final transactionsAsync = ref.watch(transactionsProvider);
     final categoriesAsync = ref.watch(categoriesProvider);
@@ -54,6 +57,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
             extra: {_selectedDay},
           );
         },
+        tooltip: l10n.fabAddTransactionTooltip,
         child: const Icon(Icons.add),
       ),
     );
@@ -150,30 +154,33 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
   }
 
   PreferredSizeWidget _buildCustomAppBar(DateRangeSelection dateRange) {
-    final monthYear = DateFormat.yMMMM().format(dateRange.start);
+    final l10n = AppLocalizations.of(context)!;
     final isCurrentMonth =
         dateRange.start.year == DateTime.now().year &&
         dateRange.start.month == DateTime.now().month;
+    final dateFormatter = CalendarDateFormatter(
+      Localizations.localeOf(context),
+    );
 
     return AppBar(
-      title: Text(monthYear),
+      title: Text(dateFormatter.formatMonthYear(dateRange.start)),
       centerTitle: true,
       leading: IconButton(
         icon: const Icon(Icons.chevron_left),
         onPressed: _previousMonth,
-        tooltip: 'Previous month',
+        tooltip: l10n.calendarPreviousMonth,
       ),
       actions: [
         if (!isCurrentMonth)
           IconButton(
             icon: const Icon(Icons.today),
             onPressed: _goToToday,
-            tooltip: 'Go to today',
+            tooltip: l10n.calendarGoToToday,
           ),
         IconButton(
           icon: const Icon(Icons.chevron_right),
           onPressed: _nextMonth,
-          tooltip: 'Next month',
+          tooltip: l10n.calendarNextMonth,
         ),
       ],
     );
@@ -255,6 +262,8 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
   Widget _buildMonthCalendar(
     AsyncValue<List<TransactionEntity>> transactionsAsync,
   ) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -269,7 +278,9 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
             ),
             error: (error, stack) => SizedBox(
               height: 300,
-              child: Center(child: Text('Error loading calendar: $error')),
+              child: Center(
+                child: Text(l10n.errorLoadingCalendar(error.toString())),
+              ),
             ),
           ),
         ],
@@ -282,6 +293,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
     CategoryEntity? category,
     AccountEntity? account,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     final colors = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final textTheme = Theme.of(context).textTheme;
@@ -326,18 +338,20 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
         backgroundColor: iconColor.withAlpha(30),
         child: Icon(icon, color: iconColor, size: 20),
       ),
-      title: Text(transaction.description ?? 'No description'),
+      title: Text(transaction.description ?? l10n.noDescription),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${DateFormat.jm().format(transaction.date)} • ${category?.label ?? 'Unknown'}',
+            '${DateFormat.jm().format(transaction.date)} • ${category?.label ?? l10n.unknownCategory}',
             style: textTheme.bodyMedium?.copyWith(
               color: colors.onSurfaceVariant,
             ),
           ),
           Text(
-            account != null ? 'Account: ${account.name}' : 'No account info',
+            account != null
+                ? l10n.accountLabel(account.name)
+                : l10n.noAccountInfo,
             style: textTheme.bodySmall?.copyWith(
               color: colors.onSurfaceVariant,
             ),
@@ -365,6 +379,12 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
     AsyncValue<List<CategoryEntity>> categoriesAsync,
     AsyncValue<List<AccountEntity>> accountsAsync,
   ) {
+    final l10n = AppLocalizations.of(context)!;
+
+    final dateFormatter = CalendarDateFormatter(
+      Localizations.localeOf(context),
+    );
+
     return transactionsAsync.when(
       data: (allTransactions) {
         // Filter transactions for selected day
@@ -386,7 +406,9 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'No transactions on ${DateFormat.MMMd().format(_selectedDay)}',
+                  l10n.noTransactionsOnDate(
+                    dateFormatter.formatShortDate(_selectedDay),
+                  ),
                   style: TextStyle(color: Colors.grey[600], fontSize: 16),
                 ),
               ],
@@ -418,23 +440,34 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stack) =>
-                  Center(child: Text('Error loading accounts: $error')),
+              error: (error, stack) => Center(
+                child: Text(l10n.errorLoadingAccounts(error.toString())),
+              ),
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stack) =>
-              Center(child: Text('Error loading categories: $error')),
+          error: (error, stack) => Center(
+            child: Text(l10n.errorLoadingCategories(error.toString())),
+          ),
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stack) =>
-          Center(child: Text('Error loading transactions: $error')),
+          Center(child: Text(l10n.errorLoadingTransactions(error.toString()))),
     );
   }
 
   Widget _buildWeekdayHeaders() {
-    final weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    final l10n = AppLocalizations.of(context)!;
+    final weekdays = [
+      l10n.weekdayMon,
+      l10n.weekdayTue,
+      l10n.weekdayWed,
+      l10n.weekdayThu,
+      l10n.weekdayFri,
+      l10n.weekdaySat,
+      l10n.weekdaySun,
+    ];
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,

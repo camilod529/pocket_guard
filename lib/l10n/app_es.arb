@@ -2,12 +2,27 @@
     "@@locale": "es",
     "accountCurrency": "Moneda",
     "accountCurrencyHint": "USD, EUR, GBP",
+    "accountLabel": "Cuenta",
+    "@accountLabel": {
+        "description": "Etiqueta para el nombre de la cuenta en el ítem de transacción",
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "Cuenta principal"
+            }
+        }
+    },
     "accountName": "Nombre de Cuenta",
     "accountNameHint": "Ingrese nombre de cuenta",
     "accounts": "Cuentas",
     "addAccount": "Agregar Cuenta",
+    "amountHint": "0.00",
+    "amountLabel": "Monto",
     "appTitle": "Administrador de Dinero",
     "calendar": "Calendario",
+    "calendarGoToToday": "Ir a hoy",
+    "calendarNextMonth": "Mes siguiente",
+    "calendarPreviousMonth": "Mes anterior",
     "cancel": "Cancelar",
     "category_expense_food_dining": "Comida",
     "category_expense_rent": "Alquiler",
@@ -15,7 +30,16 @@
     "category_income_freelance": "Freelance",
     "category_income_salary": "Salario",
     "category_transfer": "Transferencia",
+    "categoryLabel": "Categoría",
+    "createTransactionButton": "Crear Transacción",
+    "dateLabel": "Fecha",
     "delete": "Eliminar",
+    "deleteAction": "Eliminar",
+    "deleteTransactionDescription": "Esta acción no se puede deshacer.",
+    "deleteTransactionTitle": "Eliminar Transacción",
+    "descriptionHint": "Ingrese descripción de la transacción",
+    "descriptionLabel": "Descripción",
+    "editTransactionTitle": "Editar Transacción",
     "error_data_not_found": "Los datos solicitados no fueron encontrados.",
     "error_data_not_found_entity": "La {entity} solicitada no fue encontrada.",
     "@error_data_not_found_entity": {
@@ -64,6 +88,89 @@
         }
     },
     "error_unknown_data": "Algo salió mal con la operación de datos. Inténtalo de nuevo.",
+    "errorLoadingAccounts": "Error al cargar las cuentas: {error}",
+    "@errorLoadingAccounts": {
+        "description": "Error mostrado cuando falla la carga de cuentas",
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Almacenamiento lleno"
+            }
+        }
+    },
+    "errorLoadingCalendar": "Error al cargar el calendario: {error}",
+    "@errorLoadingCalendar": {
+        "description": "Error mostrado cuando falla la carga del calendario",
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Error de red"
+            }
+        }
+    },
+    "errorLoadingCategories": "Error al cargar las categorías: {error}",
+    "@errorLoadingCategories": {
+        "description": "Error mostrado cuando falla la carga de categorías",
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Tiempo de espera agotado"
+            }
+        }
+    },
+    "errorLoadingTransaction": "Error al cargar transacción: {error}",
+    "errorLoadingTransactions": "Error al cargar las transacciones: {error}",
+    "@errorLoadingTransactions": {
+        "description": "Error mostrado cuando falla la carga de transacciones",
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Error de base de datos"
+            }
+        }
+    },
+    "expenseType": "Gasto",
+    "fabAddTransactionTooltip": "Agregar transacción",
+    "goBackAction": "Regresar",
     "helloWorld": "¡Hola Mundo!",
-    "more": "Más"
+    "incomeType": "Ingreso",
+    "more": "Más",
+    "newTransactionTitle": "Nueva Transacción",
+    "noAccountInfo": "Sin información de cuenta",
+    "noDescription": "Sin descripción",
+    "noTransactionsOnDate": "Sin transacciones el {date}",
+    "@noTransactionsOnDate": {
+        "description": "Mensaje cuando no hay transacciones en el día seleccionado",
+        "placeholders": {
+            "date": {
+                "type": "String",
+                "example": "5 ene"
+            }
+        }
+    },
+    "selectAccountError": "Por favor seleccione una cuenta",
+    "selectAccountHint": "Seleccionar cuenta",
+    "selectCategoryError": "Por favor seleccione una categoría",
+    "selectCategoryHint": "Seleccionar categoría",
+    "selectDateHint": "Seleccionar fecha",
+    "selectTimeHint": "Seleccionar hora",
+    "thisTransaction": "esta transacción",
+    "timeLabel": "Hora",
+    "transactionCreatedSuccess": "¡Transacción creada exitosamente!",
+    "transactionDeletedSuccess": "Transacción eliminada exitosamente",
+    "transactionDeleteError": "Error al eliminar transacción: {error}",
+    "transactionSaveError": "Error al guardar transacción",
+    "transactionTitle": "Transacción",
+    "transactionTypeLabel": "Tipo de Transacción",
+    "transactionUpdatedSuccess": "¡Transacción actualizada exitosamente!",
+    "transferType": "Transferencia",
+    "unknownCategory": "Desconocida",
+    "updateTransactionButton": "Actualizar Transacción",
+    "weekdayFri": "Vie",
+    "weekdayMon": "Lun",
+    "weekdaySat": "Sáb",
+    "weekdaySun": "Dom",
+    "weekdayThu": "Jue",
+    "weekdayTue": "Mar",
+    "weekdayWed": "Mié"
 }

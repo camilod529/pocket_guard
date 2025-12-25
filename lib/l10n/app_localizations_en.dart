@@ -15,6 +15,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountCurrencyHint => 'USD, EUR, GBP';
 
   @override
+  String accountLabel(String name) {
+    return 'Account: $name';
+  }
+
+  @override
   String get accountName => 'Account Name';
 
   @override
@@ -27,10 +32,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addAccount => 'Add Account';
 
   @override
+  String get amountHint => '0.00';
+
+  @override
+  String get amountLabel => 'Amount';
+
+  @override
   String get appTitle => 'Money Manager';
 
   @override
   String get calendar => 'Calendar';
+
+  @override
+  String get calendarGoToToday => 'Go to today';
+
+  @override
+  String get calendarNextMonth => 'Next month';
+
+  @override
+  String get calendarPreviousMonth => 'Previous month';
 
   @override
   String get cancel => 'Cancel';
@@ -54,7 +74,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get category_transfer => 'Transfer';
 
   @override
+  String get categoryLabel => 'Category';
+
+  @override
+  String get createTransactionButton => 'Create Transaction';
+
+  @override
+  String get dateLabel => 'Date';
+
+  @override
   String get delete => 'Delete';
+
+  @override
+  String get deleteAction => 'Delete';
+
+  @override
+  String get deleteTransactionDescription => 'This action cannot be undone.';
+
+  @override
+  String get deleteTransactionTitle => 'Delete Transaction';
+
+  @override
+  String get descriptionHint => 'Enter transaction description';
+
+  @override
+  String get descriptionLabel => 'Description';
+
+  @override
+  String get editTransactionTitle => 'Edit Transaction';
 
   @override
   String get error_data_not_found => 'The requested data was not found.';
@@ -101,8 +148,136 @@ class AppLocalizationsEn extends AppLocalizations {
   String get error_unknown_data => 'Something went wrong with the data operation. Please try again.';
 
   @override
+  String errorLoadingAccounts(String error) {
+    return 'Error loading accounts: $error';
+  }
+
+  @override
+  String errorLoadingCalendar(String error) {
+    return 'Error loading calendar: $error';
+  }
+
+  @override
+  String errorLoadingCategories(String error) {
+    return 'Error loading categories: $error';
+  }
+
+  @override
+  String errorLoadingTransaction(String error) {
+    return 'Error loading transaction: $error';
+  }
+
+  @override
+  String errorLoadingTransactions(String error) {
+    return 'Error loading transactions: $error';
+  }
+
+  @override
+  String get expenseType => 'Expense';
+
+  @override
+  String get fabAddTransactionTooltip => 'Add transaction';
+
+  @override
+  String get goBackAction => 'Go Back';
+
+  @override
   String get helloWorld => 'Hello World!';
 
   @override
+  String get incomeType => 'Income';
+
+  @override
   String get more => 'More';
+
+  @override
+  String get newTransactionTitle => 'New Transaction';
+
+  @override
+  String get noAccountInfo => 'No account info';
+
+  @override
+  String get noDescription => 'No description';
+
+  @override
+  String noTransactionsOnDate(String date) {
+    return 'No transactions on $date';
+  }
+
+  @override
+  String get selectAccountError => 'Please select an account';
+
+  @override
+  String get selectAccountHint => 'Select an account';
+
+  @override
+  String get selectCategoryError => 'Please select a category';
+
+  @override
+  String get selectCategoryHint => 'Select a category';
+
+  @override
+  String get selectDateHint => 'Select date';
+
+  @override
+  String get selectTimeHint => 'Select time';
+
+  @override
+  String get thisTransaction => 'this transaction';
+
+  @override
+  String get timeLabel => 'Time';
+
+  @override
+  String get transactionCreatedSuccess => 'Transaction created successfully!';
+
+  @override
+  String get transactionDeletedSuccess => 'Transaction deleted successfully';
+
+  @override
+  String transactionDeleteError(String error) {
+    return 'Failed to delete transaction: $error';
+  }
+
+  @override
+  String get transactionSaveError => 'Failed to save transaction';
+
+  @override
+  String get transactionTitle => 'Transaction';
+
+  @override
+  String get transactionTypeLabel => 'Transaction Type';
+
+  @override
+  String get transactionUpdatedSuccess => 'Transaction updated successfully!';
+
+  @override
+  String get transferType => 'Transfer';
+
+  @override
+  String get unknownCategory => 'Unknown';
+
+  @override
+  String get updateTransactionButton => 'Update Transaction';
+
+  @override
+  String get weekdayFri => 'Fri';
+
+  @override
+  String get weekdayMon => 'Mon';
+
+  @override
+  String get weekdaySat => 'Sat';
+
+  @override
+  String get weekdaySun => 'Sun';
+
+  @override
+  String get weekdayThu => 'Thu';
+
+  @override
+  String get weekdayTue => 'Tue';
+
+  @override
+  String get weekdayWed => 'Wed';
 }

@@ -107,6 +107,12 @@ abstract class AppLocalizations {
   /// **'USD, EUR, GBP'**
   String get accountCurrencyHint;
 
+  /// Label for account name in transaction list item
+  ///
+  /// In en, this message translates to:
+  /// **'Account: {name}'**
+  String accountLabel(String name);
+
   /// Label for account name input
   ///
   /// In en, this message translates to:
@@ -131,6 +137,18 @@ abstract class AppLocalizations {
   /// **'Add Account'**
   String get addAccount;
 
+  /// Amount field hint text
+  ///
+  /// In en, this message translates to:
+  /// **'0.00'**
+  String get amountHint;
+
+  /// Amount field label
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get amountLabel;
+
   /// The title of the application
   ///
   /// In en, this message translates to:
@@ -142,6 +160,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Calendar'**
   String get calendar;
+
+  /// Tooltip for jumping back to the current day/month
+  ///
+  /// In en, this message translates to:
+  /// **'Go to today'**
+  String get calendarGoToToday;
+
+  /// Tooltip for going to next month in the calendar
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get calendarNextMonth;
+
+  /// Tooltip for going to previous month in the calendar
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get calendarPreviousMonth;
 
   /// Cancel action/button
   ///
@@ -185,11 +221,65 @@ abstract class AppLocalizations {
   /// **'Transfer'**
   String get category_transfer;
 
+  /// Category selector label
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get categoryLabel;
+
+  /// Button to create new transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Create Transaction'**
+  String get createTransactionButton;
+
+  /// Date field label
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get dateLabel;
+
   /// Delete action/button
   ///
   /// In en, this message translates to:
   /// **'Delete'**
   String get delete;
+
+  /// Delete button tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteAction;
+
+  /// Delete confirmation description
+  ///
+  /// In en, this message translates to:
+  /// **'This action cannot be undone.'**
+  String get deleteTransactionDescription;
+
+  /// Delete confirmation dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Transaction'**
+  String get deleteTransactionTitle;
+
+  /// Description field hint text
+  ///
+  /// In en, this message translates to:
+  /// **'Enter transaction description'**
+  String get descriptionHint;
+
+  /// Description field label
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get descriptionLabel;
+
+  /// AppBar title for editing existing transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Transaction'**
+  String get editTransactionTitle;
 
   /// Generic data not found error
   ///
@@ -263,17 +353,245 @@ abstract class AppLocalizations {
   /// **'Something went wrong with the data operation. Please try again.'**
   String get error_unknown_data;
 
+  /// Error shown when accounts fail to load
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading accounts: {error}'**
+  String errorLoadingAccounts(String error);
+
+  /// Error shown when the calendar data fails to load
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading calendar: {error}'**
+  String errorLoadingCalendar(String error);
+
+  /// Error shown when categories fail to load
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading categories: {error}'**
+  String errorLoadingCategories(String error);
+
+  /// Error loading transaction data
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading transaction: {error}'**
+  String errorLoadingTransaction(String error);
+
+  /// Error shown when transactions for the list fail to load
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading transactions: {error}'**
+  String errorLoadingTransactions(String error);
+
+  /// Expense transaction type
+  ///
+  /// In en, this message translates to:
+  /// **'Expense'**
+  String get expenseType;
+
+  /// Tooltip for FAB that creates a new transaction from the calendar view
+  ///
+  /// In en, this message translates to:
+  /// **'Add transaction'**
+  String get fabAddTransactionTooltip;
+
+  /// Button to go back from error screen
+  ///
+  /// In en, this message translates to:
+  /// **'Go Back'**
+  String get goBackAction;
+
   /// A simple greeting message
   ///
   /// In en, this message translates to:
   /// **'Hello World!'**
   String get helloWorld;
 
+  /// Income transaction type
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get incomeType;
+
   /// Label for the more options view
   ///
   /// In en, this message translates to:
   /// **'More'**
   String get more;
+
+  /// AppBar title for creating new transaction
+  ///
+  /// In en, this message translates to:
+  /// **'New Transaction'**
+  String get newTransactionTitle;
+
+  /// Shown when a transaction has no account associated
+  ///
+  /// In en, this message translates to:
+  /// **'No account info'**
+  String get noAccountInfo;
+
+  /// Shown when a transaction has no description
+  ///
+  /// In en, this message translates to:
+  /// **'No description'**
+  String get noDescription;
+
+  /// Message when there are no transactions on the selected day
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions on {date}'**
+  String noTransactionsOnDate(String date);
+
+  /// Account validation error
+  ///
+  /// In en, this message translates to:
+  /// **'Please select an account'**
+  String get selectAccountError;
+
+  /// Account dropdown hint
+  ///
+  /// In en, this message translates to:
+  /// **'Select an account'**
+  String get selectAccountHint;
+
+  /// Category validation error
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a category'**
+  String get selectCategoryError;
+
+  /// Category dropdown hint
+  ///
+  /// In en, this message translates to:
+  /// **'Select a category'**
+  String get selectCategoryHint;
+
+  /// Date field hint text
+  ///
+  /// In en, this message translates to:
+  /// **'Select date'**
+  String get selectDateHint;
+
+  /// Time field hint text
+  ///
+  /// In en, this message translates to:
+  /// **'Select time'**
+  String get selectTimeHint;
+
+  /// Fallback entity name for delete confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'this transaction'**
+  String get thisTransaction;
+
+  /// Time field label
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get timeLabel;
+
+  /// Success message after creation
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction created successfully!'**
+  String get transactionCreatedSuccess;
+
+  /// Success message after deletion
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction deleted successfully'**
+  String get transactionDeletedSuccess;
+
+  /// Error message after failed deletion
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete transaction: {error}'**
+  String transactionDeleteError(String error);
+
+  /// Generic save error message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save transaction'**
+  String get transactionSaveError;
+
+  /// Generic transaction title
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction'**
+  String get transactionTitle;
+
+  /// Transaction type selector label
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Type'**
+  String get transactionTypeLabel;
+
+  /// Success message after update
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction updated successfully!'**
+  String get transactionUpdatedSuccess;
+
+  /// Transfer transaction type
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get transferType;
+
+  /// Fallback label when a category is missing or unknown
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknownCategory;
+
+  /// Button to update existing transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Update Transaction'**
+  String get updateTransactionButton;
+
+  /// Short label for Friday in calendar header
+  ///
+  /// In en, this message translates to:
+  /// **'Fri'**
+  String get weekdayFri;
+
+  /// Short label for Monday in calendar header
+  ///
+  /// In en, this message translates to:
+  /// **'Mon'**
+  String get weekdayMon;
+
+  /// Short label for Saturday in calendar header
+  ///
+  /// In en, this message translates to:
+  /// **'Sat'**
+  String get weekdaySat;
+
+  /// Short label for Sunday in calendar header
+  ///
+  /// In en, this message translates to:
+  /// **'Sun'**
+  String get weekdaySun;
+
+  /// Short label for Thursday in calendar header
+  ///
+  /// In en, this message translates to:
+  /// **'Thu'**
+  String get weekdayThu;
+
+  /// Short label for Tuesday in calendar header
+  ///
+  /// In en, this message translates to:
+  /// **'Tue'**
+  String get weekdayTue;
+
+  /// Short label for Wednesday in calendar header
+  ///
+  /// In en, this message translates to:
+  /// **'Wed'**
+  String get weekdayWed;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

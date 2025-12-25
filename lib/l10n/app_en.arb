@@ -8,6 +8,16 @@
   "@accountCurrencyHint": {
     "description": "Hint text for account currency input"
   },
+  "accountLabel": "Account: {name}",
+  "@accountLabel": {
+    "description": "Label for account name in transaction list item",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Main account"
+      }
+    }
+  },
   "accountName": "Account Name",
   "@accountName": {
     "description": "Label for account name input"
@@ -24,6 +34,14 @@
   "@addAccount": {
     "description": "Add new account button"
   },
+  "amountHint": "0.00",
+  "@amountHint": {
+    "description": "Amount field hint text"
+  },
+  "amountLabel": "Amount",
+  "@amountLabel": {
+    "description": "Amount field label"
+  },
   "appTitle": "Money Manager",
   "@appTitle": {
     "description": "The title of the application"
@@ -31,6 +49,18 @@
   "calendar": "Calendar",
   "@calendar": {
     "description": "Label for the calendar view"
+  },
+  "calendarGoToToday": "Go to today",
+  "@calendarGoToToday": {
+    "description": "Tooltip for jumping back to the current day/month"
+  },
+  "calendarNextMonth": "Next month",
+  "@calendarNextMonth": {
+    "description": "Tooltip for going to next month in the calendar"
+  },
+  "calendarPreviousMonth": "Previous month",
+  "@calendarPreviousMonth": {
+    "description": "Tooltip for going to previous month in the calendar"
   },
   "cancel": "Cancel",
   "@cancel": {
@@ -60,9 +90,45 @@
   "@category_transfer": {
     "description": "Category for money transfers"
   },
+  "categoryLabel": "Category",
+  "@categoryLabel": {
+    "description": "Category selector label"
+  },
+  "createTransactionButton": "Create Transaction",
+  "@createTransactionButton": {
+    "description": "Button to create new transaction"
+  },
+  "dateLabel": "Date",
+  "@dateLabel": {
+    "description": "Date field label"
+  },
   "delete": "Delete",
   "@delete": {
     "description": "Delete action/button"
+  },
+  "deleteAction": "Delete",
+  "@deleteAction": {
+    "description": "Delete button tooltip"
+  },
+  "deleteTransactionDescription": "This action cannot be undone.",
+  "@deleteTransactionDescription": {
+    "description": "Delete confirmation description"
+  },
+  "deleteTransactionTitle": "Delete Transaction",
+  "@deleteTransactionTitle": {
+    "description": "Delete confirmation dialog title"
+  },
+  "descriptionHint": "Enter transaction description",
+  "@descriptionHint": {
+    "description": "Description field hint text"
+  },
+  "descriptionLabel": "Description",
+  "@descriptionLabel": {
+    "description": "Description field label"
+  },
+  "editTransactionTitle": "Edit Transaction",
+  "@editTransactionTitle": {
+    "description": "AppBar title for editing existing transaction"
   },
   "error_data_not_found": "The requested data was not found.",
   "@error_data_not_found": {
@@ -136,12 +202,206 @@
   "@error_unknown_data": {
     "description": "Unknown or unexpected data-related error"
   },
+  "errorLoadingAccounts": "Error loading accounts: {error}",
+  "@errorLoadingAccounts": {
+    "description": "Error shown when accounts fail to load",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Storage full"
+      }
+    }
+  },
+  "errorLoadingCalendar": "Error loading calendar: {error}",
+  "@errorLoadingCalendar": {
+    "description": "Error shown when the calendar data fails to load",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "errorLoadingCategories": "Error loading categories: {error}",
+  "@errorLoadingCategories": {
+    "description": "Error shown when categories fail to load",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Timeout"
+      }
+    }
+  },
+  "errorLoadingTransaction": "Error loading transaction: {error}",
+  "@errorLoadingTransaction": {
+    "description": "Error loading transaction data",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Database error"
+      }
+    }
+  },
+  "errorLoadingTransactions": "Error loading transactions: {error}",
+  "@errorLoadingTransactions": {
+    "description": "Error shown when transactions for the list fail to load",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Database error"
+      }
+    }
+  },
+  "expenseType": "Expense",
+  "@expenseType": {
+    "description": "Expense transaction type"
+  },
+  "fabAddTransactionTooltip": "Add transaction",
+  "@fabAddTransactionTooltip": {
+    "description": "Tooltip for FAB that creates a new transaction from the calendar view"
+  },
+  "goBackAction": "Go Back",
+  "@goBackAction": {
+    "description": "Button to go back from error screen"
+  },
   "helloWorld": "Hello World!",
   "@helloWorld": {
     "description": "A simple greeting message"
   },
+  "incomeType": "Income",
+  "@incomeType": {
+    "description": "Income transaction type"
+  },
   "more": "More",
   "@more": {
     "description": "Label for the more options view"
+  },
+  "newTransactionTitle": "New Transaction",
+  "@newTransactionTitle": {
+    "description": "AppBar title for creating new transaction"
+  },
+  "noAccountInfo": "No account info",
+  "@noAccountInfo": {
+    "description": "Shown when a transaction has no account associated"
+  },
+  "noDescription": "No description",
+  "@noDescription": {
+    "description": "Shown when a transaction has no description"
+  },
+  "noTransactionsOnDate": "No transactions on {date}",
+  "@noTransactionsOnDate": {
+    "description": "Message when there are no transactions on the selected day",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "Jan 5"
+      }
+    }
+  },
+  "selectAccountError": "Please select an account",
+  "@selectAccountError": {
+    "description": "Account validation error"
+  },
+  "selectAccountHint": "Select an account",
+  "@selectAccountHint": {
+    "description": "Account dropdown hint"
+  },
+  "selectCategoryError": "Please select a category",
+  "@selectCategoryError": {
+    "description": "Category validation error"
+  },
+  "selectCategoryHint": "Select a category",
+  "@selectCategoryHint": {
+    "description": "Category dropdown hint"
+  },
+  "selectDateHint": "Select date",
+  "@selectDateHint": {
+    "description": "Date field hint text"
+  },
+  "selectTimeHint": "Select time",
+  "@selectTimeHint": {
+    "description": "Time field hint text"
+  },
+  "thisTransaction": "this transaction",
+  "@thisTransaction": {
+    "description": "Fallback entity name for delete confirmation"
+  },
+  "timeLabel": "Time",
+  "@timeLabel": {
+    "description": "Time field label"
+  },
+  "transactionCreatedSuccess": "Transaction created successfully!",
+  "@transactionCreatedSuccess": {
+    "description": "Success message after creation"
+  },
+  "transactionDeletedSuccess": "Transaction deleted successfully",
+  "@transactionDeletedSuccess": {
+    "description": "Success message after deletion"
+  },
+  "transactionDeleteError": "Failed to delete transaction: {error}",
+  "@transactionDeleteError": {
+    "description": "Error message after failed deletion",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "transactionSaveError": "Failed to save transaction",
+  "@transactionSaveError": {
+    "description": "Generic save error message"
+  },
+  "transactionTitle": "Transaction",
+  "@transactionTitle": {
+    "description": "Generic transaction title"
+  },
+  "transactionTypeLabel": "Transaction Type",
+  "@transactionTypeLabel": {
+    "description": "Transaction type selector label"
+  },
+  "transactionUpdatedSuccess": "Transaction updated successfully!",
+  "@transactionUpdatedSuccess": {
+    "description": "Success message after update"
+  },
+  "transferType": "Transfer",
+  "@transferType": {
+    "description": "Transfer transaction type"
+  },
+  "unknownCategory": "Unknown",
+  "@unknownCategory": {
+    "description": "Fallback label when a category is missing or unknown"
+  },
+  "updateTransactionButton": "Update Transaction",
+  "@updateTransactionButton": {
+    "description": "Button to update existing transaction"
+  },
+  "weekdayFri": "Fri",
+  "@weekdayFri": {
+    "description": "Short label for Friday in calendar header"
+  },
+  "weekdayMon": "Mon",
+  "@weekdayMon": {
+    "description": "Short label for Monday in calendar header"
+  },
+  "weekdaySat": "Sat",
+  "@weekdaySat": {
+    "description": "Short label for Saturday in calendar header"
+  },
+  "weekdaySun": "Sun",
+  "@weekdaySun": {
+    "description": "Short label for Sunday in calendar header"
+  },
+  "weekdayThu": "Thu",
+  "@weekdayThu": {
+    "description": "Short label for Thursday in calendar header"
+  },
+  "weekdayTue": "Tue",
+  "@weekdayTue": {
+    "description": "Short label for Tuesday in calendar header"
+  },
+  "weekdayWed": "Wed",
+  "@weekdayWed": {
+    "description": "Short label for Wednesday in calendar header"
   }
 }
