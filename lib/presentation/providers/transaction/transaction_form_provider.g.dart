@@ -16,7 +16,7 @@ final class TransactionFormProvider
     extends $AsyncNotifierProvider<TransactionForm, TransactionFormState> {
   const TransactionFormProvider._({
     required TransactionFormFamily super.from,
-    required String super.argument,
+    required (String, {DateTime? selectedDate}) super.argument,
   }) : super(
          retry: null,
          name: r'transactionFormProvider',
@@ -32,7 +32,7 @@ final class TransactionFormProvider
   String toString() {
     return r'transactionFormProvider'
         ''
-        '($argument)';
+        '$argument';
   }
 
   @$internal
@@ -50,7 +50,7 @@ final class TransactionFormProvider
   }
 }
 
-String _$transactionFormHash() => r'636df368153ab6b077c675bf02861dea3c0525be';
+String _$transactionFormHash() => r'c208665e6521d3dd6519a01ea6781bedb7ec7afd';
 
 final class TransactionFormFamily extends $Family
     with
@@ -59,7 +59,7 @@ final class TransactionFormFamily extends $Family
           AsyncValue<TransactionFormState>,
           TransactionFormState,
           FutureOr<TransactionFormState>,
-          String
+          (String, {DateTime? selectedDate})
         > {
   const TransactionFormFamily._()
     : super(
@@ -70,22 +70,31 @@ final class TransactionFormFamily extends $Family
         isAutoDispose: true,
       );
 
-  TransactionFormProvider call(String transactionId) =>
-      TransactionFormProvider._(argument: transactionId, from: this);
+  TransactionFormProvider call(
+    String transactionId, {
+    DateTime? selectedDate,
+  }) => TransactionFormProvider._(
+    argument: (transactionId, selectedDate: selectedDate),
+    from: this,
+  );
 
   @override
   String toString() => r'transactionFormProvider';
 }
 
 abstract class _$TransactionForm extends $AsyncNotifier<TransactionFormState> {
-  late final _$args = ref.$arg as String;
-  String get transactionId => _$args;
+  late final _$args = ref.$arg as (String, {DateTime? selectedDate});
+  String get transactionId => _$args.$1;
+  DateTime? get selectedDate => _$args.selectedDate;
 
-  FutureOr<TransactionFormState> build(String transactionId);
+  FutureOr<TransactionFormState> build(
+    String transactionId, {
+    DateTime? selectedDate,
+  });
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build(_$args);
+    final created = build(_$args.$1, selectedDate: _$args.selectedDate);
     final ref =
         this.ref
             as $Ref<AsyncValue<TransactionFormState>, TransactionFormState>;

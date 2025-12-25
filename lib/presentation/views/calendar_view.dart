@@ -49,7 +49,10 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.push(Routes.transactionFormPage(GlobalConstants.createId));
+          context.push(
+            Routes.transactionFormPage(GlobalConstants.createId),
+            extra: {_selectedDay},
+          );
         },
         child: const Icon(Icons.add),
       ),

@@ -32,8 +32,13 @@ final appRouter = GoRouter(
       path: Routes.transactionForm,
       builder: (context, state) {
         final transactionId = state.pathParameters['id'];
+        final extra = state.extra as Set<DateTime>?;
+        final selectedDate = extra != null && extra.isNotEmpty
+            ? extra.first
+            : null;
         return TransactionFormScreen(
           transactionId: transactionId ?? GlobalConstants.createId,
+          selectedDate: selectedDate,
         );
       },
     ),

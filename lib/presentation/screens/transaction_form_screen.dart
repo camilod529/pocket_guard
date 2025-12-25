@@ -13,8 +13,13 @@ import 'package:money_manager_flutter/utils/constants/global_constants.dart';
 
 class TransactionFormScreen extends ConsumerStatefulWidget {
   final String transactionId; // "create" or real UUID
+  final DateTime? selectedDate;
 
-  const TransactionFormScreen({super.key, required this.transactionId});
+  const TransactionFormScreen({
+    super.key,
+    required this.transactionId,
+    this.selectedDate,
+  });
 
   @override
   ConsumerState<TransactionFormScreen> createState() =>
@@ -30,7 +35,10 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
     final isCreating = widget.transactionId == GlobalConstants.createId;
 
     final formStateAsync = ref.watch(
-      transactionFormProvider(widget.transactionId),
+      transactionFormProvider(
+        widget.transactionId,
+        selectedDate: widget.selectedDate,
+      ),
     );
     final categoriesAsync = ref.watch(categoriesProvider);
     final accountsAsync = ref.watch(accountsProvider);
@@ -86,6 +94,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                                 .read(
                                   transactionFormProvider(
                                     widget.transactionId,
+                                    selectedDate: widget.selectedDate,
                                   ).notifier,
                                 )
                                 .amountChanged(value);
@@ -109,6 +118,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                                 .read(
                                   transactionFormProvider(
                                     widget.transactionId,
+                                    selectedDate: widget.selectedDate,
                                   ).notifier,
                                 )
                                 .descriptionChanged(value);
@@ -162,9 +172,14 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                         const SizedBox(height: 32),
 
                         // Submit Button
+                        // Submit Button
                         ElevatedButton.icon(
                           onPressed:
-                              formState.isFormPure || formState.isFormValid
+                              (isCreating
+                                  ? (formState.isFormPure ||
+                                        formState.isFormValid)
+                                  : (formState.hasFormBeenModified &&
+                                        formState.isFormValid))
                               ? () => _handleSubmit(context, ref)
                               : null,
                           icon: const Icon(Icons.save),
@@ -265,6 +280,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                           .read(
                             transactionFormProvider(
                               widget.transactionId,
+                              selectedDate: widget.selectedDate,
                             ).notifier,
                           )
                           .accountChanged(value);
@@ -363,6 +379,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                           .read(
                             transactionFormProvider(
                               widget.transactionId,
+                              selectedDate: widget.selectedDate,
                             ).notifier,
                           )
                           .categoryChanged(value);
@@ -435,7 +452,12 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
           selected: {formState.type},
           onSelectionChanged: (Set<TransactionType> newSelection) {
             ref
-                .read(transactionFormProvider(widget.transactionId).notifier)
+                .read(
+                  transactionFormProvider(
+                    widget.transactionId,
+                    selectedDate: widget.selectedDate,
+                  ).notifier,
+                )
                 .typeChanged(newSelection.first);
           },
         ),
@@ -456,7 +478,12 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
 
   Future<void> _handleSubmit(BuildContext context, WidgetRef ref) async {
     final success = await ref
-        .read(transactionFormProvider(widget.transactionId).notifier)
+        .read(
+          transactionFormProvider(
+            widget.transactionId,
+            selectedDate: widget.selectedDate,
+          ).notifier,
+        )
         .onFormSubmit();
 
     if (success && context.mounted) {
@@ -506,7 +533,12 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
       );
 
       ref
-          .read(transactionFormProvider(widget.transactionId).notifier)
+          .read(
+            transactionFormProvider(
+              widget.transactionId,
+              selectedDate: widget.selectedDate,
+            ).notifier,
+          )
           .dateChanged(newDateTime);
     }
   }
@@ -528,7 +560,12 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
       );
 
       ref
-          .read(transactionFormProvider(widget.transactionId).notifier)
+          .read(
+            transactionFormProvider(
+              widget.transactionId,
+              selectedDate: widget.selectedDate,
+            ).notifier,
+          )
           .dateChanged(newDateTime);
     }
   }

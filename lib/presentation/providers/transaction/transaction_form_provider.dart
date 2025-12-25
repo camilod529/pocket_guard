@@ -25,6 +25,7 @@ class TransactionForm extends _$TransactionForm {
       currentState.copyWith(
         accountId: accountId,
         account: account,
+        hasFormBeenModified: true,
         isFormValid: _isValid(
           currentState.description,
           currentState.amount,
@@ -42,6 +43,7 @@ class TransactionForm extends _$TransactionForm {
     final amount = TransactionAmount.dirty(value);
     state = AsyncValue.data(
       currentState.copyWith(
+        hasFormBeenModified: true,
         amount: amount,
         isFormValid: _isValid(
           currentState.description,
@@ -54,7 +56,10 @@ class TransactionForm extends _$TransactionForm {
   }
 
   @override
-  Future<TransactionFormState> build(String transactionId) async {
+  Future<TransactionFormState> build(
+    String transactionId, {
+    DateTime? selectedDate,
+  }) async {
     final isCreating = transactionId == GlobalConstants.createId;
 
     if (!isCreating) {
@@ -92,7 +97,13 @@ class TransactionForm extends _$TransactionForm {
     // Default to expense for new transactions
     return TransactionFormState(
       type: TransactionType.expense,
-      date: DateTime.now(),
+      date:
+          selectedDate?.copyWith(
+            hour: DateTime.now().hour,
+            minute: DateTime.now().minute,
+            second: DateTime.now().second,
+          ) ??
+          DateTime.now(),
       amount: const TransactionAmount.pure(),
       description: const TransactionDescription.pure(),
       isFormValid: false,
@@ -111,6 +122,7 @@ class TransactionForm extends _$TransactionForm {
     state = AsyncValue.data(
       currentState.copyWith(
         categoryId: categoryId,
+        hasFormBeenModified: true,
         category: category,
         isFormValid: _isValid(
           currentState.description,
@@ -126,7 +138,9 @@ class TransactionForm extends _$TransactionForm {
     final currentState = state.value;
     if (currentState == null) return;
 
-    state = AsyncValue.data(currentState.copyWith(date: date));
+    state = AsyncValue.data(
+      currentState.copyWith(date: date, hasFormBeenModified: true),
+    );
   }
 
   void descriptionChanged(String value) {
@@ -136,6 +150,7 @@ class TransactionForm extends _$TransactionForm {
     final description = TransactionDescription.dirty(value);
     state = AsyncValue.data(
       currentState.copyWith(
+        hasFormBeenModified: true,
         description: description,
         isFormValid: _isValid(
           description,
@@ -191,6 +206,7 @@ class TransactionForm extends _$TransactionForm {
     state = AsyncValue.data(
       currentState.copyWith(
         type: type,
+        hasFormBeenModified: true,
         categoryId: null, // Reset category when type changes
         category: const GenericStringInput.pure(),
         isFormValid: false,
@@ -237,6 +253,7 @@ class TransactionForm extends _$TransactionForm {
         category: category,
         account: account,
         isFormPure: false,
+        hasFormBeenModified: true,
         isFormValid: Formz.validate([amount, description, category, account]),
       ),
     );
@@ -255,6 +272,7 @@ class TransactionFormState {
   final DateTime date;
   final TransactionType type;
   final bool isFormPure;
+  final bool hasFormBeenModified;
 
   const TransactionFormState({
     this.isFormValid = false,
@@ -268,6 +286,7 @@ class TransactionFormState {
     required this.date,
     required this.type,
     this.isFormPure = true,
+    this.hasFormBeenModified = false,
   });
 
   String? get amountError =>
@@ -278,6 +297,7 @@ class TransactionFormState {
       : null;
   bool get isAmountPure => amount.isPure;
   bool get isDescriptionPure => description.isPure;
+
   TransactionFormState copyWith({
     bool? isFormValid,
     String? id,
@@ -290,6 +310,7 @@ class TransactionFormState {
     TransactionType? type,
     bool? isFormPure,
     String? accountId,
+    bool? hasFormBeenModified,
   }) {
     return TransactionFormState(
       isFormValid: isFormValid ?? this.isFormValid,
@@ -303,6 +324,7 @@ class TransactionFormState {
       type: type ?? this.type,
       isFormPure: isFormPure ?? this.isFormPure,
       accountId: accountId ?? this.accountId,
+      hasFormBeenModified: hasFormBeenModified ?? this.hasFormBeenModified,
     );
   }
 }
