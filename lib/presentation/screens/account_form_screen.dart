@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:money_manager_flutter/l10n/app_localizations.dart';
@@ -105,6 +106,11 @@ class AccountFormScreen extends ConsumerWidget {
                               signed: true,
                               decimal: true,
                             ),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                RegExp(r'^-?\d*\.?\d{0,2}'),
+                              ),
+                            ],
                             onChanged: (value) {
                               final parsedValue =
                                   NumberFormatting.parseUserInput(
