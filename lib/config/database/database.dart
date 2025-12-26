@@ -34,42 +34,13 @@ class AppDatabase extends _$AppDatabase {
         await seedDefaultCategories();
       },
       beforeOpen: (details) async {
-        print('🔍 beforeOpen called - enabling foreign keys');
         await customStatement('PRAGMA foreign_keys = ON');
-
-        // Verify it worked
-        final result = await customSelect('PRAGMA foreign_keys').get();
-        print('🔍 Foreign keys after setting: ${result.first.data}');
       },
     );
   }
 
   @override
   int get schemaVersion => 1;
-
-  Future<void> debugDatabaseSetup() async {
-    // Check if foreign keys are enabled
-    final fkResult = await customSelect('PRAGMA foreign_keys').get();
-    print('🔍 Foreign keys enabled: ${fkResult.first.data}');
-
-    // Check the actual table schema
-    final schemaResult = await customSelect(
-      "SELECT sql FROM sqlite_master WHERE type='table' AND name='transactions'",
-    ).get();
-    print('🔍 Transactions table SQL: ${schemaResult.first.data}');
-
-    // Check if there are any transactions
-    final transCount = await customSelect(
-      'SELECT COUNT(*) as count FROM transactions',
-    ).get();
-    print('🔍 Total transactions: ${transCount.first.data}');
-
-    // Try to check integrity
-    final integrityResult = await customSelect(
-      'PRAGMA foreign_key_check',
-    ).get();
-    print('🔍 Foreign key violations: ${integrityResult.length}');
-  }
 
   Future<void> seedDefaultCategories() async {
     final defaultCategories = [
