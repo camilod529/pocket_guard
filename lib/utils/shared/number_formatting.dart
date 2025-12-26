@@ -62,7 +62,11 @@ class NumberFormatting {
   }
 
   /// Parses user input string to double, handling locale-specific formats
-  static double? parseUserInput(String input, String currency) {
+  static double? parseUserInput(
+    String input,
+    String currency, {
+    bool removeNegative = true,
+  }) {
     if (input.isEmpty) return null;
 
     // Clean input: remove currency symbols, spaces, thousands separators
@@ -75,8 +79,10 @@ class NumberFormatting {
         .trim();
 
     // Handle negative numbers
-    bool isNegative = cleaned.startsWith('-');
-    if (isNegative) cleaned = cleaned.substring(1);
+    if (removeNegative) {
+      bool isNegative = cleaned.startsWith('-');
+      if (isNegative) cleaned = cleaned.substring(1);
+    }
 
     return double.tryParse(cleaned);
   }

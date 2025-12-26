@@ -22,6 +22,7 @@ class CustomFormField extends ConsumerWidget {
   final int? minLines;
   final bool readOnly;
   final BorderRadius borderRadius;
+  final VoidCallback? onTap;
   const CustomFormField({
     super.key,
     required this.label,
@@ -42,6 +43,7 @@ class CustomFormField extends ConsumerWidget {
     this.enableSuggestions = true,
     this.maxLines = 1,
     this.minLines,
+    this.onTap,
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
   });
 
@@ -57,6 +59,7 @@ class CustomFormField extends ConsumerWidget {
       onChanged: (value) {
         onChanged?.call(value);
       },
+      onTap: onTap,
       controller: controller,
       readOnly: readOnly,
       inputFormatters: inputFormatters,
