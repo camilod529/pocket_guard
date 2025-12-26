@@ -7,6 +7,7 @@ import 'package:money_manager_flutter/presentation/providers/account/accounts_pr
 import 'package:money_manager_flutter/presentation/widgets/shared/delete_confirmation_modal.dart';
 import 'package:money_manager_flutter/presentation/widgets/shared/forms/custom_form_field.dart';
 import 'package:money_manager_flutter/utils/constants/global_constants.dart';
+import 'package:money_manager_flutter/utils/shared/number_formatting.dart';
 
 class AccountFormScreen extends ConsumerWidget {
   final String accountId; // "create" or real UUID
@@ -84,29 +85,74 @@ class AccountFormScreen extends ConsumerWidget {
                         .currencyChanged(value),
                   ),
                   const SizedBox(height: 16),
-                  CustomFormField(
-                    initialValue: formState.balance.value.toStringAsFixed(2),
-                    label: localizations.amountLabel,
-                    hintText: localizations.amountHint,
-                    prefixIcon: const Icon(Icons.attach_money_outlined),
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
+                  IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: CustomFormField(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(12),
+                              bottomLeft: Radius.circular(12),
+                            ),
+                            initialValue: NumberFormatting.formatNumber(
+                              formState.balance.value,
+                            ),
+                            label: localizations.amountLabel,
+                            hintText: localizations.amountHint,
+                            prefixIcon: const Icon(Icons.attach_money_outlined),
+                            keyboardType: const TextInputType.numberWithOptions(
+                              signed: true,
+                              decimal: true,
+                            ),
+                            onChanged: (value) {
+                              final parsedValue =
+                                  NumberFormatting.parseUserInput(
+                                    value,
+                                    formState.currency.value.isEmpty
+                                        ? 'USD'
+                                        : formState.currency.value,
+                                  );
+                              if (parsedValue != null || value.isEmpty) {
+                                ref
+                                    .read(
+                                      accountFormProvider(accountId).notifier,
+                                    )
+                                    .balanceChanged(
+                                      parsedValue ?? formState.balance.value,
+                                    );
+                              }
+                            },
+                          ),
+                        ),
+                        Container(
+                          width: 64, // Fixed width for consistency
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 16,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surfaceContainerHighest,
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(12),
+                              bottomRight: Radius.circular(12),
+                            ),
+                          ),
+                          child: Center(
+                            // Center vertically within the full height
+                            child: Text(
+                              formState.currency.value.isEmpty
+                                  ? 'USD'
+                                  : formState.currency.value,
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    onChanged: (value) {
-                      if (value.isEmpty) {
-                        ref
-                            .read(accountFormProvider(accountId).notifier)
-                            .balanceChanged(formState.balance.value);
-                        return;
-                      }
-                      final parsedValue = double.tryParse(value);
-                      if (parsedValue == null) {
-                        return;
-                      }
-                      ref
-                          .read(accountFormProvider(accountId).notifier)
-                          .balanceChanged(parsedValue);
-                    },
                   ),
                   const Spacer(),
                   ElevatedButton.icon(

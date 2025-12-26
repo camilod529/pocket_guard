@@ -21,6 +21,7 @@ class CustomFormField extends ConsumerWidget {
   final int maxLines;
   final int? minLines;
   final bool readOnly;
+  final BorderRadius borderRadius;
   const CustomFormField({
     super.key,
     required this.label,
@@ -41,6 +42,7 @@ class CustomFormField extends ConsumerWidget {
     this.enableSuggestions = true,
     this.maxLines = 1,
     this.minLines,
+    this.borderRadius = const BorderRadius.all(Radius.circular(12)),
   });
 
   @override
@@ -84,23 +86,23 @@ class CustomFormField extends ConsumerWidget {
         filled: true,
         fillColor: colors.surfaceContainerHighest.withAlpha(77),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: borderRadius,
           borderSide: BorderSide(color: colors.outline.withAlpha(128)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: borderRadius,
           borderSide: BorderSide(color: colors.outline.withAlpha(128)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: borderRadius,
           borderSide: BorderSide(color: colors.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: borderRadius,
           borderSide: BorderSide(color: colors.error, width: 2),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: borderRadius,
           borderSide: BorderSide(color: colors.error, width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(
