@@ -36,7 +36,7 @@ class TransactionForm extends _$TransactionForm {
     );
   }
 
-  void amountChanged(String value) {
+  void amountChanged(double value) {
     final currentState = state.value;
     if (currentState == null) return;
 
@@ -77,7 +77,7 @@ class TransactionForm extends _$TransactionForm {
 
         return TransactionFormState(
           id: transaction.id,
-          amount: TransactionAmount.dirty(transaction.amount.toString()),
+          amount: TransactionAmount.dirty(transaction.amount),
           description: TransactionDescription.dirty(
             transaction.description ?? '',
           ),
@@ -174,7 +174,7 @@ class TransactionForm extends _$TransactionForm {
     try {
       final transaction = TransactionEntity(
         id: validState.id,
-        amount: double.parse(validState.amount.value),
+        amount: (validState.amount.value),
         description: validState.description.value,
         categoryId: validState.categoryId!,
         date: validState.date,

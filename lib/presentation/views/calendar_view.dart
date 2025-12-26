@@ -14,6 +14,7 @@ import 'package:money_manager_flutter/presentation/providers/selected_date_range
 import 'package:money_manager_flutter/presentation/providers/transaction/transactions_provider.dart';
 import 'package:money_manager_flutter/utils/constants/global_constants.dart';
 import 'package:money_manager_flutter/utils/shared/dates/calendar_date_formatter.dart';
+import 'package:money_manager_flutter/utils/shared/number_formatting.dart';
 
 class CalendarView extends ConsumerStatefulWidget {
   const CalendarView({super.key});
@@ -292,6 +293,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
     TransactionEntity transaction,
     CategoryEntity? category,
     AccountEntity? account,
+    Map<String, AccountEntity> accountMap,
   ) {
     final l10n = AppLocalizations.of(context)!;
     final colors = Theme.of(context).colorScheme;
@@ -307,7 +309,6 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
 
     IconData icon;
     Color iconColor;
-    String amountPrefix;
 
     final income = isDark ? Colors.green.shade300 : Colors.green.shade700;
     final expense = isDark ? Colors.red.shade300 : Colors.red.shade700;
@@ -317,21 +318,16 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
       case TransactionType.income:
         icon = Icons.arrow_downward;
         iconColor = income;
-        amountPrefix = '+';
         break;
       case TransactionType.expense:
         icon = Icons.arrow_upward;
         iconColor = expense;
-        amountPrefix = '-';
         break;
       case TransactionType.transfer:
         icon = Icons.swap_horiz;
         iconColor = transfer;
-        amountPrefix = '';
         break;
     }
-
-    final displayAmount = transaction.amount.abs();
 
     return ListTile(
       leading: CircleAvatar(
@@ -358,16 +354,43 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
           ),
         ],
       ),
-      trailing: Text(
-        '$amountPrefix\$${displayAmount.toStringAsFixed(2)}',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-          color: type == TransactionType.expense
-              ? expense
-              : (type == TransactionType.income ? income : null),
-        ),
+      trailing: Builder(
+        builder: (context) {
+          final account = accountMap[transaction.accountId];
+          final currency = account?.currency ?? 'USD';
+
+          final displayAmount = NumberFormatting.formatCurrencyWithSymbol(
+            transaction.amount.abs(),
+            currency,
+          );
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                displayAmount,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: type == TransactionType.expense
+                      ? expense
+                      : (type == TransactionType.income ? income : null),
+                ),
+              ),
+              if (account != null)
+                Text(
+                  account.currency.toUpperCase(),
+                  style: textTheme.bodySmall?.copyWith(
+                    color: colors.onSurfaceVariant,
+                    fontSize: 10,
+                  ),
+                ),
+            ],
+          );
+        },
       ),
+
       onTap: () {
         context.push(Routes.transactionFormPage(transaction.id));
       },
@@ -435,6 +458,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
                       transaction,
                       category,
                       account,
+                      accountMap,
                     );
                   },
                 );

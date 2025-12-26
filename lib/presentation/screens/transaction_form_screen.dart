@@ -13,6 +13,7 @@ import 'package:money_manager_flutter/presentation/widgets/shared/delete_confirm
 import 'package:money_manager_flutter/presentation/widgets/shared/forms/custom_form_field.dart';
 import 'package:money_manager_flutter/utils/constants/global_constants.dart';
 import 'package:money_manager_flutter/utils/shared/dates/calendar_date_formatter.dart';
+import 'package:money_manager_flutter/utils/shared/number_formatting.dart';
 
 class TransactionFormScreen extends ConsumerStatefulWidget {
   final String transactionId;
@@ -83,15 +84,15 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                   children: [
                     _buildAccountSelector(formState, accountsAsync, l10n),
                     const SizedBox(height: 16),
-                    _buildAmountField(formState, l10n),
+                    _buildAmountField(formState, l10n, accountsAsync),
                     const SizedBox(height: 16),
                     _buildDescriptionField(formState, l10n),
+                    const SizedBox(height: 24),
+                    _buildTransactionTypeSelector(formState, l10n),
                     const SizedBox(height: 16),
                     _buildCategorySelector(formState, categoriesAsync, l10n),
                     const SizedBox(height: 16),
                     _buildDateTimeFields(formState, formatter),
-                    const SizedBox(height: 24),
-                    _buildTransactionTypeSelector(formState, l10n),
                     const SizedBox(height: 32),
                     // Submit Button
                     ElevatedButton.icon(
@@ -238,25 +239,92 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
   Widget _buildAmountField(
     TransactionFormState formState,
     AppLocalizations l10n,
+    AsyncValue<List<AccountEntity>> accountsAsync,
   ) {
-    return CustomFormField(
-      initialValue: formState.amount.value,
-      label: l10n.amountLabel,
-      hintText: l10n.amountHint,
-      errorText: formState.isFormPure ? null : formState.amountError,
-      prefixIcon: const Icon(Icons.attach_money),
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-      ],
-      onChanged: (value) => ref
-          .read(
-            transactionFormProvider(
-              widget.transactionId,
-              selectedDate: widget.selectedDate,
-            ).notifier,
-          )
-          .amountChanged(value),
+    return accountsAsync.when(
+      data: (accounts) {
+        final currency = formState.accountId == null
+            ? 'USD'
+            : accounts
+                  .firstWhere((acc) => acc.id == formState.accountId)
+                  .currency;
+        return Row(
+          children: [
+            Expanded(
+              child: CustomFormField(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(12),
+                  bottomLeft: Radius.circular(12),
+                ),
+                initialValue: NumberFormatting.formatNumber(
+                  formState.amount.value,
+                ),
+                label: l10n.amountLabel,
+                hintText: l10n.amountHint,
+                errorText: formState.isFormPure ? null : formState.amountError,
+                prefixIcon: const Icon(Icons.attach_money),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+                ],
+                onChanged: (value) {
+                  final parsedValue = NumberFormatting.parseUserInput(
+                    value,
+                    currency,
+                  );
+
+                  if (parsedValue != null || value.isEmpty) {
+                    ref
+                        .read(
+                          transactionFormProvider(
+                            widget.transactionId,
+                            selectedDate: widget.selectedDate,
+                          ).notifier,
+                        )
+                        .amountChanged(parsedValue ?? formState.amount.value);
+                  }
+                },
+              ),
+            ),
+            Container(
+              width: 64,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(12),
+                  bottomRight: Radius.circular(12),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  currency.isEmpty ? 'USD' : currency,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+      loading: () => CustomFormField(
+        label: l10n.amountLabel,
+        hintText: l10n.amountHint,
+        prefixIcon: const Icon(Icons.attach_money),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        readOnly: true,
+      ),
+      error: (error, stack) => CustomFormField(
+        label: l10n.amountLabel,
+        hintText: l10n.amountHint,
+        prefixIcon: const Icon(Icons.attach_money),
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        readOnly: true,
+        errorText: l10n.errorLoadingAccounts(error.toString()),
+      ),
     );
   }
 
@@ -484,14 +552,16 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
             ),
           ],
           selected: {formState.type},
-          onSelectionChanged: (Set<TransactionType> newSelection) => ref
-              .read(
-                transactionFormProvider(
-                  widget.transactionId,
-                  selectedDate: widget.selectedDate,
-                ).notifier,
-              )
-              .typeChanged(newSelection.first),
+          onSelectionChanged: (Set<TransactionType> newSelection) {
+            ref
+                .read(
+                  transactionFormProvider(
+                    widget.transactionId,
+                    selectedDate: widget.selectedDate,
+                  ).notifier,
+                )
+                .typeChanged(newSelection.first);
+          },
         ),
       ],
     );

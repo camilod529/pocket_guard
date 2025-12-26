@@ -2,15 +2,14 @@ import 'package:formz/formz.dart';
 
 enum AmountError { empty, invalid, zeroOrNegative }
 
-class TransactionAmount extends FormzInput<String, AmountError> {
-  const TransactionAmount.dirty([super.value = '']) : super.dirty();
-  const TransactionAmount.pure() : super.pure('');
+class TransactionAmount extends FormzInput<double, AmountError> {
+  const TransactionAmount.dirty([super.value = 0]) : super.dirty();
+  const TransactionAmount.pure() : super.pure(0);
 
   @override
-  AmountError? validator(String value) {
-    if (value.isEmpty) return AmountError.empty;
-    final doubleAmount = double.tryParse(value);
-    if (doubleAmount == null || doubleAmount <= 0) {
+  AmountError? validator(double value) {
+    if (value.toString().isEmpty) return AmountError.empty;
+    if (value <= 0) {
       return AmountError.zeroOrNegative;
     }
     return null;

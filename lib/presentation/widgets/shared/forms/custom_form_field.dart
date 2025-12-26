@@ -11,8 +11,8 @@ class CustomFormField extends ConsumerWidget {
   final String? initialValue;
   final TextEditingController? controller;
   final String? errorText;
-  final void Function(String)? onChanged;
-  final String? Function(String?)? validator;
+  final void Function(String value)? onChanged;
+  final String? Function(String? value)? validator;
   final TextInputType? keyboardType;
   final TextCapitalization textCapitalization;
   final bool autocorrect;

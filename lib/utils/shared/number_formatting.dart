@@ -32,6 +32,26 @@ class NumberFormatting {
     return numberFormat.format(value);
   }
 
+  /// Formats double to currency string with symbol ONLY (no account name)
+  static String formatCurrencyWithSymbol(
+    double value,
+    String currency, {
+    int decimalDigits = 2,
+  }) {
+    final locale =
+        _currencyLocales[currency.toUpperCase()] ?? const Locale('en', 'US');
+    final numberFormat = NumberFormat.currency(
+      locale: locale.toString(),
+      name: currency,
+      decimalDigits: decimalDigits,
+      symbol: NumberFormat.currency(
+        locale: locale.toString(),
+        name: currency,
+      ).currencySymbol,
+    );
+    return numberFormat.format(value);
+  }
+
   /// Formats double to simple number string (no currency symbol)
   static String formatNumber(double value, {int decimalDigits = 2}) {
     final locale = const Locale('en', 'US');
