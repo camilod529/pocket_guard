@@ -12,6 +12,7 @@ final database = AppDatabase();
 
 // Table definitions
 class Accounts extends Table {
+  RealColumn get balance => real().withDefault(const Constant(0.0))();
   TextColumn get currency => text()();
   TextColumn get id =>
       text().clientDefault(() => _uuid.v4())(); // UUID v4 as text
@@ -21,7 +22,6 @@ class Accounts extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-// Data classes (optional but useful)
 @DriftDatabase(tables: [Accounts, Categories, Transactions])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
@@ -33,6 +33,11 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
         await seedDefaultCategories();
       },
+      onUpgrade: (Migrator m, int from, int to) async {
+        if (from < 2) {
+          await m.addColumn(accounts, accounts.balance);
+        }
+      },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
       },
@@ -40,7 +45,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   Future<void> seedDefaultCategories() async {
     final defaultCategories = [

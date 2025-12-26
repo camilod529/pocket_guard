@@ -83,6 +83,31 @@ class AccountFormScreen extends ConsumerWidget {
                         .read(accountFormProvider(accountId).notifier)
                         .currencyChanged(value),
                   ),
+                  const SizedBox(height: 16),
+                  CustomFormField(
+                    initialValue: formState.balance.value.toStringAsFixed(2),
+                    label: localizations.amountLabel,
+                    hintText: localizations.amountHint,
+                    prefixIcon: const Icon(Icons.attach_money_outlined),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    onChanged: (value) {
+                      if (value.isEmpty) {
+                        ref
+                            .read(accountFormProvider(accountId).notifier)
+                            .balanceChanged(formState.balance.value);
+                        return;
+                      }
+                      final parsedValue = double.tryParse(value);
+                      if (parsedValue == null) {
+                        return;
+                      }
+                      ref
+                          .read(accountFormProvider(accountId).notifier)
+                          .balanceChanged(parsedValue);
+                    },
+                  ),
                   const Spacer(),
                   ElevatedButton.icon(
                     onPressed: formState.isFormValid

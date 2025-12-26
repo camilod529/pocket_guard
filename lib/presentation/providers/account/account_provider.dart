@@ -8,8 +8,14 @@ part 'account_provider.g.dart';
 class AccountNotifier extends _$AccountNotifier {
   @override
   Future<AccountEntity?> build(String id) async {
+    if (id.isEmpty) return null;
     final repository = ref.read(accountRepositoryProvider);
     final account = await repository.getAccountById(id);
     return account;
+  }
+
+  Future<void> refreshAccount() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => build(state.value?.id ?? ''));
   }
 }

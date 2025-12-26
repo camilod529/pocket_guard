@@ -63,6 +63,7 @@ class AccountDriftDataSourceImpl extends AccountDataSource {
         id: account.id,
         name: account.name,
         currency: account.currency,
+        balance: account.balance,
       );
     } catch (e, stackTrace) {
       throw _exceptionHandler.handleDriftException(
@@ -84,6 +85,7 @@ class AccountDriftDataSourceImpl extends AccountDataSource {
           id: account.id,
           name: account.name,
           currency: account.currency,
+          balance: account.balance,
         );
       }).toList();
 
@@ -114,6 +116,7 @@ class AccountDriftDataSourceImpl extends AccountDataSource {
           id: account.id,
           name: account.name,
           currency: account.currency,
+          balance: account.balance,
         );
       }).toList();
     } catch (e, stackTrace) {
@@ -142,6 +145,7 @@ class AccountDriftDataSourceImpl extends AccountDataSource {
             AccountsCompanion(
               name: Value(account.name),
               currency: Value(account.currency),
+              balance: Value(account.balance),
             ),
           );
 
