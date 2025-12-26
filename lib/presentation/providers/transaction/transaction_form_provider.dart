@@ -4,6 +4,7 @@ import 'package:money_manager_flutter/domain/entities/transaction.dart';
 import 'package:money_manager_flutter/infrastructure/inputs/generic_string.dart';
 import 'package:money_manager_flutter/infrastructure/inputs/transactions/amount.dart';
 import 'package:money_manager_flutter/infrastructure/inputs/transactions/description.dart';
+import 'package:money_manager_flutter/presentation/providers/account/account_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/category/categories_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/transaction/transaction_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/transaction/transactions_provider.dart';
@@ -12,7 +13,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'transaction_form_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: false)
 class TransactionForm extends _$TransactionForm {
   void accountChanged(String? accountId) {
     final currentState = state.value;
@@ -192,6 +193,10 @@ class TransactionForm extends _$TransactionForm {
             .read(transactionsProvider.notifier)
             .createTransaction(transaction);
       }
+
+      ref
+          .read(accountProvider(transaction.accountId).notifier)
+          .refreshAccount();
 
       return true;
     } catch (e) {

@@ -13,7 +13,6 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
   Future<void> createTransaction(TransactionEntity transaction) async {
     try {
       await database.transaction(() async {
-        // Insert transaction
         await database
             .into(database.transactions)
             .insert(
@@ -26,18 +25,16 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
               ),
             );
 
-        // Get category type using a simpler query
-        final category =
-            await (database.select(database.categories)
-                  ..where((tbl) => tbl.id.equals(transaction.categoryId)))
-                .getSingle(); // Will throw if not found
+        final category = await (database.select(
+          database.categories,
+        )..where((tbl) => tbl.id.equals(transaction.categoryId))).getSingle();
 
-        // Calculate adjustment
         final adjustment = category.type == TransactionType.income
             ? transaction.amount
             : -transaction.amount;
 
-        // Update balance using UPDATE with arithmetic
+        // TODO: Handle transfer type
+
         await database.customUpdate(
           'UPDATE accounts SET balance = balance + ? WHERE id = ?',
           updates: {database.accounts},
@@ -46,8 +43,6 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
             Variable<String>(transaction.accountId),
           ],
         );
-
-        print('Transaction created, balance adjusted by: $adjustment');
       });
     } catch (e, stackTrace) {
       throw _exceptionHandler.handleDriftException(
@@ -68,44 +63,28 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
       }
 
       await database.transaction(() async {
-        // Get category type
-        final category =
-            await (database.select(database.categories)
-                  ..where((tbl) => tbl.id.equals(transaction.categoryId)))
-                .getSingleOrNull();
+        final category = await (database.select(
+          database.categories,
+        )..where((tbl) => tbl.id.equals(transaction.categoryId))).getSingle();
 
-        if (category == null) {
-          throw DataNotFoundException(entityName: 'category');
-        }
-
-        // Reverse the effect (income becomes negative, expense becomes positive)
         final reverseEffect = category.type == TransactionType.income
             ? -transaction.amount
             : transaction.amount;
 
-        // Get current account balance
-        final currentAccount =
-            await (database.select(database.accounts)
-                  ..where((tbl) => tbl.id.equals(transaction.accountId)))
-                .getSingleOrNull();
+        // TODO: Handle transfer type
 
-        if (currentAccount == null) {
-          throw DataNotFoundException(entityName: 'account');
-        }
-
-        final newBalance = currentAccount.balance + reverseEffect;
-
-        // TODO: Handle transfer type (reverse split between accounts)
-
-        // Delete transaction
         await (database.delete(
           database.transactions,
         )..where((tbl) => tbl.id.equals(id))).go();
 
-        // Apply reversal to balance
-        await (database.update(database.accounts)
-              ..where((tbl) => tbl.id.equals(transaction.accountId)))
-            .write(AccountsCompanion(balance: Value(newBalance)));
+        await database.customUpdate(
+          'UPDATE accounts SET balance = balance + ? WHERE id = ?',
+          updates: {database.accounts},
+          variables: [
+            Variable<double>(reverseEffect),
+            Variable<String>(transaction.accountId),
+          ],
+        );
       });
     } catch (e, stackTrace) {
       throw _exceptionHandler.handleDriftException(
@@ -231,22 +210,16 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
       }
 
       await database.transaction(() async {
-        // Get old and new category types
         final oldCategory =
             await (database.select(database.categories)
                   ..where((tbl) => tbl.id.equals(oldTransaction.categoryId)))
-                .getSingleOrNull();
+                .getSingle();
         final newCategory =
             await (database.select(
                   database.categories,
                 )..where((tbl) => tbl.id.equals(updatedTransaction.categoryId)))
-                .getSingleOrNull();
+                .getSingle();
 
-        if (oldCategory == null || newCategory == null) {
-          throw DataNotFoundException(entityName: 'category');
-        }
-
-        // Calculate old effect reversal and new effect
         final oldEffect = oldCategory.type == TransactionType.income
             ? oldTransaction.amount
             : -oldTransaction.amount;
@@ -254,9 +227,8 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
             ? updatedTransaction.amount
             : -updatedTransaction.amount;
 
-        final netChange = newEffect - oldEffect;
+        // TODO: Handle transfer type
 
-        // Update transaction
         await (database.update(
           database.transactions,
         )..where((tbl) => tbl.id.equals(id))).write(
@@ -270,55 +242,36 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
         );
 
         if (updatedTransaction.accountId != oldTransaction.accountId) {
-          // Account changed: fully reverse old, apply new
           // TODO: Handle transfer type for both accounts
 
-          // Get current balances for both accounts
-          final oldAccount =
-              await (database.select(database.accounts)
-                    ..where((tbl) => tbl.id.equals(oldTransaction.accountId)))
-                  .getSingleOrNull();
-          final newAccount =
-              await (database.select(database.accounts)..where(
-                    (tbl) => tbl.id.equals(updatedTransaction.accountId),
-                  ))
-                  .getSingleOrNull();
-
-          if (oldAccount == null || newAccount == null) {
-            throw DataNotFoundException(entityName: 'account');
-          }
-
-          // Update old account (reverse effect)
-          await (database.update(
-            database.accounts,
-          )..where((tbl) => tbl.id.equals(oldTransaction.accountId))).write(
-            AccountsCompanion(balance: Value(oldAccount.balance - oldEffect)),
+          await database.customUpdate(
+            'UPDATE accounts SET balance = balance + ? WHERE id = ?',
+            updates: {database.accounts},
+            variables: [
+              Variable<double>(-oldEffect),
+              Variable<String>(oldTransaction.accountId),
+            ],
           );
 
-          // Update new account (apply effect)
-          await (database.update(
-            database.accounts,
-          )..where((tbl) => tbl.id.equals(updatedTransaction.accountId))).write(
-            AccountsCompanion(balance: Value(newAccount.balance + newEffect)),
+          await database.customUpdate(
+            'UPDATE accounts SET balance = balance + ? WHERE id = ?',
+            updates: {database.accounts},
+            variables: [
+              Variable<double>(newEffect),
+              Variable<String>(updatedTransaction.accountId),
+            ],
           );
         } else {
-          // Same account: apply net change
-          final currentAccount =
-              await (database.select(database.accounts)..where(
-                    (tbl) => tbl.id.equals(updatedTransaction.accountId),
-                  ))
-                  .getSingleOrNull();
+          // Same account: apply net change atomically
+          final netChange = newEffect - oldEffect;
 
-          if (currentAccount == null) {
-            throw DataNotFoundException(entityName: 'account');
-          }
-
-          await (database.update(
-            database.accounts,
-          )..where((tbl) => tbl.id.equals(updatedTransaction.accountId))).write(
-            AccountsCompanion(
-              balance: Value(currentAccount.balance + netChange),
-            ),
+          await database.customUpdate(
+            'UPDATE accounts SET balance = balance + ? WHERE id = ?',
+            updates: {database.accounts},
+            variables: [
+              Variable<double>(netChange),
+              Variable<String>(updatedTransaction.accountId),
+            ],
           );
         }
       });

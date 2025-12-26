@@ -3,6 +3,7 @@ import 'package:money_manager_flutter/domain/entities/transaction.dart';
 import 'package:money_manager_flutter/domain/repositories/transaction_repository.dart';
 import 'package:money_manager_flutter/infrastructure/data_sources/transaction_drift_data_source_impl.dart';
 import 'package:money_manager_flutter/infrastructure/repositories/transaction_repository_impl.dart';
+import 'package:money_manager_flutter/presentation/providers/account/account_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/selected_date_range_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -54,12 +55,20 @@ class TransactionsNotifier extends _$TransactionsNotifier {
     state = const AsyncLoading();
     try {
       final repository = ref.read(transactionRepositoryProvider);
+      final transaction = await repository.getTransactionById(id);
+      if (transaction == null) {
+        throw Exception('Transaction not found');
+      }
       await repository.deleteTransaction(id);
 
       if (!ref.mounted) return;
 
       // Refresh the current date range
       ref.invalidateSelf();
+
+      ref
+          .read(accountProvider(transaction.accountId).notifier)
+          .refreshAccount();
     } catch (e, stackTrace) {
       state = AsyncValue.error(e, stackTrace);
     }
