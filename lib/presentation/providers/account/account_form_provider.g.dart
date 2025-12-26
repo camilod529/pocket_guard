@@ -50,7 +50,7 @@ final class AccountFormProvider
   }
 }
 
-String _$accountFormHash() => r'e4dd60eb4711fd9adbd3b133bfcc9df62c6dbf90';
+String _$accountFormHash() => r'74bee5088395a49e580b250531229bf330ce8754';
 
 final class AccountFormFamily extends $Family
     with

@@ -8,7 +8,7 @@ part 'database.g.dart';
 
 const _uuid = Uuid();
 
-final database = AppDatabase();
+final AppDatabase database = AppDatabase();
 
 // Table definitions
 class Accounts extends Table {
@@ -40,12 +40,20 @@ class AppDatabase extends _$AppDatabase {
       },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
+        await customStatement('PRAGMA journal_mode = WAL');
+        await customStatement('PRAGMA busy_timeout = 5000'); // 5 second timeout
       },
     );
   }
 
   @override
   int get schemaVersion => 2;
+
+  Future<double> getAccountBalance(String accountId) {
+    return (select(accounts)..where((tbl) => tbl.id.equals(accountId)))
+        .map((row) => row.balance)
+        .getSingle();
+  }
 
   Future<void> seedDefaultCategories() async {
     final defaultCategories = [

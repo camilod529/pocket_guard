@@ -50,7 +50,7 @@ final class AccountNotifierProvider
   }
 }
 
-String _$accountNotifierHash() => r'1ca7c1b71b5078c7e2c2049ca89e7a622ff97974';
+String _$accountNotifierHash() => r'f79a5cb2c18dc69417849beef55426485f904616';
 
 final class AccountNotifierFamily extends $Family
     with
