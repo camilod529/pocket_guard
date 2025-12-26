@@ -2,6 +2,7 @@
     "@@locale": "es",
     "accountCurrency": "Moneda",
     "accountCurrencyHint": "USD, EUR, GBP",
+    "accountDeletedSuccessfully": "Cuenta eliminada con éxito",
     "accountLabel": "Cuenta",
     "@accountLabel": {
         "description": "Etiqueta para el nombre de la cuenta en el ítem de transacción",
@@ -34,11 +35,24 @@
     "createTransactionButton": "Crear Transacción",
     "dateLabel": "Fecha",
     "delete": "Eliminar",
+    "deleteAccount": "Eliminar Cuenta",
+    "deleteAccountConfirmation": "¿Estás seguro de que deseas eliminar la cuenta \"{accountName}\"? Esta acción no se puede deshacer.",
+    "@deleteAccountConfirmation": {
+        "description": "Delete account confirmation message with account name",
+        "placeholders": {
+            "accountName": {
+                "type": "String",
+                "example": "Main account"
+            }
+        }
+    },
+    "deleteAccountSuccess": "Cuenta eliminada con éxito",
     "deleteAction": "Eliminar",
     "deleteTransactionDescription": "Esta acción no se puede deshacer.",
     "deleteTransactionTitle": "Eliminar Transacción",
     "descriptionHint": "Ingrese descripción de la transacción",
     "descriptionLabel": "Descripción",
+    "edit": "Editar",
     "editTransactionTitle": "Editar Transacción",
     "error_data_not_found": "Los datos solicitados no fueron encontrados.",
     "error_data_not_found_entity": "La {entity} solicitada no fue encontrada.",

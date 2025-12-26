@@ -8,6 +8,10 @@
   "@accountCurrencyHint": {
     "description": "Hint text for account currency input"
   },
+  "accountDeletedSuccessfully": "Account deleted successfully",
+  "@accountDeletedSuccessfully": {
+    "description": "Success message after account deletion"
+  },
   "accountLabel": "Account: {name}",
   "@accountLabel": {
     "description": "Label for account name in transaction list item",
@@ -106,6 +110,24 @@
   "@delete": {
     "description": "Delete action/button"
   },
+  "deleteAccount": "Delete Account",
+  "@deleteAccount": {
+    "description": "Delete account button"
+  },
+  "deleteAccountConfirmation": "Are you sure you want to delete the account \"{accountName}\"? This will also delete all associated transactions.",
+  "@deleteAccountConfirmation": {
+    "description": "Delete account confirmation message with account name",
+    "placeholders": {
+      "accountName": {
+        "type": "String",
+        "example": "Main account"
+      }
+    }
+  },
+  "deleteAccountSuccess": "Account deleted successfully",
+  "@deleteAccountSuccess": {
+    "description": "Success message after account deletion"
+  },
   "deleteAction": "Delete",
   "@deleteAction": {
     "description": "Delete button tooltip"
@@ -125,6 +147,10 @@
   "descriptionLabel": "Description",
   "@descriptionLabel": {
     "description": "Description field label"
+  },
+  "edit": "Edit",
+  "@edit": {
+    "description": "Edit action/button"
   },
   "editTransactionTitle": "Edit Transaction",
   "@editTransactionTitle": {

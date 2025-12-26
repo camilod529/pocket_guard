@@ -15,6 +15,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get accountCurrencyHint => 'USD, EUR, GBP';
 
   @override
+  String get accountDeletedSuccessfully => 'Cuenta eliminada con éxito';
+
+  @override
   String accountLabel(String name) {
     return 'Cuenta';
   }
@@ -86,6 +89,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get delete => 'Eliminar';
 
   @override
+  String get deleteAccount => 'Eliminar Cuenta';
+
+  @override
+  String deleteAccountConfirmation(String accountName) {
+    return '¿Estás seguro de que deseas eliminar la cuenta \"$accountName\"? Esta acción no se puede deshacer.';
+  }
+
+  @override
+  String get deleteAccountSuccess => 'Cuenta eliminada con éxito';
+
+  @override
   String get deleteAction => 'Eliminar';
 
   @override
@@ -99,6 +113,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get descriptionLabel => 'Descripción';
+
+  @override
+  String get edit => 'Editar';
 
   @override
   String get editTransactionTitle => 'Editar Transacción';

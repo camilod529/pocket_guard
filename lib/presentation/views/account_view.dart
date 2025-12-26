@@ -5,7 +5,9 @@ import 'package:money_manager_flutter/config/router/routes.dart';
 import 'package:money_manager_flutter/domain/entities/account.dart';
 import 'package:money_manager_flutter/l10n/app_localizations.dart';
 import 'package:money_manager_flutter/presentation/providers/account/accounts_provider.dart';
+import 'package:money_manager_flutter/presentation/widgets/shared/delete_confirmation_modal.dart';
 import 'package:money_manager_flutter/utils/constants/global_constants.dart';
+import 'package:money_manager_flutter/utils/types/account_types.dart';
 
 class AccountView extends ConsumerWidget {
   const AccountView({super.key});
@@ -71,29 +73,29 @@ class AccountView extends ConsumerWidget {
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
       subtitle: Text(account.currency),
-      trailing: PopupMenuButton<String>(
+      trailing: PopupMenuButton<AccountActionDropdownEnum>(
         icon: const Icon(Icons.more_vert),
         onSelected: (value) =>
             _onAccountAction(context, value, account.id, ref, localizations),
         itemBuilder: (context) => [
           PopupMenuItem(
-            value: 'edit',
+            value: AccountActionDropdownEnum.edit,
             child: Row(
               children: [
                 const Icon(Icons.edit, size: 20),
                 const SizedBox(width: 8),
-                Text(localizations.accounts), // Reuse for "Edit"
+                Text(localizations.edit),
               ],
             ),
           ),
           PopupMenuItem(
-            value: 'delete',
+            value: AccountActionDropdownEnum.delete,
             child: Row(
               children: [
                 const Icon(Icons.delete, size: 20, color: Colors.red),
                 const SizedBox(width: 8),
                 Text(
-                  'Delete', // Add this key to your translations
+                  localizations.delete,
                   style: const TextStyle(color: Colors.red),
                 ),
               ],
@@ -190,50 +192,48 @@ class AccountView extends ConsumerWidget {
 
   void _onAccountAction(
     BuildContext context,
-    String action,
+    AccountActionDropdownEnum action,
     String accountId,
     WidgetRef ref,
     AppLocalizations localizations,
   ) {
     switch (action) {
-      case 'edit':
+      case AccountActionDropdownEnum.edit:
         // Navigate to edit account screen
         context.push(Routes.accountFormPage(accountId));
         break;
-      case 'delete':
+      case AccountActionDropdownEnum.delete:
         _showDeleteConfirmation(context, accountId, ref, localizations);
         break;
     }
   }
 
-  void _showDeleteConfirmation(
+  Future<void> _showDeleteConfirmation(
     BuildContext context,
     String accountId,
     WidgetRef ref,
     AppLocalizations localizations,
-  ) {
-    showDialog(
+  ) async {
+    await DeleteConfirmationModal.show(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(localizations.accounts),
-        content: Text(
-          localizations.error_data_not_found_entity('account'),
-        ), // Reuse generic
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'), // Add this key later
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ref.read(accountsProvider.notifier).deleteAccount(accountId);
-            },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Delete'), // Add this key later
-          ),
-        ],
-      ),
+      title: localizations.deleteAccount,
+      entity: localizations.accountName,
+      onConfirm: () async {
+        try {
+          await ref.read(accountsProvider.notifier).deleteAccount(accountId);
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(localizations.deleteAccountSuccess)),
+            );
+          }
+        } catch (e) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(localizations.error_db_operation_failed)),
+            );
+          }
+        }
+      },
     );
   }
 }

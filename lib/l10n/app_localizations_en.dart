@@ -15,6 +15,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountCurrencyHint => 'USD, EUR, GBP';
 
   @override
+  String get accountDeletedSuccessfully => 'Account deleted successfully';
+
+  @override
   String accountLabel(String name) {
     return 'Account: $name';
   }
@@ -86,6 +89,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete => 'Delete';
 
   @override
+  String get deleteAccount => 'Delete Account';
+
+  @override
+  String deleteAccountConfirmation(String accountName) {
+    return 'Are you sure you want to delete the account \"$accountName\"? This will also delete all associated transactions.';
+  }
+
+  @override
+  String get deleteAccountSuccess => 'Account deleted successfully';
+
+  @override
   String get deleteAction => 'Delete';
 
   @override
@@ -99,6 +113,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get descriptionLabel => 'Description';
+
+  @override
+  String get edit => 'Edit';
 
   @override
   String get editTransactionTitle => 'Edit Transaction';

@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:money_manager_flutter/l10n/app_localizations.dart';
 import 'package:money_manager_flutter/presentation/providers/account/account_form_provider.dart';
+import 'package:money_manager_flutter/presentation/providers/account/accounts_provider.dart';
+import 'package:money_manager_flutter/presentation/widgets/shared/delete_confirmation_modal.dart';
 import 'package:money_manager_flutter/presentation/widgets/shared/forms/custom_form_field.dart';
 import 'package:money_manager_flutter/utils/constants/global_constants.dart';
 
@@ -25,6 +27,20 @@ class AccountFormScreen extends ConsumerWidget {
             title: Text(
               isCreating ? localizations.accountName : localizations.accounts,
             ),
+            actions: [
+              if (!isCreating)
+                IconButton(
+                  icon: const Icon(Icons.delete_outline),
+                  onPressed: () => _handleDelete(
+                    context,
+                    formState,
+                    localizations,
+                    () => ref
+                        .read(accountsProvider.notifier)
+                        .deleteAccount(accountId),
+                  ),
+                ),
+            ],
           ),
           body: SafeArea(
             child: Padding(
@@ -108,6 +124,46 @@ class AccountFormScreen extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _handleDelete(
+    BuildContext context,
+    AccountFormState formState,
+    AppLocalizations l10n,
+    Future<void> Function() onSubmit,
+  ) async {
+    await DeleteConfirmationModal.show(
+      context: context,
+      title: l10n.deleteTransactionTitle,
+      entity: formState.name.value.isEmpty
+          ? l10n.thisTransaction
+          : formState.name.value,
+      description: l10n.deleteTransactionDescription,
+      onConfirm: () async {
+        try {
+          await onSubmit();
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(l10n.accountDeletedSuccessfully),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+            context.pop();
+          }
+        } catch (e) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(l10n.transactionDeleteError(e.toString())),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        }
+      },
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:money_manager_flutter/config/database/database.dart';
 import 'package:money_manager_flutter/config/router/router.dart';
 import 'package:money_manager_flutter/config/theme/app_theme.dart';
 
@@ -7,6 +8,8 @@ import 'l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await database.debugDatabaseSetup();
 
   runApp(ProviderScope(child: const MainApp()));
 }

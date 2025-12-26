@@ -107,6 +107,12 @@ abstract class AppLocalizations {
   /// **'USD, EUR, GBP'**
   String get accountCurrencyHint;
 
+  /// Success message after account deletion
+  ///
+  /// In en, this message translates to:
+  /// **'Account deleted successfully'**
+  String get accountDeletedSuccessfully;
+
   /// Label for account name in transaction list item
   ///
   /// In en, this message translates to:
@@ -245,6 +251,24 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get delete;
 
+  /// Delete account button
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccount;
+
+  /// Delete account confirmation message with account name
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the account \"{accountName}\"? This will also delete all associated transactions.'**
+  String deleteAccountConfirmation(String accountName);
+
+  /// Success message after account deletion
+  ///
+  /// In en, this message translates to:
+  /// **'Account deleted successfully'**
+  String get deleteAccountSuccess;
+
   /// Delete button tooltip
   ///
   /// In en, this message translates to:
@@ -274,6 +298,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Description'**
   String get descriptionLabel;
+
+  /// Edit action/button
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
 
   /// AppBar title for editing existing transaction
   ///
