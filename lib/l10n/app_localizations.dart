@@ -425,6 +425,12 @@ abstract class AppLocalizations {
   /// **'Add transaction'**
   String get fabAddTransactionTooltip;
 
+  /// Label for 'from' account in transfer transaction form
+  ///
+  /// In en, this message translates to:
+  /// **'From Account'**
+  String get fromAccountLabel;
+
   /// Button to go back from error screen
   ///
   /// In en, this message translates to:
@@ -520,6 +526,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Time'**
   String get timeLabel;
+
+  /// Label for 'to' account in transfer transaction form
+  ///
+  /// In en, this message translates to:
+  /// **'To Account'**
+  String get toAccountLabel;
 
   /// Success message after creation
   ///

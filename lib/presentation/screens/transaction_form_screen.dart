@@ -60,6 +60,7 @@ class _AccountSelector extends ConsumerWidget {
             SizedBox(
               height: 72,
               child: DropdownButtonFormField<String>(
+                key: ValueKey(accounts.map((a) => a.id).join(',')),
                 initialValue: formState.accountId,
                 decoration: InputDecoration(
                   hintText: l10n.selectAccountHint,
@@ -578,7 +579,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                         l10n: l10n,
                         categoriesAsync: categoriesAsync,
                         formatter: formatter,
-                        transactionId: formState.id,
+                        transactionId: widget.transactionId,
                         selectedDate: widget.selectedDate,
                         dateController: _dateController,
                         selectDate: () => _selectDate(context, formState.date),
@@ -589,7 +590,10 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                         ),
                       ),
                     if (formState.type == TransactionType.transfer)
-                      _TransferForm(),
+                      _TransferForm(
+                        transactionId: widget.transactionId,
+                        selectedDate: widget.selectedDate,
+                      ),
                     // Submit Button
                     ElevatedButton.icon(
                       onPressed:
@@ -860,11 +864,180 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
   }
 }
 
-class _TransferForm extends StatelessWidget {
-  const _TransferForm();
+class _TransferForm extends ConsumerStatefulWidget {
+  final String transactionId;
+  final DateTime? selectedDate;
+  const _TransferForm({this.selectedDate, required this.transactionId});
+
+  @override
+  ConsumerState<_TransferForm> createState() => _TransferFormState();
+}
+
+class _TransferFormState extends ConsumerState<_TransferForm> {
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final l10n = AppLocalizations.of(context)!;
+    final formStateAsync = ref.watch(
+      transactionFormProvider(
+        widget.transactionId,
+        selectedDate: widget.selectedDate,
+      ),
+    );
+    final accountsAsync = ref.watch(accountsProvider);
+
+    return formStateAsync.when(
+      data: (formState) {
+        final formatter = CalendarDateFormatter(
+          Localizations.localeOf(context),
+        );
+
+        _dateController.text = formatter.formatFullDate(formState.date);
+        _timeController.text = formatter.formatTime(formState.date);
+
+        return Column(
+          children: [
+            // From account
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(l10n.fromAccountLabel),
+            ),
+            _AccountSelector(
+              formState: formState,
+              accountsAsync: accountsAsync,
+              l10n: l10n,
+              transactionId: formState.id,
+            ),
+            const SizedBox(height: 16),
+
+            // To account
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(l10n.toAccountLabel),
+            ),
+            SizedBox(
+              height: 72,
+              child: accountsAsync.when(
+                data: (accounts) => DropdownButtonFormField<String>(
+                  initialValue: formState.toAccountId,
+                  decoration: InputDecoration(
+                    hintText: 'Select destination account',
+                    prefixIcon: const Icon(Icons.account_balance_wallet),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    filled: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 20,
+                    ),
+                  ),
+                  isExpanded: true,
+                  items: accounts
+                      .map(
+                        (account) => DropdownMenuItem(
+                          value: account.id,
+                          child: Text('${account.name} (${account.currency})'),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) => ref
+                      .read(transactionFormProvider(formState.id).notifier)
+                      .toAccountChanged(value),
+                ),
+                loading: () => const LinearProgressIndicator(),
+                error: (e, _) => Text(e.toString()),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Amount + description + date/time as usual
+            _AmountField(
+              formState: formState,
+              accountsAsync: accountsAsync,
+              l10n: l10n,
+              transactionId: formState.id,
+            ),
+
+            const SizedBox(height: 16),
+            _DescriptionField(
+              formState: formState,
+              l10n: l10n,
+              transactionId: formState.id,
+            ),
+            const SizedBox(height: 24),
+            _DateTimeFields(
+              l10n: l10n,
+              dateController: _dateController,
+              selectDate: () => _selectDate(context, formState.date),
+              timeController: _timeController,
+              selectTime: () => _selectTime(context, formState.date),
+            ),
+            const SizedBox(height: 32),
+          ],
+        );
+      },
+      loading: () => const CircularProgressIndicator(),
+      error: (e, _) => Text(e.toString()),
+    );
+  }
+
+  @override
+  void dispose() {
+    _dateController.dispose();
+    _timeController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _selectDate(BuildContext context, DateTime currentDate) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: currentDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && mounted) {
+      final newDateTime = DateTime(
+        picked.year,
+        picked.month,
+        picked.day,
+        currentDate.hour,
+        currentDate.minute,
+      );
+      ref
+          .read(
+            transactionFormProvider(
+              widget.transactionId,
+              selectedDate: widget.selectedDate,
+            ).notifier,
+          )
+          .dateChanged(newDateTime);
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context, DateTime currentDate) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(currentDate),
+    );
+    if (picked != null && mounted) {
+      final newDateTime = DateTime(
+        currentDate.year,
+        currentDate.month,
+        currentDate.day,
+        picked.hour,
+        picked.minute,
+      );
+      ref
+          .read(
+            transactionFormProvider(
+              widget.transactionId,
+              selectedDate: widget.selectedDate,
+            ).notifier,
+          )
+          .dateChanged(newDateTime);
+    }
   }
 }

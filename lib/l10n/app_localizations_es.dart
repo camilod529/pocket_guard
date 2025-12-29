@@ -196,6 +196,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get fabAddTransactionTooltip => 'Agregar transacción';
 
   @override
+  String get fromAccountLabel => 'Cuenta de Origen';
+
+  @override
   String get goBackAction => 'Regresar';
 
   @override
@@ -244,6 +247,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get timeLabel => 'Hora';
+
+  @override
+  String get toAccountLabel => 'Cuenta de Destino';
 
   @override
   String get transactionCreatedSuccess => '¡Transacción creada exitosamente!';

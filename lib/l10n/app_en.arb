@@ -286,6 +286,10 @@
   "@fabAddTransactionTooltip": {
     "description": "Tooltip for FAB that creates a new transaction from the calendar view"
   },
+  "fromAccountLabel": "From Account",
+  "@fromAccountLabel": {
+    "description": "Label for 'from' account in transfer transaction form"
+  },
   "goBackAction": "Go Back",
   "@goBackAction": {
     "description": "Button to go back from error screen"
@@ -355,6 +359,10 @@
   "timeLabel": "Time",
   "@timeLabel": {
     "description": "Time field label"
+  },
+  "toAccountLabel": "To Account",
+  "@toAccountLabel": {
+    "description": "Label for 'to' account in transfer transaction form"
   },
   "transactionCreatedSuccess": "Transaction created successfully!",
   "@transactionCreatedSuccess": {

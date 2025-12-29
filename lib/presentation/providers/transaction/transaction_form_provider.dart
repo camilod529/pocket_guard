@@ -28,10 +28,11 @@ class TransactionForm extends _$TransactionForm {
         account: account,
         hasFormBeenModified: true,
         isFormValid: _isValid(
-          currentState.description,
-          currentState.amount,
-          currentState.categoryId,
-          accountId,
+          description: currentState.description,
+          amount: currentState.amount,
+          categoryId: currentState.categoryId,
+          accountId: accountId,
+          toAccountId: currentState.toAccountId,
         ),
       ),
     );
@@ -47,10 +48,11 @@ class TransactionForm extends _$TransactionForm {
         hasFormBeenModified: true,
         amount: amount,
         isFormValid: _isValid(
-          currentState.description,
-          amount,
-          currentState.categoryId,
-          currentState.accountId,
+          amount: amount,
+          description: currentState.description,
+          categoryId: currentState.categoryId,
+          accountId: currentState.accountId,
+          toAccountId: currentState.toAccountId,
         ),
       ),
     );
@@ -91,6 +93,13 @@ class TransactionForm extends _$TransactionForm {
           accountId: transaction.accountId.isEmpty
               ? null
               : transaction.accountId,
+          account: transaction.accountId.isNotEmpty
+              ? GenericStringInput.dirty(transaction.accountId)
+              : const GenericStringInput.pure(),
+          category: GenericStringInput.dirty(transaction.categoryId),
+          // TODO: implement toAccount and toAccountId for transfers
+          // toAccount: const GenericStringInput.pure(),
+          // toAccountId: null,
         );
       }
     }
@@ -107,9 +116,11 @@ class TransactionForm extends _$TransactionForm {
           DateTime.now(),
       amount: const TransactionAmount.pure(),
       description: const TransactionDescription.pure(),
+      toAccount: const GenericStringInput.pure(),
       isFormValid: false,
       accountId: null,
       categoryId: null,
+      toAccountId: null,
     );
   }
 
@@ -126,10 +137,11 @@ class TransactionForm extends _$TransactionForm {
         hasFormBeenModified: true,
         category: category,
         isFormValid: _isValid(
-          currentState.description,
-          currentState.amount,
-          categoryId,
-          currentState.accountId,
+          description: currentState.description,
+          amount: currentState.amount,
+          categoryId: categoryId,
+          accountId: currentState.accountId,
+          toAccountId: currentState.toAccountId,
         ),
       ),
     );
@@ -154,10 +166,11 @@ class TransactionForm extends _$TransactionForm {
         hasFormBeenModified: true,
         description: description,
         isFormValid: _isValid(
-          description,
-          currentState.amount,
-          currentState.categoryId,
-          currentState.accountId,
+          description: description,
+          amount: currentState.amount,
+          categoryId: currentState.categoryId,
+          accountId: currentState.accountId,
+          toAccountId: currentState.toAccountId,
         ),
       ),
     );
@@ -204,6 +217,30 @@ class TransactionForm extends _$TransactionForm {
     }
   }
 
+  void toAccountChanged(String? accountId) {
+    final currentState = state.value;
+    if (currentState == null) return;
+
+    final toAccount = accountId != null
+        ? GenericStringInput.dirty(accountId)
+        : const GenericStringInput.pure();
+
+    state = AsyncValue.data(
+      currentState.copyWith(
+        toAccountId: accountId,
+        toAccount: toAccount,
+        hasFormBeenModified: true,
+        isFormValid: _isValid(
+          description: currentState.description,
+          amount: currentState.amount,
+          categoryId: currentState.categoryId,
+          accountId: currentState.accountId,
+          toAccountId: accountId,
+        ),
+      ),
+    );
+  }
+
   void typeChanged(TransactionType type) {
     final currentState = state.value;
     if (currentState == null) return;
@@ -214,24 +251,43 @@ class TransactionForm extends _$TransactionForm {
         hasFormBeenModified: true,
         categoryId: null, // Reset category when type changes
         category: const GenericStringInput.pure(),
+        // For transfers: start clean for both accounts
+        accountId: type == TransactionType.transfer
+            ? null
+            : currentState.accountId,
+        account: type == TransactionType.transfer
+            ? const GenericStringInput.pure()
+            : currentState.account,
+        toAccountId: null,
+        toAccount: const GenericStringInput.pure(),
         isFormValid: false,
       ),
     );
   }
 
-  bool _isValid(
-    TransactionDescription description,
-    TransactionAmount amount,
+  bool _isValid({
+    required TransactionDescription description,
+    required TransactionAmount amount,
     String? categoryId,
     String? accountId,
-  ) {
+    String? toAccountId,
+  }) {
     final category = categoryId != null
         ? GenericStringInput.dirty(categoryId)
         : const GenericStringInput.pure();
     final account = accountId != null
         ? GenericStringInput.dirty(accountId)
         : const GenericStringInput.pure();
+    final toAccount = toAccountId != null
+        ? GenericStringInput.dirty(toAccountId)
+        : const GenericStringInput.pure();
 
+    if (state.value?.type == TransactionType.transfer) {
+      // For transfer: description + amount + from + to
+      return Formz.validate([description, amount, account, toAccount]);
+    }
+
+    // For income/expense: description + amount + category + account
     return Formz.validate([description, amount, category, account]);
   }
 
@@ -272,6 +328,8 @@ class TransactionFormState {
   final TransactionDescription description;
   final GenericStringInput category;
   final GenericStringInput account;
+  final GenericStringInput toAccount;
+  final String? toAccountId;
   final String? categoryId;
   final String? accountId;
   final DateTime date;
@@ -286,6 +344,8 @@ class TransactionFormState {
     this.description = const TransactionDescription.pure(),
     this.category = const GenericStringInput.pure(),
     this.account = const GenericStringInput.pure(),
+    this.toAccount = const GenericStringInput.pure(),
+    this.toAccountId,
     this.categoryId,
     this.accountId,
     required this.date,
@@ -310,6 +370,8 @@ class TransactionFormState {
     TransactionDescription? description,
     GenericStringInput? category,
     GenericStringInput? account,
+    GenericStringInput? toAccount,
+    String? toAccountId,
     String? categoryId,
     DateTime? date,
     TransactionType? type,
@@ -330,6 +392,8 @@ class TransactionFormState {
       isFormPure: isFormPure ?? this.isFormPure,
       accountId: accountId ?? this.accountId,
       hasFormBeenModified: hasFormBeenModified ?? this.hasFormBeenModified,
+      toAccount: toAccount ?? this.toAccount,
+      toAccountId: toAccountId ?? this.toAccountId,
     );
   }
 }
