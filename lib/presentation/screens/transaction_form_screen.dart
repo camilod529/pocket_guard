@@ -5,11 +5,13 @@ import 'package:go_router/go_router.dart';
 import 'package:money_manager_flutter/domain/entities/account.dart';
 import 'package:money_manager_flutter/domain/entities/category.dart';
 import 'package:money_manager_flutter/l10n/app_localizations.dart';
+import 'package:money_manager_flutter/presentation/mixins/date_time_selection_mixin.dart';
 import 'package:money_manager_flutter/presentation/providers/account/accounts_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/category/categories_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/transaction/transaction_form_provider.dart';
 import 'package:money_manager_flutter/presentation/providers/transaction/transactions_provider.dart';
 import 'package:money_manager_flutter/presentation/widgets/shared/delete_confirmation_modal.dart';
+import 'package:money_manager_flutter/presentation/widgets/shared/forms/common_drop_down.dart';
 import 'package:money_manager_flutter/presentation/widgets/shared/forms/custom_form_field.dart';
 import 'package:money_manager_flutter/utils/constants/global_constants.dart';
 import 'package:money_manager_flutter/utils/shared/dates/calendar_date_formatter.dart';
@@ -30,12 +32,32 @@ class TransactionFormScreen extends ConsumerStatefulWidget {
       _TransactionFormScreenState();
 }
 
+/// Helper class for common icons
+class TransactionIcons {
+  static IconData getIconByType(TransactionType type) {
+    switch (type) {
+      case TransactionType.expense:
+        return Icons.arrow_upward;
+      case TransactionType.income:
+        return Icons.arrow_downward;
+      case TransactionType.transfer:
+        return Icons.swap_horiz;
+    }
+  }
+}
+
+// ============================================================================
+// REUSABLE WIDGETS
+// ============================================================================
+
 class _AccountSelector extends ConsumerWidget {
   final TransactionFormState formState;
   final AsyncValue<List<AccountEntity>> accountsAsync;
   final AppLocalizations l10n;
   final String transactionId;
   final DateTime? selectedDate;
+  final String? labelOverride;
+  final void Function(String)? onChangedOverride;
 
   const _AccountSelector({
     required this.formState,
@@ -43,88 +65,115 @@ class _AccountSelector extends ConsumerWidget {
     required this.l10n,
     required this.transactionId,
     this.selectedDate,
+    this.labelOverride,
+    this.onChangedOverride,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return accountsAsync.when(
-      data: (accounts) => IntrinsicHeight(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              l10n.accountLabel(''),
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+      data: (accounts) => _buildAccountDropdown(context, ref, accounts),
+      loading: () => _buildLoadingState(),
+      error: (error, stack) => _buildErrorState(error),
+    );
+  }
+
+  Widget _buildAccountDropdown(
+    BuildContext context,
+    WidgetRef ref,
+    List<AccountEntity> accounts,
+  ) {
+    final accountId = onChangedOverride != null
+        ? formState.toAccountId
+        : formState.accountId;
+    final showError = accountId == null && !formState.isFormPure;
+
+    return IntrinsicHeight(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            labelOverride ?? l10n.accountLabel(''),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 72,
+            child: DropdownButtonFormField<String>(
+              key: ValueKey(accounts.map((a) => a.id).join(',')),
+              initialValue: accountId,
+              decoration: DropdownDecorationHelper.getDecoration(
+                hintText: l10n.selectAccountHint,
+                prefixIcon: const Icon(Icons.account_balance_wallet),
+              ),
+              isExpanded: true,
+              items: accounts
+                  .map(
+                    (account) => DropdownMenuItem(
+                      value: account.id,
+                      child: Text('${account.name} (${account.currency})'),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  if (onChangedOverride != null) {
+                    onChangedOverride!(value);
+                  } else {
+                    ref
+                        .read(
+                          transactionFormProvider(
+                            transactionId,
+                            selectedDate: selectedDate,
+                          ).notifier,
+                        )
+                        .accountChanged(value);
+                  }
+                }
+              },
             ),
-            const SizedBox(height: 8),
-            SizedBox(
-              height: 72,
-              child: DropdownButtonFormField<String>(
-                key: ValueKey(accounts.map((a) => a.id).join(',')),
-                initialValue: formState.accountId,
-                decoration: InputDecoration(
-                  hintText: l10n.selectAccountHint,
-                  prefixIcon: const Icon(Icons.account_balance_wallet),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  filled: true,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 20,
-                  ),
+          ),
+          if (showError)
+            Padding(
+              padding: const EdgeInsets.only(left: 12, top: 8),
+              child: Text(
+                l10n.selectAccountError,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.error,
+                  fontSize: 12,
                 ),
-                isExpanded: true,
-                items: accounts
-                    .map(
-                      (account) => DropdownMenuItem(
-                        value: account.id,
-                        child: Text('${account.name} (${account.currency})'),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) => value != null
-                    ? ref
-                          .read(
-                            transactionFormProvider(
-                              transactionId,
-                              selectedDate: selectedDate,
-                            ).notifier,
-                          )
-                          .accountChanged(value)
-                    : null,
               ),
             ),
-            if (formState.accountId == null && !formState.isFormPure)
-              Padding(
-                padding: const EdgeInsets.only(left: 12, top: 8),
-                child: Text(
-                  l10n.selectAccountError,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.error,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState(Object error) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          labelOverride ?? l10n.accountLabel(''),
+          style: const TextStyle(fontSize: 16),
         ),
-      ),
-      loading: () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(l10n.accountLabel(''), style: const TextStyle(fontSize: 16)),
-          const SizedBox(height: 8),
-          const LinearProgressIndicator(),
-        ],
-      ),
-      error: (error, stack) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(l10n.accountLabel(''), style: const TextStyle(fontSize: 16)),
-          const SizedBox(height: 8),
-          Text(l10n.errorLoadingAccounts(error.toString())),
-        ],
-      ),
+        const SizedBox(height: 8),
+        Text(l10n.errorLoadingAccounts(error.toString())),
+      ],
+    );
+  }
+
+  Widget _buildLoadingState() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          labelOverride ?? l10n.accountLabel(''),
+          style: const TextStyle(fontSize: 16),
+        ),
+        const SizedBox(height: 8),
+        const LinearProgressIndicator(),
+      ],
     );
   }
 }
@@ -147,90 +196,101 @@ class _AmountField extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return accountsAsync.when(
-      data: (accounts) {
-        final currency = formState.accountId == null
-            ? 'USD'
-            : accounts
-                  .firstWhere((acc) => acc.id == formState.accountId)
-                  .currency;
-        return Row(
-          children: [
-            Expanded(
-              child: CustomFormField(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  bottomLeft: Radius.circular(12),
-                ),
-                initialValue: NumberFormatting.formatNumber(
-                  formState.amount.value,
-                ),
-                label: l10n.amountLabel,
-                hintText: l10n.amountHint,
-                errorText: formState.isFormPure ? null : formState.amountError,
-                prefixIcon: const Icon(Icons.attach_money),
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                ],
-                onChanged: (value) {
-                  final parsedValue = NumberFormatting.parseUserInput(
-                    value,
-                    currency,
-                  );
+      data: (accounts) => _buildAmountFieldWithCurrency(context, ref, accounts),
+      loading: () => _buildLoadingField(),
+      error: (error, stack) => _buildErrorField(error),
+    );
+  }
 
-                  if (parsedValue != null || value.isEmpty) {
-                    ref
-                        .read(
-                          transactionFormProvider(
-                            transactionId,
-                            selectedDate: selectedDate,
-                          ).notifier,
-                        )
-                        .amountChanged(parsedValue ?? formState.amount.value);
-                  }
-                },
-              ),
+  Widget _buildAmountFieldWithCurrency(
+    BuildContext context,
+    WidgetRef ref,
+    List<AccountEntity> accounts,
+  ) {
+    final currency = formState.accountId == null
+        ? 'USD'
+        : accounts.firstWhere((acc) => acc.id == formState.accountId).currency;
+
+    return Row(
+      children: [
+        Expanded(
+          child: CustomFormField(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(12),
+              bottomLeft: Radius.circular(12),
             ),
-            Container(
-              width: 64,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(12),
-                  bottomRight: Radius.circular(12),
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  currency.isEmpty ? 'USD' : currency,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-      loading: () => CustomFormField(
-        label: l10n.amountLabel,
-        hintText: l10n.amountHint,
-        prefixIcon: const Icon(Icons.attach_money),
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        readOnly: true,
+            initialValue: NumberFormatting.formatNumber(formState.amount.value),
+            label: l10n.amountLabel,
+            hintText: l10n.amountHint,
+            errorText: formState.isFormPure ? null : formState.amountError,
+            prefixIcon: const Icon(Icons.attach_money),
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+            ],
+            onChanged: (value) => _handleAmountChange(ref, value, currency),
+          ),
+        ),
+        _buildCurrencyBadge(context, currency),
+      ],
+    );
+  }
+
+  Widget _buildCurrencyBadge(BuildContext context, String currency) {
+    return Container(
+      width: 64,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: const BorderRadius.only(
+          topRight: Radius.circular(12),
+          bottomRight: Radius.circular(12),
+        ),
       ),
-      error: (error, stack) => CustomFormField(
-        label: l10n.amountLabel,
-        hintText: l10n.amountHint,
-        prefixIcon: const Icon(Icons.attach_money),
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        readOnly: true,
-        errorText: l10n.errorLoadingAccounts(error.toString()),
+      child: Center(
+        child: Text(
+          currency.isEmpty ? 'USD' : currency,
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+        ),
       ),
     );
+  }
+
+  Widget _buildErrorField(Object error) {
+    return CustomFormField(
+      label: l10n.amountLabel,
+      hintText: l10n.amountHint,
+      prefixIcon: const Icon(Icons.attach_money),
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      readOnly: true,
+      errorText: l10n.errorLoadingAccounts(error.toString()),
+    );
+  }
+
+  Widget _buildLoadingField() {
+    return CustomFormField(
+      label: l10n.amountLabel,
+      hintText: l10n.amountHint,
+      prefixIcon: const Icon(Icons.attach_money),
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      readOnly: true,
+    );
+  }
+
+  void _handleAmountChange(WidgetRef ref, String value, String currency) {
+    final parsedValue = NumberFormatting.parseUserInput(value, currency);
+    if (parsedValue != null || value.isEmpty) {
+      ref
+          .read(
+            transactionFormProvider(
+              transactionId,
+              selectedDate: selectedDate,
+            ).notifier,
+          )
+          .amountChanged(parsedValue ?? formState.amount.value);
+    }
   }
 }
 
@@ -254,96 +314,102 @@ class _CategorySelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return categoriesAsync.when(
-      data: (categories) {
-        final filteredCategories = categories
-            .where((cat) => cat.type == formState.type)
-            .toList();
-        final validCategoryId =
-            filteredCategories.any((cat) => cat.id == formState.categoryId)
-            ? formState.categoryId
-            : null;
+      data: (categories) => _buildCategoryDropdown(context, ref, categories),
+      loading: () => _buildLoadingState(),
+      error: (error, stack) => _buildErrorState(error),
+    );
+  }
 
-        return IntrinsicHeight(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                l10n.categoryLabel,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 8),
-              SizedBox(
-                height: 72,
-                child: DropdownButtonFormField<String>(
-                  key: ValueKey(filteredCategories.map((c) => c.id).join(',')),
-                  initialValue: validCategoryId,
-                  decoration: InputDecoration(
-                    hintText: l10n.selectCategoryHint,
-                    prefixIcon: Icon(prefixIcon),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    filled: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 20,
-                    ),
-                  ),
-                  isExpanded: true,
-                  items: filteredCategories
-                      .map(
-                        (category) => DropdownMenuItem(
-                          value: category.id,
-                          child: Text(category.label),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (value) => value != null
-                      ? ref
-                            .read(
-                              transactionFormProvider(
-                                transactionId,
-                                selectedDate: selectedDate,
-                              ).notifier,
-                            )
-                            .categoryChanged(value)
-                      : null,
-                ),
-              ),
-              if (formState.categoryId == null && !formState.isFormPure)
-                Padding(
-                  padding: const EdgeInsets.only(left: 12, top: 8),
-                  child: Text(
-                    l10n.selectCategoryError,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-            ],
+  Widget _buildCategoryDropdown(
+    BuildContext context,
+    WidgetRef ref,
+    List<CategoryEntity> categories,
+  ) {
+    final filteredCategories = categories
+        .where((cat) => cat.type == formState.type)
+        .toList();
+    final validCategoryId =
+        filteredCategories.any((cat) => cat.id == formState.categoryId)
+        ? formState.categoryId
+        : null;
+    final showError = formState.categoryId == null && !formState.isFormPure;
+
+    return IntrinsicHeight(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            l10n.categoryLabel,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
-        );
-      },
-      loading: () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(l10n.categoryLabel, style: const TextStyle(fontSize: 16)),
           const SizedBox(height: 8),
-          const LinearProgressIndicator(),
+          SizedBox(
+            height: 72,
+            child: DropdownButtonFormField<String>(
+              key: ValueKey(filteredCategories.map((c) => c.id).join(',')),
+              initialValue: validCategoryId,
+              decoration: DropdownDecorationHelper.getDecoration(
+                hintText: l10n.selectCategoryHint,
+                prefixIcon: Icon(prefixIcon),
+              ),
+              isExpanded: true,
+              items: filteredCategories
+                  .map(
+                    (category) => DropdownMenuItem(
+                      value: category.id,
+                      child: Text(category.label),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  ref
+                      .read(
+                        transactionFormProvider(
+                          transactionId,
+                          selectedDate: selectedDate,
+                        ).notifier,
+                      )
+                      .categoryChanged(value);
+                }
+              },
+            ),
+          ),
+          if (showError)
+            Padding(
+              padding: const EdgeInsets.only(left: 12, top: 8),
+              child: Text(
+                l10n.selectCategoryError,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.error,
+                  fontSize: 12,
+                ),
+              ),
+            ),
         ],
       ),
-      error: (error, stack) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(l10n.categoryLabel, style: const TextStyle(fontSize: 16)),
-          const SizedBox(height: 8),
-          Text(l10n.errorLoadingCategories(error.toString())),
-        ],
-      ),
+    );
+  }
+
+  Widget _buildErrorState(Object error) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(l10n.categoryLabel, style: const TextStyle(fontSize: 16)),
+        const SizedBox(height: 8),
+        Text(l10n.errorLoadingCategories(error.toString())),
+      ],
+    );
+  }
+
+  Widget _buildLoadingState() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(l10n.categoryLabel, style: const TextStyle(fontSize: 16)),
+        const SizedBox(height: 8),
+        const LinearProgressIndicator(),
+      ],
     );
   }
 }
@@ -367,40 +433,48 @@ class _DateTimeFields extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        GestureDetector(
-          onTap: selectDate,
-          child: AbsorbPointer(
-            child: SizedBox(
-              height: 72,
-              child: CustomFormField(
-                controller: dateController,
-                label: l10n.dateLabel,
-                hintText: l10n.selectDateHint,
-                prefixIcon: const Icon(Icons.calendar_today),
-                readOnly: true,
-                onChanged: (_) {},
-              ),
-            ),
-          ),
-        ),
+        _buildDateField(),
         const SizedBox(height: 12),
-        GestureDetector(
-          onTap: selectTime,
-          child: AbsorbPointer(
-            child: SizedBox(
-              height: 72,
-              child: CustomFormField(
-                controller: timeController,
-                label: l10n.timeLabel,
-                hintText: l10n.selectTimeHint,
-                prefixIcon: const Icon(Icons.access_time),
-                readOnly: true,
-                onChanged: (_) {},
-              ),
-            ),
+        _buildTimeField(),
+      ],
+    );
+  }
+
+  Widget _buildDateField() {
+    return GestureDetector(
+      onTap: selectDate,
+      child: AbsorbPointer(
+        child: SizedBox(
+          height: 72,
+          child: CustomFormField(
+            controller: dateController,
+            label: l10n.dateLabel,
+            hintText: l10n.selectDateHint,
+            prefixIcon: const Icon(Icons.calendar_today),
+            readOnly: true,
+            onChanged: (_) {},
           ),
         ),
-      ],
+      ),
+    );
+  }
+
+  Widget _buildTimeField() {
+    return GestureDetector(
+      onTap: selectTime,
+      child: AbsorbPointer(
+        child: SizedBox(
+          height: 72,
+          child: CustomFormField(
+            controller: timeController,
+            label: l10n.timeLabel,
+            hintText: l10n.selectTimeHint,
+            prefixIcon: const Icon(Icons.access_time),
+            readOnly: true,
+            onChanged: (_) {},
+          ),
+        ),
+      ),
     );
   }
 }
@@ -440,44 +514,44 @@ class _DescriptionField extends ConsumerWidget {
   }
 }
 
-class _IncomeExpenseForm extends ConsumerWidget {
+// ============================================================================
+// FORM SECTIONS
+// ============================================================================
+
+class _IncomeExpenseForm extends StatelessWidget {
   final TransactionFormState formState;
   final AsyncValue<List<AccountEntity>> accountsAsync;
   final AppLocalizations l10n;
   final AsyncValue<List<CategoryEntity>> categoriesAsync;
-  final CalendarDateFormatter formatter;
   final String transactionId;
   final DateTime? selectedDate;
   final TextEditingController dateController;
   final VoidCallback selectDate;
   final TextEditingController timeController;
   final VoidCallback selectTime;
-  final IconData categorySelectorPrefixIcon;
 
   const _IncomeExpenseForm({
     required this.formState,
     required this.accountsAsync,
     required this.l10n,
     required this.categoriesAsync,
-    required this.formatter,
     required this.transactionId,
     required this.dateController,
     this.selectedDate,
     required this.selectDate,
     required this.timeController,
     required this.selectTime,
-    required this.categorySelectorPrefixIcon,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Column(
       children: [
         _AccountSelector(
           formState: formState,
           accountsAsync: accountsAsync,
           l10n: l10n,
-          transactionId: formState.id,
+          transactionId: transactionId,
           selectedDate: selectedDate,
         ),
         const SizedBox(height: 16),
@@ -500,7 +574,7 @@ class _IncomeExpenseForm extends ConsumerWidget {
           formState: formState,
           categoriesAsync: categoriesAsync,
           l10n: l10n,
-          prefixIcon: categorySelectorPrefixIcon,
+          prefixIcon: TransactionIcons.getIconByType(formState.type),
           transactionId: transactionId,
           selectedDate: selectedDate,
         ),
@@ -518,129 +592,39 @@ class _IncomeExpenseForm extends ConsumerWidget {
   }
 }
 
-class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
+class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen>
+    with DateTimeSelectionMixin {
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
 
   @override
+  DateTime? get selectedDate => widget.selectedDate;
+
+  @override
+  String get transactionId => widget.transactionId;
+
+  bool get _isCreating => transactionId == GlobalConstants.createId;
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final isCreating = widget.transactionId == GlobalConstants.createId;
-
     final formStateAsync = ref.watch(
-      transactionFormProvider(
-        widget.transactionId,
-        selectedDate: widget.selectedDate,
-      ),
+      transactionFormProvider(transactionId, selectedDate: selectedDate),
     );
     final categoriesAsync = ref.watch(categoriesProvider);
     final accountsAsync = ref.watch(accountsProvider);
 
     return formStateAsync.when(
-      data: (formState) {
-        final formatter = _getDateFormatter();
-
-        _dateController.text = formatter.formatFullDate(formState.date);
-        _timeController.text = formatter.formatTime(formState.date);
-
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              isCreating ? l10n.newTransactionTitle : l10n.editTransactionTitle,
-            ),
-            actions: [
-              if (!isCreating)
-                IconButton(
-                  icon: const Icon(Icons.delete),
-                  tooltip: l10n.deleteAction,
-                  onPressed: () => _handleDelete(context, formState, l10n),
-                ),
-            ],
-          ),
-          body: SafeArea(
-            child: SingleChildScrollView(
-              padding: MediaQuery.of(
-                context,
-              ).padding.copyWith(top: 0, bottom: 20),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 24,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildTransactionTypeSelector(formState, l10n),
-                    const SizedBox(height: 16),
-                    if (formState.type != TransactionType.transfer)
-                      _IncomeExpenseForm(
-                        formState: formState,
-                        accountsAsync: accountsAsync,
-                        l10n: l10n,
-                        categoriesAsync: categoriesAsync,
-                        formatter: formatter,
-                        transactionId: widget.transactionId,
-                        selectedDate: widget.selectedDate,
-                        dateController: _dateController,
-                        selectDate: () => _selectDate(context, formState.date),
-                        timeController: _timeController,
-                        selectTime: () => _selectTime(context, formState.date),
-                        categorySelectorPrefixIcon: _getCategoryIconByType(
-                          formState.type,
-                        ),
-                      ),
-                    if (formState.type == TransactionType.transfer)
-                      _TransferForm(
-                        transactionId: widget.transactionId,
-                        selectedDate: widget.selectedDate,
-                      ),
-                    // Submit Button
-                    ElevatedButton.icon(
-                      onPressed:
-                          (isCreating
-                              ? (formState.isFormPure || formState.isFormValid)
-                              : (formState.hasFormBeenModified &&
-                                    formState.isFormValid))
-                          ? () => _handleSubmit(context, ref)
-                          : null,
-                      icon: const Icon(Icons.save),
-                      label: Text(
-                        isCreating
-                            ? l10n.createTransactionButton
-                            : l10n.updateTransactionButton,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
+      data: (formState) => _buildFormScaffold(
+        context,
+        formState,
+        l10n,
+        categoriesAsync,
+        accountsAsync,
+      ),
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
-      error: (error, stack) => Scaffold(
-        appBar: AppBar(title: Text(l10n.transactionTitle)),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.red),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Text(l10n.errorLoadingTransaction(error.toString())),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () => context.pop(),
-                child: Text(l10n.goBackAction),
-              ),
-            ],
-          ),
-        ),
-      ),
+      error: (error, stack) => _buildErrorScaffold(context, l10n, error),
     );
   }
 
@@ -649,6 +633,121 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
     _dateController.dispose();
     _timeController.dispose();
     super.dispose();
+  }
+
+  PreferredSizeWidget _buildAppBar(
+    AppLocalizations l10n,
+    TransactionFormState formState,
+  ) {
+    return AppBar(
+      title: Text(
+        _isCreating ? l10n.newTransactionTitle : l10n.editTransactionTitle,
+      ),
+      actions: [
+        if (!_isCreating)
+          IconButton(
+            icon: const Icon(Icons.delete),
+            tooltip: l10n.deleteAction,
+            onPressed: () => _handleDelete(context, formState, l10n),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildErrorScaffold(
+    BuildContext context,
+    AppLocalizations l10n,
+    Object error,
+  ) {
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.transactionTitle)),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Text(l10n.errorLoadingTransaction(error.toString())),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => context.pop(),
+              child: Text(l10n.goBackAction),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFormScaffold(
+    BuildContext context,
+    TransactionFormState formState,
+    AppLocalizations l10n,
+    AsyncValue<List<CategoryEntity>> categoriesAsync,
+    AsyncValue<List<AccountEntity>> accountsAsync,
+  ) {
+    _updateControllers(formState);
+
+    return Scaffold(
+      appBar: _buildAppBar(l10n, formState),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: MediaQuery.of(context).padding.copyWith(top: 0, bottom: 20),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildTransactionTypeSelector(formState, l10n),
+                const SizedBox(height: 16),
+                if (formState.type != TransactionType.transfer)
+                  _IncomeExpenseForm(
+                    formState: formState,
+                    accountsAsync: accountsAsync,
+                    l10n: l10n,
+                    categoriesAsync: categoriesAsync,
+                    transactionId: transactionId,
+                    selectedDate: selectedDate,
+                    dateController: _dateController,
+                    selectDate: () => selectDate(context, formState.date),
+                    timeController: _timeController,
+                    selectTime: () => selectTime(context, formState.date),
+                  ),
+                if (formState.type == TransactionType.transfer)
+                  _TransferForm(
+                    transactionId: transactionId,
+                    selectedDate: selectedDate,
+                  ),
+                _buildSubmitButton(formState, l10n),
+                const SizedBox(height: 24),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSubmitButton(
+    TransactionFormState formState,
+    AppLocalizations l10n,
+  ) {
+    final isEnabled = _isCreating
+        ? (formState.isFormPure || formState.isFormValid)
+        : (formState.hasFormBeenModified && formState.isFormValid);
+
+    return ElevatedButton.icon(
+      onPressed: isEnabled ? () => _handleSubmit(context, ref) : null,
+      icon: const Icon(Icons.save),
+      label: Text(
+        _isCreating
+            ? l10n.createTransactionButton
+            : l10n.updateTransactionButton,
+      ),
+    );
   }
 
   Widget _buildTransactionTypeSelector(
@@ -663,57 +762,19 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 12),
-
         SegmentedButton<TransactionType>(
           showSelectedIcon: false,
           style: ButtonStyle(
             textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 13)),
           ),
-          segments: [
-            ButtonSegment(
-              value: TransactionType.expense,
-              label: SizedBox(
-                width: 70,
-                child: Text(
-                  l10n.expenseType,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              ),
-              icon: Icon(_getCategoryIconByType(TransactionType.expense)),
-            ),
-            ButtonSegment(
-              value: TransactionType.income,
-              label: SizedBox(
-                width: 70,
-                child: Text(
-                  l10n.incomeType,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              ),
-              icon: Icon(_getCategoryIconByType(TransactionType.income)),
-            ),
-            ButtonSegment(
-              value: TransactionType.transfer,
-              label: SizedBox(
-                width: 70,
-                child: Text(
-                  l10n.transferType,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              ),
-              icon: Icon(_getCategoryIconByType(TransactionType.transfer)),
-            ),
-          ],
+          segments: _buildTypeSegments(l10n),
           selected: {formState.type},
           onSelectionChanged: (Set<TransactionType> newSelection) {
             ref
                 .read(
                   transactionFormProvider(
-                    widget.transactionId,
-                    selectedDate: widget.selectedDate,
+                    transactionId,
+                    selectedDate: selectedDate,
                   ).notifier,
                 )
                 .typeChanged(newSelection.first);
@@ -723,19 +784,28 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
     );
   }
 
-  IconData _getCategoryIconByType(TransactionType type) {
-    switch (type) {
-      case TransactionType.expense:
-        return Icons.arrow_upward;
-      case TransactionType.income:
-        return Icons.arrow_downward;
-      case TransactionType.transfer:
-        return Icons.swap_horiz;
-    }
+  ButtonSegment<TransactionType> _buildTypeSegment(
+    TransactionType type,
+    String label,
+  ) {
+    return ButtonSegment(
+      value: type,
+      label: SizedBox(
+        width: 70,
+        child: Text(label, overflow: TextOverflow.ellipsis, maxLines: 1),
+      ),
+      icon: Icon(TransactionIcons.getIconByType(type)),
+    );
   }
 
-  CalendarDateFormatter _getDateFormatter() {
-    return CalendarDateFormatter(Localizations.localeOf(context));
+  List<ButtonSegment<TransactionType>> _buildTypeSegments(
+    AppLocalizations l10n,
+  ) {
+    return [
+      _buildTypeSegment(TransactionType.expense, l10n.expenseType),
+      _buildTypeSegment(TransactionType.income, l10n.incomeType),
+      _buildTypeSegment(TransactionType.transfer, l10n.transferType),
+    ];
   }
 
   Future<void> _handleDelete(
@@ -754,24 +824,16 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
         try {
           await ref
               .read(transactionsProvider.notifier)
-              .deleteTransaction(widget.transactionId);
+              .deleteTransaction(transactionId);
           if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(l10n.transactionDeletedSuccess),
-                backgroundColor: Colors.green,
-                duration: const Duration(seconds: 2),
-              ),
-            );
+            _showSuccessSnackbar(context, l10n.transactionDeletedSuccess);
             context.pop();
           }
         } catch (e) {
           if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(l10n.transactionDeleteError(e.toString())),
-                backgroundColor: Colors.red,
-              ),
+            _showErrorSnackbar(
+              context,
+              l10n.transactionDeleteError(e.toString()),
             );
           }
         }
@@ -783,200 +845,85 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
     final success = await ref
         .read(
           transactionFormProvider(
-            widget.transactionId,
-            selectedDate: widget.selectedDate,
+            transactionId,
+            selectedDate: selectedDate,
           ).notifier,
         )
         .onFormSubmit();
 
-    if (success && context.mounted) {
-      final l10n = AppLocalizations.of(context)!;
-      final message = widget.transactionId == GlobalConstants.createId
+    if (!context.mounted) return;
+
+    final l10n = AppLocalizations.of(context)!;
+    if (success) {
+      final message = _isCreating
           ? l10n.transactionCreatedSuccess
           : l10n.transactionUpdatedSuccess;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: Colors.green,
-          duration: const Duration(seconds: 2),
-        ),
-      );
+      _showSuccessSnackbar(context, message);
       context.pop();
-    } else if (context.mounted) {
-      final l10n = AppLocalizations.of(context)!;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.transactionSaveError),
-          backgroundColor: Colors.red,
-        ),
-      );
+    } else {
+      _showErrorSnackbar(context, l10n.transactionSaveError);
     }
   }
 
-  Future<void> _selectDate(BuildContext context, DateTime currentDate) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: currentDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
+  void _showErrorSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
-    if (picked != null && mounted) {
-      final newDateTime = DateTime(
-        picked.year,
-        picked.month,
-        picked.day,
-        currentDate.hour,
-        currentDate.minute,
-      );
-      ref
-          .read(
-            transactionFormProvider(
-              widget.transactionId,
-              selectedDate: widget.selectedDate,
-            ).notifier,
-          )
-          .dateChanged(newDateTime);
-    }
   }
 
-  Future<void> _selectTime(BuildContext context, DateTime currentDate) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(currentDate),
+  void _showSuccessSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 2),
+      ),
     );
-    if (picked != null && mounted) {
-      final newDateTime = DateTime(
-        currentDate.year,
-        currentDate.month,
-        currentDate.day,
-        picked.hour,
-        picked.minute,
-      );
-      ref
-          .read(
-            transactionFormProvider(
-              widget.transactionId,
-              selectedDate: widget.selectedDate,
-            ).notifier,
-          )
-          .dateChanged(newDateTime);
-    }
+  }
+
+  void _updateControllers(TransactionFormState formState) {
+    final formatter = CalendarDateFormatter(Localizations.localeOf(context));
+    _dateController.text = formatter.formatFullDate(formState.date);
+    _timeController.text = formatter.formatTime(formState.date);
   }
 }
 
 class _TransferForm extends ConsumerStatefulWidget {
   final String transactionId;
   final DateTime? selectedDate;
+
   const _TransferForm({this.selectedDate, required this.transactionId});
 
   @override
   ConsumerState<_TransferForm> createState() => _TransferFormState();
 }
 
-class _TransferFormState extends ConsumerState<_TransferForm> {
+class _TransferFormState extends ConsumerState<_TransferForm>
+    with DateTimeSelectionMixin {
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
+
+  @override
+  DateTime? get selectedDate => widget.selectedDate;
+
+  @override
+  String get transactionId => widget.transactionId;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final formStateAsync = ref.watch(
-      transactionFormProvider(
-        widget.transactionId,
-        selectedDate: widget.selectedDate,
-      ),
+      transactionFormProvider(transactionId, selectedDate: selectedDate),
     );
     final accountsAsync = ref.watch(accountsProvider);
 
     return formStateAsync.when(
       data: (formState) {
-        final formatter = CalendarDateFormatter(
-          Localizations.localeOf(context),
-        );
-
-        _dateController.text = formatter.formatFullDate(formState.date);
-        _timeController.text = formatter.formatTime(formState.date);
-
-        return Column(
-          children: [
-            // From account
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(l10n.fromAccountLabel),
-            ),
-            _AccountSelector(
-              formState: formState,
-              accountsAsync: accountsAsync,
-              l10n: l10n,
-              transactionId: formState.id,
-            ),
-            const SizedBox(height: 16),
-
-            // To account
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(l10n.toAccountLabel),
-            ),
-            SizedBox(
-              height: 72,
-              child: accountsAsync.when(
-                data: (accounts) => DropdownButtonFormField<String>(
-                  initialValue: formState.toAccountId,
-                  decoration: InputDecoration(
-                    hintText: 'Select destination account',
-                    prefixIcon: const Icon(Icons.account_balance_wallet),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    filled: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 20,
-                    ),
-                  ),
-                  isExpanded: true,
-                  items: accounts
-                      .map(
-                        (account) => DropdownMenuItem(
-                          value: account.id,
-                          child: Text('${account.name} (${account.currency})'),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (value) => ref
-                      .read(transactionFormProvider(formState.id).notifier)
-                      .toAccountChanged(value),
-                ),
-                loading: () => const LinearProgressIndicator(),
-                error: (e, _) => Text(e.toString()),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Amount + description + date/time as usual
-            _AmountField(
-              formState: formState,
-              accountsAsync: accountsAsync,
-              l10n: l10n,
-              transactionId: formState.id,
-            ),
-
-            const SizedBox(height: 16),
-            _DescriptionField(
-              formState: formState,
-              l10n: l10n,
-              transactionId: formState.id,
-            ),
-            const SizedBox(height: 24),
-            _DateTimeFields(
-              l10n: l10n,
-              dateController: _dateController,
-              selectDate: () => _selectDate(context, formState.date),
-              timeController: _timeController,
-              selectTime: () => _selectTime(context, formState.date),
-            ),
-            const SizedBox(height: 32),
-          ],
+        _updateControllers(formState);
+        return _buildTransferFormContent(
+          formState: formState,
+          accountsAsync: accountsAsync,
+          l10n: l10n,
         );
       },
       loading: () => const CircularProgressIndicator(),
@@ -991,53 +938,64 @@ class _TransferFormState extends ConsumerState<_TransferForm> {
     super.dispose();
   }
 
-  Future<void> _selectDate(BuildContext context, DateTime currentDate) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: currentDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
+  Widget _buildTransferFormContent({
+    required TransactionFormState formState,
+    required AsyncValue<List<AccountEntity>> accountsAsync,
+    required AppLocalizations l10n,
+  }) {
+    return Column(
+      children: [
+        _AccountSelector(
+          formState: formState,
+          accountsAsync: accountsAsync,
+          l10n: l10n,
+          transactionId: transactionId,
+          selectedDate: selectedDate,
+          labelOverride: l10n.fromAccountLabel,
+        ),
+        const SizedBox(height: 16),
+        _AccountSelector(
+          formState: formState,
+          accountsAsync: accountsAsync,
+          l10n: l10n,
+          transactionId: transactionId,
+          selectedDate: selectedDate,
+          labelOverride: l10n.toAccountLabel,
+          onChangedOverride: (value) => ref
+              .read(transactionFormProvider(transactionId).notifier)
+              .toAccountChanged(value),
+        ),
+        const SizedBox(height: 16),
+        _AmountField(
+          formState: formState,
+          accountsAsync: accountsAsync,
+          l10n: l10n,
+          transactionId: transactionId,
+          selectedDate: selectedDate,
+        ),
+        const SizedBox(height: 16),
+        _DescriptionField(
+          formState: formState,
+          l10n: l10n,
+          transactionId: transactionId,
+          selectedDate: selectedDate,
+        ),
+        const SizedBox(height: 24),
+        _DateTimeFields(
+          l10n: l10n,
+          dateController: _dateController,
+          selectDate: () => selectDate(context, formState.date),
+          timeController: _timeController,
+          selectTime: () => selectTime(context, formState.date),
+        ),
+        const SizedBox(height: 32),
+      ],
     );
-    if (picked != null && mounted) {
-      final newDateTime = DateTime(
-        picked.year,
-        picked.month,
-        picked.day,
-        currentDate.hour,
-        currentDate.minute,
-      );
-      ref
-          .read(
-            transactionFormProvider(
-              widget.transactionId,
-              selectedDate: widget.selectedDate,
-            ).notifier,
-          )
-          .dateChanged(newDateTime);
-    }
   }
 
-  Future<void> _selectTime(BuildContext context, DateTime currentDate) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(currentDate),
-    );
-    if (picked != null && mounted) {
-      final newDateTime = DateTime(
-        currentDate.year,
-        currentDate.month,
-        currentDate.day,
-        picked.hour,
-        picked.minute,
-      );
-      ref
-          .read(
-            transactionFormProvider(
-              widget.transactionId,
-              selectedDate: widget.selectedDate,
-            ).notifier,
-          )
-          .dateChanged(newDateTime);
-    }
+  void _updateControllers(TransactionFormState formState) {
+    final formatter = CalendarDateFormatter(Localizations.localeOf(context));
+    _dateController.text = formatter.formatFullDate(formState.date);
+    _timeController.text = formatter.formatTime(formState.date);
   }
 }
