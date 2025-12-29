@@ -33,6 +33,7 @@ class TransactionForm extends _$TransactionForm {
           categoryId: currentState.categoryId,
           accountId: accountId,
           toAccountId: currentState.toAccountId,
+          type: currentState.type,
         ),
       ),
     );
@@ -53,6 +54,7 @@ class TransactionForm extends _$TransactionForm {
           categoryId: currentState.categoryId,
           accountId: currentState.accountId,
           toAccountId: currentState.toAccountId,
+          type: currentState.type,
         ),
       ),
     );
@@ -97,9 +99,11 @@ class TransactionForm extends _$TransactionForm {
               ? GenericStringInput.dirty(transaction.accountId)
               : const GenericStringInput.pure(),
           category: GenericStringInput.dirty(transaction.categoryId),
-          // TODO: implement toAccount and toAccountId for transfers
-          // toAccount: const GenericStringInput.pure(),
-          // toAccountId: null,
+          // Handle transfer fields
+          toAccountId: transaction.toAccountId,
+          toAccount: transaction.toAccountId != null
+              ? GenericStringInput.dirty(transaction.toAccountId!)
+              : const GenericStringInput.pure(),
         );
       }
     }
@@ -142,6 +146,7 @@ class TransactionForm extends _$TransactionForm {
           categoryId: categoryId,
           accountId: currentState.accountId,
           toAccountId: currentState.toAccountId,
+          type: currentState.type,
         ),
       ),
     );
@@ -171,6 +176,7 @@ class TransactionForm extends _$TransactionForm {
           categoryId: currentState.categoryId,
           accountId: currentState.accountId,
           toAccountId: currentState.toAccountId,
+          type: currentState.type,
         ),
       ),
     );
@@ -183,16 +189,22 @@ class TransactionForm extends _$TransactionForm {
     _touchAllFields();
 
     final validState = state.value;
+
     if (validState == null || !validState.isFormValid) return false;
 
     try {
+      // Create transaction entity based on type
       final transaction = TransactionEntity(
         id: validState.id,
-        amount: (validState.amount.value),
+        amount: validState.amount.value,
         description: validState.description.value,
         categoryId: validState.categoryId!,
         date: validState.date,
         accountId: validState.accountId!,
+        // Include toAccountId for transfers
+        toAccountId: validState.type == TransactionType.transfer
+            ? validState.toAccountId
+            : null,
       );
 
       final isEditing = validState.id != GlobalConstants.createId;
@@ -207,9 +219,18 @@ class TransactionForm extends _$TransactionForm {
             .createTransaction(transaction);
       }
 
+      // Refresh affected accounts
       ref
           .read(accountProvider(transaction.accountId).notifier)
           .refreshAccount();
+
+      // If transfer, also refresh the destination account
+      if (validState.type == TransactionType.transfer &&
+          transaction.toAccountId != null) {
+        ref
+            .read(accountProvider(transaction.toAccountId!).notifier)
+            .refreshAccount();
+      }
 
       return true;
     } catch (e) {
@@ -217,17 +238,17 @@ class TransactionForm extends _$TransactionForm {
     }
   }
 
-  void toAccountChanged(String? accountId) {
+  void toAccountChanged(String? toAccountId) {
     final currentState = state.value;
     if (currentState == null) return;
 
-    final toAccount = accountId != null
-        ? GenericStringInput.dirty(accountId)
+    final toAccount = toAccountId != null
+        ? GenericStringInput.dirty(toAccountId)
         : const GenericStringInput.pure();
 
     state = AsyncValue.data(
       currentState.copyWith(
-        toAccountId: accountId,
+        toAccountId: toAccountId,
         toAccount: toAccount,
         hasFormBeenModified: true,
         isFormValid: _isValid(
@@ -235,29 +256,48 @@ class TransactionForm extends _$TransactionForm {
           amount: currentState.amount,
           categoryId: currentState.categoryId,
           accountId: currentState.accountId,
-          toAccountId: accountId,
+          toAccountId: toAccountId,
+          type: currentState.type,
         ),
       ),
     );
   }
 
-  void typeChanged(TransactionType type) {
+  void typeChanged(TransactionType type) async {
     final currentState = state.value;
     if (currentState == null) return;
 
+    if (type == TransactionType.transfer) {
+      // Auto-select transfer category if none selected
+      final categories = await ref.read(categoriesProvider.future);
+      final transferCategory = categories.firstWhere(
+        (cat) => cat.type == TransactionType.transfer,
+      );
+      state = AsyncValue.data(
+        currentState.copyWith(
+          type: type,
+          categoryId: transferCategory.id,
+          category: GenericStringInput.dirty(transferCategory.id),
+          hasFormBeenModified: true,
+          accountId: null,
+          account: const GenericStringInput.pure(),
+          toAccountId: null,
+          toAccount: const GenericStringInput.pure(),
+          isFormValid: false,
+        ),
+      );
+      return;
+    }
+
+    // For income/expense, reset category and accounts
     state = AsyncValue.data(
       currentState.copyWith(
         type: type,
         hasFormBeenModified: true,
-        categoryId: null, // Reset category when type changes
+        categoryId: null, // Reset category for income/expense
         category: const GenericStringInput.pure(),
-        // For transfers: start clean for both accounts
-        accountId: type == TransactionType.transfer
-            ? null
-            : currentState.accountId,
-        account: type == TransactionType.transfer
-            ? const GenericStringInput.pure()
-            : currentState.account,
+        accountId: currentState.accountId,
+        account: currentState.account,
         toAccountId: null,
         toAccount: const GenericStringInput.pure(),
         isFormValid: false,
@@ -271,6 +311,7 @@ class TransactionForm extends _$TransactionForm {
     String? categoryId,
     String? accountId,
     String? toAccountId,
+    required TransactionType type,
   }) {
     final category = categoryId != null
         ? GenericStringInput.dirty(categoryId)
@@ -282,8 +323,9 @@ class TransactionForm extends _$TransactionForm {
         ? GenericStringInput.dirty(toAccountId)
         : const GenericStringInput.pure();
 
-    if (state.value?.type == TransactionType.transfer) {
+    if (type == TransactionType.transfer) {
       // For transfer: description + amount + from + to
+      // No category required for transfers
       return Formz.validate([description, amount, account, toAccount]);
     }
 
@@ -302,10 +344,19 @@ class TransactionForm extends _$TransactionForm {
     final category = currentState.categoryId != null
         ? GenericStringInput.dirty(currentState.categoryId!)
         : const GenericStringInput.pure();
-
     final account = currentState.accountId != null
         ? GenericStringInput.dirty(currentState.accountId!)
         : const GenericStringInput.pure();
+    final toAccount = currentState.toAccountId != null
+        ? GenericStringInput.dirty(currentState.toAccountId!)
+        : const GenericStringInput.pure();
+
+    final List<FormzInput> fieldsToValidate;
+    if (currentState.type == TransactionType.transfer) {
+      fieldsToValidate = [amount, description, account, toAccount];
+    } else {
+      fieldsToValidate = [amount, description, category, account];
+    }
 
     state = AsyncValue.data(
       currentState.copyWith(
@@ -313,9 +364,10 @@ class TransactionForm extends _$TransactionForm {
         description: description,
         category: category,
         account: account,
+        toAccount: toAccount,
         isFormPure: false,
         hasFormBeenModified: true,
-        isFormValid: Formz.validate([amount, description, category, account]),
+        isFormValid: Formz.validate(fieldsToValidate),
       ),
     );
   }
@@ -360,6 +412,7 @@ class TransactionFormState {
   String? get descriptionError => description.error != null
       ? 'Description is required (2-200 characters)'
       : null;
+
   bool get isAmountPure => amount.isPure;
   bool get isDescriptionPure => description.isPure;
 

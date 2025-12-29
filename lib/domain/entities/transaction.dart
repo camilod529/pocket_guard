@@ -5,6 +5,7 @@ class TransactionEntity {
   final DateTime date;
   final String categoryId;
   final String? description;
+  final String? toAccountId;
 
   TransactionEntity({
     required this.id,
@@ -13,5 +14,6 @@ class TransactionEntity {
     required this.date,
     required this.categoryId,
     this.description,
+    this.toAccountId,
   });
 }

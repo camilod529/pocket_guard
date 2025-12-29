@@ -13,6 +13,7 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
   Future<void> createTransaction(TransactionEntity transaction) async {
     try {
       await database.transaction(() async {
+        // Insert the transaction
         await database
             .into(database.transactions)
             .insert(
@@ -22,27 +23,56 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
                 description: Value(transaction.description),
                 accountId: Value(transaction.accountId),
                 categoryId: Value(transaction.categoryId),
+                toAccountId: Value(transaction.toAccountId),
               ),
             );
 
+        // Get category to determine type
         final category = await (database.select(
           database.categories,
         )..where((tbl) => tbl.id.equals(transaction.categoryId))).getSingle();
 
-        final adjustment = category.type == TransactionType.income
-            ? transaction.amount
-            : -transaction.amount;
+        // Handle balance updates based on transaction type
+        if (category.type == TransactionType.transfer) {
+          // Transfer: subtract from source account, add to destination account
+          if (transaction.toAccountId == null) {
+            throw Exception('Transfer transaction requires toAccountId');
+          }
 
-        // TODO: Handle transfer type
+          // Subtract from source account
+          await database.customUpdate(
+            'UPDATE accounts SET balance = balance - ? WHERE id = ?',
+            updates: {database.accounts},
+            variables: [
+              Variable<double>(transaction.amount),
+              Variable<String>(transaction.accountId),
+            ],
+          );
 
-        await database.customUpdate(
-          'UPDATE accounts SET balance = balance + ? WHERE id = ?',
-          updates: {database.accounts},
-          variables: [
-            Variable<double>(adjustment),
-            Variable<String>(transaction.accountId),
-          ],
-        );
+          // Add to destination account
+          await database.customUpdate(
+            'UPDATE accounts SET balance = balance + ? WHERE id = ?',
+            updates: {database.accounts},
+            variables: [
+              Variable<double>(transaction.amount),
+              Variable<String>(transaction.toAccountId!),
+            ],
+          );
+        } else {
+          // Income or Expense: update only the main account
+          final adjustment = category.type == TransactionType.income
+              ? transaction.amount
+              : -transaction.amount;
+
+          await database.customUpdate(
+            'UPDATE accounts SET balance = balance + ? WHERE id = ?',
+            updates: {database.accounts},
+            variables: [
+              Variable<double>(adjustment),
+              Variable<String>(transaction.accountId),
+            ],
+          );
+        }
       });
     } catch (e, stackTrace) {
       throw _exceptionHandler.handleDriftException(
@@ -67,24 +97,52 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
           database.categories,
         )..where((tbl) => tbl.id.equals(transaction.categoryId))).getSingle();
 
-        final reverseEffect = category.type == TransactionType.income
-            ? -transaction.amount
-            : transaction.amount;
-
-        // TODO: Handle transfer type
-
+        // Delete the transaction first
         await (database.delete(
           database.transactions,
         )..where((tbl) => tbl.id.equals(id))).go();
 
-        await database.customUpdate(
-          'UPDATE accounts SET balance = balance + ? WHERE id = ?',
-          updates: {database.accounts},
-          variables: [
-            Variable<double>(reverseEffect),
-            Variable<String>(transaction.accountId),
-          ],
-        );
+        // Reverse the balance effects
+        if (category.type == TransactionType.transfer) {
+          // Transfer: reverse the transfer
+          if (transaction.toAccountId == null) {
+            throw Exception('Transfer transaction missing toAccountId');
+          }
+
+          // Add back to source account
+          await database.customUpdate(
+            'UPDATE accounts SET balance = balance + ? WHERE id = ?',
+            updates: {database.accounts},
+            variables: [
+              Variable<double>(transaction.amount),
+              Variable<String>(transaction.accountId),
+            ],
+          );
+
+          // Subtract from destination account
+          await database.customUpdate(
+            'UPDATE accounts SET balance = balance - ? WHERE id = ?',
+            updates: {database.accounts},
+            variables: [
+              Variable<double>(transaction.amount),
+              Variable<String>(transaction.toAccountId!),
+            ],
+          );
+        } else {
+          // Income or Expense: reverse the effect
+          final reverseEffect = category.type == TransactionType.income
+              ? -transaction.amount
+              : transaction.amount;
+
+          await database.customUpdate(
+            'UPDATE accounts SET balance = balance + ? WHERE id = ?',
+            updates: {database.accounts},
+            variables: [
+              Variable<double>(reverseEffect),
+              Variable<String>(transaction.accountId),
+            ],
+          );
+        }
       });
     } catch (e, stackTrace) {
       throw _exceptionHandler.handleDriftException(
@@ -128,6 +186,7 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
           description: transaction.description,
           accountId: transaction.accountId,
           categoryId: transaction.categoryId,
+          toAccountId: transaction.toAccountId,
         );
       }).toList();
     } catch (e, stackTrace) {
@@ -156,6 +215,7 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
         description: transaction.description,
         accountId: transaction.accountId,
         categoryId: transaction.categoryId,
+        toAccountId: transaction.toAccountId,
       );
     } catch (e, stackTrace) {
       throw _exceptionHandler.handleDriftException(
@@ -186,14 +246,15 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
           description: transaction.description,
           accountId: transaction.accountId,
           categoryId: transaction.categoryId,
+          toAccountId: transaction.toAccountId,
         );
       }).toList();
     } catch (e, stackTrace) {
       throw _exceptionHandler.handleDriftException(
         e,
         stackTrace,
-        operation: 'search accounts',
-        entityName: 'account',
+        operation: 'search transactions',
+        entityName: 'transaction',
       );
     }
   }
@@ -203,6 +264,9 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
     String id,
     TransactionEntity updatedTransaction,
   ) async {
+    // TODO: when updating a transaction that is a transfer,
+    // and the change is that the accounts swapped,
+    //need to handle both accounts, this has a bug
     try {
       final oldTransaction = await getTransactionById(id);
       if (oldTransaction == null) {
@@ -220,15 +284,7 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
                 )..where((tbl) => tbl.id.equals(updatedTransaction.categoryId)))
                 .getSingle();
 
-        final oldEffect = oldCategory.type == TransactionType.income
-            ? oldTransaction.amount
-            : -oldTransaction.amount;
-        final newEffect = newCategory.type == TransactionType.income
-            ? updatedTransaction.amount
-            : -updatedTransaction.amount;
-
-        // TODO: Handle transfer type
-
+        // Update the transaction record
         await (database.update(
           database.transactions,
         )..where((tbl) => tbl.id.equals(id))).write(
@@ -238,42 +294,15 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
             description: Value(updatedTransaction.description),
             accountId: Value(updatedTransaction.accountId),
             categoryId: Value(updatedTransaction.categoryId),
+            toAccountId: Value(updatedTransaction.toAccountId),
           ),
         );
 
-        if (updatedTransaction.accountId != oldTransaction.accountId) {
-          // TODO: Handle transfer type for both accounts
+        // Reverse old transaction effects
+        await _reverseTransactionEffect(oldTransaction, oldCategory.type);
 
-          await database.customUpdate(
-            'UPDATE accounts SET balance = balance + ? WHERE id = ?',
-            updates: {database.accounts},
-            variables: [
-              Variable<double>(-oldEffect),
-              Variable<String>(oldTransaction.accountId),
-            ],
-          );
-
-          await database.customUpdate(
-            'UPDATE accounts SET balance = balance + ? WHERE id = ?',
-            updates: {database.accounts},
-            variables: [
-              Variable<double>(newEffect),
-              Variable<String>(updatedTransaction.accountId),
-            ],
-          );
-        } else {
-          // Same account: apply net change atomically
-          final netChange = newEffect - oldEffect;
-
-          await database.customUpdate(
-            'UPDATE accounts SET balance = balance + ? WHERE id = ?',
-            updates: {database.accounts},
-            variables: [
-              Variable<double>(netChange),
-              Variable<String>(updatedTransaction.accountId),
-            ],
-          );
-        }
+        // Apply new transaction effects
+        await _applyTransactionEffect(updatedTransaction, newCategory.type);
       });
     } catch (e, stackTrace) {
       throw _exceptionHandler.handleDriftException(
@@ -281,6 +310,98 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
         stackTrace,
         operation: 'update transaction',
         entityName: 'transaction',
+      );
+    }
+  }
+
+  /// Apply the balance effect of a transaction
+  Future<void> _applyTransactionEffect(
+    TransactionEntity transaction,
+    TransactionType type,
+  ) async {
+    if (type == TransactionType.transfer) {
+      if (transaction.toAccountId == null) {
+        throw Exception('Transfer transaction requires toAccountId');
+      }
+
+      // Subtract from source account
+      await database.customUpdate(
+        'UPDATE accounts SET balance = balance - ? WHERE id = ?',
+        updates: {database.accounts},
+        variables: [
+          Variable<double>(transaction.amount),
+          Variable<String>(transaction.accountId),
+        ],
+      );
+
+      // Add to destination account
+      await database.customUpdate(
+        'UPDATE accounts SET balance = balance + ? WHERE id = ?',
+        updates: {database.accounts},
+        variables: [
+          Variable<double>(transaction.amount),
+          Variable<String>(transaction.toAccountId!),
+        ],
+      );
+    } else {
+      // Income or Expense
+      final adjustment = type == TransactionType.income
+          ? transaction.amount
+          : -transaction.amount;
+
+      await database.customUpdate(
+        'UPDATE accounts SET balance = balance + ? WHERE id = ?',
+        updates: {database.accounts},
+        variables: [
+          Variable<double>(adjustment),
+          Variable<String>(transaction.accountId),
+        ],
+      );
+    }
+  }
+
+  /// Reverse the balance effect of a transaction
+  Future<void> _reverseTransactionEffect(
+    TransactionEntity transaction,
+    TransactionType type,
+  ) async {
+    if (type == TransactionType.transfer) {
+      if (transaction.toAccountId == null) {
+        throw Exception('Transfer transaction missing toAccountId');
+      }
+
+      // Add back to source account
+      await database.customUpdate(
+        'UPDATE accounts SET balance = balance + ? WHERE id = ?',
+        updates: {database.accounts},
+        variables: [
+          Variable<double>(transaction.amount),
+          Variable<String>(transaction.accountId),
+        ],
+      );
+
+      // Subtract from destination account
+      await database.customUpdate(
+        'UPDATE accounts SET balance = balance - ? WHERE id = ?',
+        updates: {database.accounts},
+        variables: [
+          Variable<double>(transaction.amount),
+          Variable<String>(transaction.toAccountId!),
+        ],
+      );
+    } else {
+      // Income or Expense
+      final reverseEffect = type == TransactionType.income
+          ? -transaction.amount
+          : transaction.amount;
+
+      await database.customUpdate(
+        'UPDATE accounts SET balance = balance + ? WHERE id = ?',
+        updates: {database.accounts},
+        variables: [
+          Variable<double>(reverseEffect),
+          Variable<String>(transaction.accountId),
+        ],
       );
     }
   }

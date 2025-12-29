@@ -46,27 +46,31 @@ class TransactionIcons {
   }
 }
 
-// ============================================================================
-// REUSABLE WIDGETS
-// ============================================================================
-
 class _AccountSelector extends ConsumerWidget {
   final TransactionFormState formState;
   final AsyncValue<List<AccountEntity>> accountsAsync;
+  final String? accountId;
   final AppLocalizations l10n;
   final String transactionId;
   final DateTime? selectedDate;
+  final String? targetCurrency;
+  final String? excludeAccountId;
   final String? labelOverride;
-  final void Function(String)? onChangedOverride;
+  final bool? readonly;
+  final void Function(String)? onChanged;
 
   const _AccountSelector({
     required this.formState,
     required this.accountsAsync,
     required this.l10n,
     required this.transactionId,
+    required this.accountId,
+    required this.onChanged,
     this.selectedDate,
     this.labelOverride,
-    this.onChangedOverride,
+    this.readonly,
+    this.excludeAccountId,
+    this.targetCurrency,
   });
 
   @override
@@ -83,10 +87,14 @@ class _AccountSelector extends ConsumerWidget {
     WidgetRef ref,
     List<AccountEntity> accounts,
   ) {
-    final accountId = onChangedOverride != null
-        ? formState.toAccountId
-        : formState.accountId;
     final showError = accountId == null && !formState.isFormPure;
+
+    final filteredAccounts = accounts.where((account) {
+      final excludeMatch = account.id != excludeAccountId;
+      final currencyMatch =
+          targetCurrency == null || account.currency == targetCurrency;
+      return excludeMatch && currencyMatch;
+    }).toList();
 
     return IntrinsicHeight(
       child: Column(
@@ -100,14 +108,16 @@ class _AccountSelector extends ConsumerWidget {
           SizedBox(
             height: 72,
             child: DropdownButtonFormField<String>(
-              key: ValueKey(accounts.map((a) => a.id).join(',')),
-              initialValue: accountId,
+              key: ValueKey(filteredAccounts.map((a) => a.id).join(',')),
+              initialValue: filteredAccounts.any((a) => a.id == accountId)
+                  ? accountId
+                  : null,
               decoration: DropdownDecorationHelper.getDecoration(
                 hintText: l10n.selectAccountHint,
                 prefixIcon: const Icon(Icons.account_balance_wallet),
               ),
               isExpanded: true,
-              items: accounts
+              items: filteredAccounts
                   .map(
                     (account) => DropdownMenuItem(
                       value: account.id,
@@ -115,22 +125,13 @@ class _AccountSelector extends ConsumerWidget {
                     ),
                   )
                   .toList(),
-              onChanged: (value) {
-                if (value != null) {
-                  if (onChangedOverride != null) {
-                    onChangedOverride!(value);
-                  } else {
-                    ref
-                        .read(
-                          transactionFormProvider(
-                            transactionId,
-                            selectedDate: selectedDate,
-                          ).notifier,
-                        )
-                        .accountChanged(value);
-                  }
-                }
-              },
+              onChanged: readonly == true
+                  ? null
+                  : (value) {
+                      if (value != null) {
+                        onChanged?.call(value);
+                      }
+                    },
             ),
           ),
           if (showError)
@@ -514,11 +515,7 @@ class _DescriptionField extends ConsumerWidget {
   }
 }
 
-// ============================================================================
-// FORM SECTIONS
-// ============================================================================
-
-class _IncomeExpenseForm extends StatelessWidget {
+class _IncomeExpenseForm extends ConsumerWidget {
   final TransactionFormState formState;
   final AsyncValue<List<AccountEntity>> accountsAsync;
   final AppLocalizations l10n;
@@ -544,7 +541,7 @@ class _IncomeExpenseForm extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         _AccountSelector(
@@ -553,6 +550,17 @@ class _IncomeExpenseForm extends StatelessWidget {
           l10n: l10n,
           transactionId: transactionId,
           selectedDate: selectedDate,
+          accountId: formState.accountId,
+          onChanged: (value) {
+            ref
+                .read(
+                  transactionFormProvider(
+                    transactionId,
+                    selectedDate: selectedDate,
+                  ).notifier,
+                )
+                .accountChanged(value);
+          },
         ),
         const SizedBox(height: 16),
         _AmountField(
@@ -718,8 +726,14 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen>
                   ),
                 if (formState.type == TransactionType.transfer)
                   _TransferForm(
+                    formState: formState,
+                    accountsAsync: accountsAsync,
                     transactionId: transactionId,
                     selectedDate: selectedDate,
+                    dateController: _dateController,
+                    selectDate: () => selectDate(context, formState.date),
+                    timeController: _timeController,
+                    selectTime: () => selectTime(context, formState.date),
                   ),
                 _buildSubmitButton(formState, l10n),
                 const SizedBox(height: 24),
@@ -891,51 +905,38 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen>
 class _TransferForm extends ConsumerStatefulWidget {
   final String transactionId;
   final DateTime? selectedDate;
+  final TransactionFormState formState;
+  final AsyncValue<List<AccountEntity>> accountsAsync;
+  final TextEditingController dateController;
+  final TextEditingController timeController;
+  final VoidCallback selectDate;
+  final VoidCallback selectTime;
 
-  const _TransferForm({this.selectedDate, required this.transactionId});
+  const _TransferForm({
+    this.selectedDate,
+    required this.transactionId,
+    required this.formState,
+    required this.accountsAsync,
+    required this.dateController,
+    required this.timeController,
+    required this.selectDate,
+    required this.selectTime,
+  });
 
   @override
   ConsumerState<_TransferForm> createState() => _TransferFormState();
 }
 
-class _TransferFormState extends ConsumerState<_TransferForm>
-    with DateTimeSelectionMixin {
-  final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _timeController = TextEditingController();
-
-  @override
-  DateTime? get selectedDate => widget.selectedDate;
-
-  @override
-  String get transactionId => widget.transactionId;
-
+class _TransferFormState extends ConsumerState<_TransferForm> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final formStateAsync = ref.watch(
-      transactionFormProvider(transactionId, selectedDate: selectedDate),
+    _updateControllers(widget.formState);
+    return _buildTransferFormContent(
+      formState: widget.formState,
+      accountsAsync: widget.accountsAsync,
+      l10n: l10n,
     );
-    final accountsAsync = ref.watch(accountsProvider);
-
-    return formStateAsync.when(
-      data: (formState) {
-        _updateControllers(formState);
-        return _buildTransferFormContent(
-          formState: formState,
-          accountsAsync: accountsAsync,
-          l10n: l10n,
-        );
-      },
-      loading: () => const CircularProgressIndicator(),
-      error: (e, _) => Text(e.toString()),
-    );
-  }
-
-  @override
-  void dispose() {
-    _dateController.dispose();
-    _timeController.dispose();
-    super.dispose();
   }
 
   Widget _buildTransferFormContent({
@@ -943,50 +944,86 @@ class _TransferFormState extends ConsumerState<_TransferForm>
     required AsyncValue<List<AccountEntity>> accountsAsync,
     required AppLocalizations l10n,
   }) {
+    // TODO: for now, cant edit transfers
+    final isEditing = widget.transactionId != GlobalConstants.createId;
+
+    final fromCurrency = formState.accountId == null
+        ? null
+        : accountsAsync.value
+              ?.firstWhere((acc) => acc.id == formState.accountId)
+              .currency;
+
+    final toCurrency = formState.toAccountId == null
+        ? null
+        : accountsAsync.value
+              ?.firstWhere((acc) => acc.id == formState.toAccountId)
+              .currency;
+
     return Column(
       children: [
         _AccountSelector(
           formState: formState,
           accountsAsync: accountsAsync,
           l10n: l10n,
-          transactionId: transactionId,
-          selectedDate: selectedDate,
+          transactionId: widget.transactionId,
+          selectedDate: widget.selectedDate,
           labelOverride: l10n.fromAccountLabel,
+          excludeAccountId: formState.toAccountId,
+          targetCurrency: toCurrency,
+          onChanged: (value) => ref
+              .read(
+                transactionFormProvider(
+                  widget.transactionId,
+                  selectedDate: widget.selectedDate,
+                ).notifier,
+              )
+              .accountChanged(value),
+          accountId: formState.accountId,
+          readonly: isEditing,
         ),
         const SizedBox(height: 16),
         _AccountSelector(
           formState: formState,
           accountsAsync: accountsAsync,
           l10n: l10n,
-          transactionId: transactionId,
-          selectedDate: selectedDate,
+          transactionId: widget.transactionId,
+          selectedDate: widget.selectedDate,
+          targetCurrency: fromCurrency,
           labelOverride: l10n.toAccountLabel,
-          onChangedOverride: (value) => ref
-              .read(transactionFormProvider(transactionId).notifier)
+          excludeAccountId: formState.accountId,
+          onChanged: (value) => ref
+              .read(
+                transactionFormProvider(
+                  widget.transactionId,
+                  selectedDate: widget.selectedDate,
+                ).notifier,
+              )
               .toAccountChanged(value),
+          accountId: formState.toAccountId,
+          readonly: isEditing,
         ),
         const SizedBox(height: 16),
         _AmountField(
           formState: formState,
           accountsAsync: accountsAsync,
           l10n: l10n,
-          transactionId: transactionId,
-          selectedDate: selectedDate,
+          transactionId: widget.transactionId,
+          selectedDate: widget.selectedDate,
         ),
         const SizedBox(height: 16),
         _DescriptionField(
           formState: formState,
           l10n: l10n,
-          transactionId: transactionId,
-          selectedDate: selectedDate,
+          transactionId: widget.transactionId,
+          selectedDate: widget.selectedDate,
         ),
         const SizedBox(height: 24),
         _DateTimeFields(
           l10n: l10n,
-          dateController: _dateController,
-          selectDate: () => selectDate(context, formState.date),
-          timeController: _timeController,
-          selectTime: () => selectTime(context, formState.date),
+          dateController: widget.dateController,
+          selectDate: widget.selectDate,
+          timeController: widget.timeController,
+          selectTime: widget.selectTime,
         ),
         const SizedBox(height: 32),
       ],
@@ -995,7 +1032,7 @@ class _TransferFormState extends ConsumerState<_TransferForm>
 
   void _updateControllers(TransactionFormState formState) {
     final formatter = CalendarDateFormatter(Localizations.localeOf(context));
-    _dateController.text = formatter.formatFullDate(formState.date);
-    _timeController.text = formatter.formatTime(formState.date);
+    widget.dateController.text = formatter.formatFullDate(formState.date);
+    widget.timeController.text = formatter.formatTime(formState.date);
   }
 }

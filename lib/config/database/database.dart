@@ -37,6 +37,10 @@ class AppDatabase extends _$AppDatabase {
         if (from < 2) {
           await m.addColumn(accounts, accounts.balance);
         }
+        if (from < 3) {
+          // Add toAccountId column for transfers
+          await m.addColumn(transactions, transactions.toAccountId);
+        }
       },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
@@ -47,8 +51,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 2;
-
+  int get schemaVersion => 3;
   Future<double> getAccountBalance(String accountId) {
     return (select(accounts)..where((tbl) => tbl.id.equals(accountId)))
         .map((row) => row.balance)
@@ -122,8 +125,6 @@ class Categories extends Table {
   TextColumn get type => text().map(CategoryTypeConverter())();
 }
 
-// Define enums for type safety
-
 enum CategoryOrigin { system, user }
 
 class CategoryOriginConverter extends TypeConverter<CategoryOrigin, String> {
@@ -137,7 +138,6 @@ class CategoryOriginConverter extends TypeConverter<CategoryOrigin, String> {
   String toSql(CategoryOrigin value) => value.name;
 }
 
-// Converters for enums
 class CategoryTypeConverter extends TypeConverter<TransactionType, String> {
   @override
   TransactionType fromSql(String fromDb) {
@@ -169,4 +169,11 @@ class Transactions extends Table {
 
   @override
   Set<Column> get primaryKey => {id};
+
+  // Add toAccountId for transfers (nullable - only used for transfer transactions)
+  TextColumn get toAccountId => text().nullable().references(
+    Accounts,
+    #id,
+    onDelete: KeyAction.cascade,
+  )();
 }

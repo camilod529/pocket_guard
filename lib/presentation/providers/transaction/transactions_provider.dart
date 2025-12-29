@@ -69,6 +69,11 @@ class TransactionsNotifier extends _$TransactionsNotifier {
       ref
           .read(accountProvider(transaction.accountId).notifier)
           .refreshAccount();
+      if (transaction.toAccountId != null) {
+        ref
+            .read(accountProvider(transaction.toAccountId!).notifier)
+            .refreshAccount();
+      }
     } catch (e, stackTrace) {
       state = AsyncValue.error(e, stackTrace);
     }
