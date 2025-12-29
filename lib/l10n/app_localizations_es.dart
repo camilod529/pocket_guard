@@ -208,6 +208,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get incomeType => 'Ingreso';
 
   @override
+  String get language => 'Idioma';
+
+  @override
   String get more => 'Más';
 
   @override
@@ -241,6 +244,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get selectTimeHint => 'Seleccionar hora';
+
+  @override
+  String get theme => 'Tema';
 
   @override
   String get thisTransaction => 'esta transacción';

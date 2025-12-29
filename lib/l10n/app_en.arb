@@ -302,6 +302,10 @@
   "@incomeType": {
     "description": "Income transaction type"
   },
+  "language": "Language",
+  "@language": {
+    "description": "Title for the language settings section"
+  },
   "more": "More",
   "@more": {
     "description": "Label for the more options view"
@@ -351,6 +355,10 @@
   "selectTimeHint": "Select time",
   "@selectTimeHint": {
     "description": "Time field hint text"
+  },
+  "theme": "Theme",
+  "@theme": {
+    "description": "Title for the theme settings section"
   },
   "thisTransaction": "this transaction",
   "@thisTransaction": {

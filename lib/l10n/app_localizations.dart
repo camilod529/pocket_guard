@@ -449,6 +449,12 @@ abstract class AppLocalizations {
   /// **'Income'**
   String get incomeType;
 
+  /// Title for the language settings section
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
   /// Label for the more options view
   ///
   /// In en, this message translates to:
@@ -514,6 +520,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select time'**
   String get selectTimeHint;
+
+  /// Title for the theme settings section
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get theme;
 
   /// Fallback entity name for delete confirmation
   ///
