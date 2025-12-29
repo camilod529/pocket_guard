@@ -1,4 +1,3 @@
-// main.dart (updated with async initialization)
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_manager_flutter/config/router/router.dart';

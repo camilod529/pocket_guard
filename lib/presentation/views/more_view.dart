@@ -1,4 +1,3 @@
-// lib/views/more_view.dart (updated for async state)
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:money_manager_flutter/config/theme/app_theme.dart';
