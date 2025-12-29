@@ -161,6 +161,12 @@ abstract class AppLocalizations {
   /// **'Money Manager'**
   String get appTitle;
 
+  /// Color option: Blue
+  ///
+  /// In en, this message translates to:
+  /// **'Blue'**
+  String get blue;
+
   /// Label for the calendar view
   ///
   /// In en, this message translates to:
@@ -233,17 +239,35 @@ abstract class AppLocalizations {
   /// **'Category'**
   String get categoryLabel;
 
+  /// Subtitle for the theme settings section
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your app color'**
+  String get chooseYourAppColor;
+
   /// Button to create new transaction
   ///
   /// In en, this message translates to:
   /// **'Create Transaction'**
   String get createTransactionButton;
 
+  /// Color option: Cyan
+  ///
+  /// In en, this message translates to:
+  /// **'Cyan'**
+  String get cyan;
+
   /// Date field label
   ///
   /// In en, this message translates to:
   /// **'Date'**
   String get dateLabel;
+
+  /// Color option: Deep Purple
+  ///
+  /// In en, this message translates to:
+  /// **'Deep Purple'**
+  String get deepPurple;
 
   /// Delete action/button
   ///
@@ -310,6 +334,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Edit Transaction'**
   String get editTransactionTitle;
+
+  /// Language name for English
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// Native language name for English
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get englishNative;
 
   /// Generic data not found error
   ///
@@ -449,11 +485,23 @@ abstract class AppLocalizations {
   /// **'Income'**
   String get incomeType;
 
+  /// Color option: Indigo
+  ///
+  /// In en, this message translates to:
+  /// **'Indigo'**
+  String get indigo;
+
   /// Title for the language settings section
   ///
   /// In en, this message translates to:
   /// **'Language'**
   String get language;
+
+  /// Color option: Lime
+  ///
+  /// In en, this message translates to:
+  /// **'Lime'**
+  String get lime;
 
   /// Label for the more options view
   ///
@@ -485,6 +533,18 @@ abstract class AppLocalizations {
   /// **'No transactions on {date}'**
   String noTransactionsOnDate(String date);
 
+  /// Label for the primary color selection in theme settings
+  ///
+  /// In en, this message translates to:
+  /// **'Primary Color'**
+  String get primaryColor;
+
+  /// Color option: Purple
+  ///
+  /// In en, this message translates to:
+  /// **'Purple'**
+  String get purple;
+
   /// Account validation error
   ///
   /// In en, this message translates to:
@@ -496,6 +556,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select an account'**
   String get selectAccountHint;
+
+  /// Subtitle for the language settings section
+  ///
+  /// In en, this message translates to:
+  /// **'Select app language'**
+  String get selectAppLanguage;
 
   /// Category validation error
   ///
@@ -520,6 +586,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select time'**
   String get selectTimeHint;
+
+  /// Title for the settings view
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// Language name for Spanish
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish'**
+  String get spanish;
+
+  /// Native language name for Spanish
+  ///
+  /// In en, this message translates to:
+  /// **'Español'**
+  String get spanishNative;
+
+  /// Color option: Teal
+  ///
+  /// In en, this message translates to:
+  /// **'Teal'**
+  String get teal;
 
   /// Title for the theme settings section
   ///
@@ -646,6 +736,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Wed'**
   String get weekdayWed;
+
+  /// Color option: Yellow
+  ///
+  /// In en, this message translates to:
+  /// **'Yellow'**
+  String get yellow;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

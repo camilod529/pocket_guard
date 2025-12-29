@@ -1,4 +1,17 @@
+// config/theme/app_theme.dart (updated with localized names)
 import 'package:flutter/material.dart';
+import 'package:money_manager_flutter/l10n/app_localizations.dart';
+
+const List<String> appColorKeys = [
+  'indigo',
+  'deepPurple',
+  'blue',
+  'purple',
+  'yellow',
+  'cyan',
+  'teal',
+  'lime',
+];
 
 const List<Color> appColors = [
   Colors.indigo,
@@ -28,7 +41,31 @@ class AppTheme {
       colorSchemeSeed: appColors[selectedColorIndex],
       useMaterial3: true,
       brightness: brightness,
-      appBarTheme: AppBarTheme(centerTitle: true),
+      appBarTheme: const AppBarTheme(centerTitle: true),
     );
+  }
+
+  static String getColorName(BuildContext context, int index) {
+    final localizations = AppLocalizations.of(context)!;
+    switch (appColorKeys[index]) {
+      case 'indigo':
+        return localizations.indigo;
+      case 'deepPurple':
+        return localizations.deepPurple;
+      case 'blue':
+        return localizations.blue;
+      case 'purple':
+        return localizations.purple;
+      case 'yellow':
+        return localizations.yellow;
+      case 'cyan':
+        return localizations.cyan;
+      case 'teal':
+        return localizations.teal;
+      case 'lime':
+        return localizations.lime;
+      default:
+        return 'Color';
+    }
   }
 }

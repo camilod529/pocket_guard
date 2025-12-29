@@ -44,6 +44,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appTitle => 'Administrador de Dinero';
 
   @override
+  String get blue => 'Azul';
+
+  @override
   String get calendar => 'Calendario';
 
   @override
@@ -80,10 +83,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get categoryLabel => 'Categoría';
 
   @override
+  String get chooseYourAppColor => 'Elige el color de tu aplicación';
+
+  @override
   String get createTransactionButton => 'Crear Transacción';
 
   @override
+  String get cyan => 'Cían';
+
+  @override
   String get dateLabel => 'Fecha';
+
+  @override
+  String get deepPurple => 'Púrpura Profundo';
 
   @override
   String get delete => 'Eliminar';
@@ -119,6 +131,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get editTransactionTitle => 'Editar Transacción';
+
+  @override
+  String get english => 'Inglés';
+
+  @override
+  String get englishNative => 'English';
 
   @override
   String get error_data_not_found => 'Los datos solicitados no fueron encontrados.';
@@ -208,7 +226,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get incomeType => 'Ingreso';
 
   @override
+  String get indigo => 'Índigo';
+
+  @override
   String get language => 'Idioma';
+
+  @override
+  String get lime => 'Lima';
 
   @override
   String get more => 'Más';
@@ -228,10 +252,19 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get primaryColor => 'Color primario';
+
+  @override
+  String get purple => 'Púrpura';
+
+  @override
   String get selectAccountError => 'Por favor seleccione una cuenta';
 
   @override
   String get selectAccountHint => 'Seleccionar cuenta';
+
+  @override
+  String get selectAppLanguage => 'Selecciona el idioma de la aplicación';
 
   @override
   String get selectCategoryError => 'Por favor seleccione una categoría';
@@ -244,6 +277,18 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get selectTimeHint => 'Seleccionar hora';
+
+  @override
+  String get settings => 'Configuración';
+
+  @override
+  String get spanish => 'Español';
+
+  @override
+  String get spanishNative => 'Español';
+
+  @override
+  String get teal => 'Verde azulado';
 
   @override
   String get theme => 'Tema';
@@ -309,4 +354,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get weekdayWed => 'Mié';
+
+  @override
+  String get yellow => 'Amarillo';
 }

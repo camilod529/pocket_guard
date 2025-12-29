@@ -50,6 +50,10 @@
   "@appTitle": {
     "description": "The title of the application"
   },
+  "blue": "Blue",
+  "@blue": {
+    "description": "Color option: Blue"
+  },
   "calendar": "Calendar",
   "@calendar": {
     "description": "Label for the calendar view"
@@ -98,13 +102,25 @@
   "@categoryLabel": {
     "description": "Category selector label"
   },
+  "chooseYourAppColor": "Choose your app color",
+  "@chooseYourAppColor": {
+    "description": "Subtitle for the theme settings section"
+  },
   "createTransactionButton": "Create Transaction",
   "@createTransactionButton": {
     "description": "Button to create new transaction"
   },
+  "cyan": "Cyan",
+  "@cyan": {
+    "description": "Color option: Cyan"
+  },
   "dateLabel": "Date",
   "@dateLabel": {
     "description": "Date field label"
+  },
+  "deepPurple": "Deep Purple",
+  "@deepPurple": {
+    "description": "Color option: Deep Purple"
   },
   "delete": "Delete",
   "@delete": {
@@ -155,6 +171,14 @@
   "editTransactionTitle": "Edit Transaction",
   "@editTransactionTitle": {
     "description": "AppBar title for editing existing transaction"
+  },
+  "english": "English",
+  "@english": {
+    "description": "Language name for English"
+  },
+  "englishNative": "English",
+  "@englishNative": {
+    "description": "Native language name for English"
   },
   "error_data_not_found": "The requested data was not found.",
   "@error_data_not_found": {
@@ -302,9 +326,17 @@
   "@incomeType": {
     "description": "Income transaction type"
   },
+  "indigo": "Indigo",
+  "@indigo": {
+    "description": "Color option: Indigo"
+  },
   "language": "Language",
   "@language": {
     "description": "Title for the language settings section"
+  },
+  "lime": "Lime",
+  "@lime": {
+    "description": "Color option: Lime"
   },
   "more": "More",
   "@more": {
@@ -332,6 +364,14 @@
       }
     }
   },
+  "primaryColor": "Primary Color",
+  "@primaryColor": {
+    "description": "Label for the primary color selection in theme settings"
+  },
+  "purple": "Purple",
+  "@purple": {
+    "description": "Color option: Purple"
+  },
   "selectAccountError": "Please select an account",
   "@selectAccountError": {
     "description": "Account validation error"
@@ -339,6 +379,10 @@
   "selectAccountHint": "Select an account",
   "@selectAccountHint": {
     "description": "Account dropdown hint"
+  },
+  "selectAppLanguage": "Select app language",
+  "@selectAppLanguage": {
+    "description": "Subtitle for the language settings section"
   },
   "selectCategoryError": "Please select a category",
   "@selectCategoryError": {
@@ -355,6 +399,22 @@
   "selectTimeHint": "Select time",
   "@selectTimeHint": {
     "description": "Time field hint text"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Title for the settings view"
+  },
+  "spanish": "Spanish",
+  "@spanish": {
+    "description": "Language name for Spanish"
+  },
+  "spanishNative": "Español",
+  "@spanishNative": {
+    "description": "Native language name for Spanish"
+  },
+  "teal": "Teal",
+  "@teal": {
+    "description": "Color option: Teal"
   },
   "theme": "Theme",
   "@theme": {
@@ -445,5 +505,9 @@
   "weekdayWed": "Wed",
   "@weekdayWed": {
     "description": "Short label for Wednesday in calendar header"
+  },
+  "yellow": "Yellow",
+  "@yellow": {
+    "description": "Color option: Yellow"
   }
 }

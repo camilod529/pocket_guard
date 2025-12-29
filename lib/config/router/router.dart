@@ -1,7 +1,10 @@
+// config/router/router.dart (updated)
 import 'package:go_router/go_router.dart';
 import 'package:money_manager_flutter/config/router/routes.dart';
 import 'package:money_manager_flutter/presentation/screens/account_form_screen.dart';
 import 'package:money_manager_flutter/presentation/screens/home_screen.dart';
+import 'package:money_manager_flutter/presentation/screens/settings/language_settings_screen.dart';
+import 'package:money_manager_flutter/presentation/screens/settings/theme_settings_screen.dart';
 import 'package:money_manager_flutter/presentation/screens/transaction_form_screen.dart';
 import 'package:money_manager_flutter/utils/constants/global_constants.dart';
 
@@ -13,11 +16,9 @@ final appRouter = GoRouter(
       builder: (context, state) {
         final pageIndex =
             int.tryParse(state.pathParameters['page'] ?? '0') ?? 0;
-
         return HomeScreen(pageIndex: pageIndex);
       },
     ),
-
     GoRoute(
       path: Routes.accountForm,
       builder: (context, state) {
@@ -27,7 +28,6 @@ final appRouter = GoRouter(
         );
       },
     ),
-
     GoRoute(
       path: Routes.transactionForm,
       builder: (context, state) {
@@ -41,6 +41,15 @@ final appRouter = GoRouter(
           selectedDate: selectedDate,
         );
       },
+    ),
+    // More/Settings routes
+    GoRoute(
+      path: Routes.themeSettings,
+      builder: (context, state) => const ThemeSettingsScreen(),
+    ),
+    GoRoute(
+      path: Routes.languageSettings,
+      builder: (context, state) => const LanguageSettingsScreen(),
     ),
   ],
 );
