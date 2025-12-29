@@ -1,7 +1,7 @@
-name: money_manager_flutter
-description: "A new Flutter project."
+name: pocket_guard
+description: "A personal finance manager app to help you take control of your money."
 publish_to: "none"
-version: 0.1.0
+version: 0.1.0+1
 
 environment:
   sdk: ^3.10.4
@@ -25,6 +25,7 @@ dependencies:
   formz: ^0.8.0
   animate_do: ^4.2.0
   shared_preferences: ^2.5.4
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:

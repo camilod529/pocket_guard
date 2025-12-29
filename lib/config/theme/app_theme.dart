@@ -1,6 +1,6 @@
 // config/theme/app_theme.dart (updated with localized names)
 import 'package:flutter/material.dart';
-import 'package:money_manager_flutter/l10n/app_localizations.dart';
+import 'package:pocket_guard/l10n/app_localizations.dart';
 
 const List<String> appColorKeys = [
   'indigo',

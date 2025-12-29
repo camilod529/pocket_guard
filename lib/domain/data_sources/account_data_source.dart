@@ -1,4 +1,4 @@
-import 'package:money_manager_flutter/domain/entities/account.dart';
+import 'package:pocket_guard/domain/entities/account.dart';
 
 abstract class AccountDataSource {
   Future<void> createAccount(AccountEntity account);

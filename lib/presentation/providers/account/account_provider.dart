@@ -1,5 +1,5 @@
-import 'package:money_manager_flutter/domain/entities/account.dart';
-import 'package:money_manager_flutter/presentation/providers/account/accounts_provider.dart';
+import 'package:pocket_guard/domain/entities/account.dart';
+import 'package:pocket_guard/presentation/providers/account/accounts_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'account_provider.g.dart';

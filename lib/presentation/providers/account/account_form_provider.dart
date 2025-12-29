@@ -1,11 +1,11 @@
 import 'package:formz/formz.dart';
-import 'package:money_manager_flutter/domain/entities/account.dart';
-import 'package:money_manager_flutter/infrastructure/inputs/accounts/balance.dart';
-import 'package:money_manager_flutter/infrastructure/inputs/accounts/currency.dart';
-import 'package:money_manager_flutter/infrastructure/inputs/accounts/name.dart';
-import 'package:money_manager_flutter/presentation/providers/account/account_provider.dart';
-import 'package:money_manager_flutter/presentation/providers/account/accounts_provider.dart';
-import 'package:money_manager_flutter/utils/constants/global_constants.dart';
+import 'package:pocket_guard/domain/entities/account.dart';
+import 'package:pocket_guard/infrastructure/inputs/accounts/balance.dart';
+import 'package:pocket_guard/infrastructure/inputs/accounts/currency.dart';
+import 'package:pocket_guard/infrastructure/inputs/accounts/name.dart';
+import 'package:pocket_guard/presentation/providers/account/account_provider.dart';
+import 'package:pocket_guard/presentation/providers/account/accounts_provider.dart';
+import 'package:pocket_guard/utils/constants/global_constants.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'account_form_provider.g.dart';

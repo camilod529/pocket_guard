@@ -1,14 +1,14 @@
 import 'package:formz/formz.dart';
-import 'package:money_manager_flutter/domain/entities/category.dart';
-import 'package:money_manager_flutter/domain/entities/transaction.dart';
-import 'package:money_manager_flutter/infrastructure/inputs/generic_string.dart';
-import 'package:money_manager_flutter/infrastructure/inputs/transactions/amount.dart';
-import 'package:money_manager_flutter/infrastructure/inputs/transactions/description.dart';
-import 'package:money_manager_flutter/presentation/providers/account/account_provider.dart';
-import 'package:money_manager_flutter/presentation/providers/category/categories_provider.dart';
-import 'package:money_manager_flutter/presentation/providers/transaction/transaction_provider.dart';
-import 'package:money_manager_flutter/presentation/providers/transaction/transactions_provider.dart';
-import 'package:money_manager_flutter/utils/constants/global_constants.dart';
+import 'package:pocket_guard/domain/entities/category.dart';
+import 'package:pocket_guard/domain/entities/transaction.dart';
+import 'package:pocket_guard/infrastructure/inputs/generic_string.dart';
+import 'package:pocket_guard/infrastructure/inputs/transactions/amount.dart';
+import 'package:pocket_guard/infrastructure/inputs/transactions/description.dart';
+import 'package:pocket_guard/presentation/providers/account/account_provider.dart';
+import 'package:pocket_guard/presentation/providers/category/categories_provider.dart';
+import 'package:pocket_guard/presentation/providers/transaction/transaction_provider.dart';
+import 'package:pocket_guard/presentation/providers/transaction/transactions_provider.dart';
+import 'package:pocket_guard/utils/constants/global_constants.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'transaction_form_provider.g.dart';

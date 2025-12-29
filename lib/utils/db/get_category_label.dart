@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money_manager_flutter/config/database/database.dart';
-import 'package:money_manager_flutter/l10n/app_localizations.dart';
+import 'package:pocket_guard/config/database/database.dart';
+import 'package:pocket_guard/l10n/app_localizations.dart';
 
 String getCategoryLabel(BuildContext context, Category category) {
   final l10n = AppLocalizations.of(context)!;

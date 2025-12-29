@@ -1,4 +1,4 @@
-import 'package:money_manager_flutter/infrastructure/errors/user_message_key.dart';
+import 'package:pocket_guard/infrastructure/errors/user_message_key.dart';
 
 /// Database constraint violations
 class ConstraintViolation extends DataException {

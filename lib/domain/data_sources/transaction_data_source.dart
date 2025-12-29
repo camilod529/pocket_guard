@@ -1,4 +1,4 @@
-import 'package:money_manager_flutter/domain/entities/transaction.dart';
+import 'package:pocket_guard/domain/entities/transaction.dart';
 
 abstract class TransactionDataSource {
   Future<void> createTransaction(TransactionEntity transaction);

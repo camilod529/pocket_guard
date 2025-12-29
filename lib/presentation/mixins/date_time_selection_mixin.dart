@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:money_manager_flutter/presentation/providers/transaction/transaction_form_provider.dart';
+import 'package:pocket_guard/presentation/providers/transaction/transaction_form_provider.dart';
 
 mixin DateTimeSelectionMixin<T extends ConsumerStatefulWidget>
     on ConsumerState<T> {

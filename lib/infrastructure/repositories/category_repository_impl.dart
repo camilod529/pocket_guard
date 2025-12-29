@@ -1,9 +1,9 @@
-import 'package:money_manager_flutter/domain/data_sources/category_data_source.dart';
-import 'package:money_manager_flutter/domain/entities/category.dart';
-import 'package:money_manager_flutter/domain/repositories/category_repository.dart';
-import 'package:money_manager_flutter/domain/services/logger_service.dart';
-import 'package:money_manager_flutter/infrastructure/errors/data_exceptions.dart';
-import 'package:money_manager_flutter/infrastructure/services/logger_service_impl.dart';
+import 'package:pocket_guard/domain/data_sources/category_data_source.dart';
+import 'package:pocket_guard/domain/entities/category.dart';
+import 'package:pocket_guard/domain/repositories/category_repository.dart';
+import 'package:pocket_guard/domain/services/logger_service.dart';
+import 'package:pocket_guard/infrastructure/errors/data_exceptions.dart';
+import 'package:pocket_guard/infrastructure/services/logger_service_impl.dart';
 
 class CategoryRepositoryImpl extends CategoryRepository {
   final CategoryDataSource _dataSource;

@@ -1,8 +1,8 @@
-import 'package:money_manager_flutter/domain/data_sources/category_data_source.dart';
-import 'package:money_manager_flutter/domain/entities/category.dart';
-import 'package:money_manager_flutter/domain/repositories/category_repository.dart';
-import 'package:money_manager_flutter/infrastructure/data_sources/category_drift_data_source_impl.dart';
-import 'package:money_manager_flutter/infrastructure/repositories/category_repository_impl.dart';
+import 'package:pocket_guard/domain/data_sources/category_data_source.dart';
+import 'package:pocket_guard/domain/entities/category.dart';
+import 'package:pocket_guard/domain/repositories/category_repository.dart';
+import 'package:pocket_guard/infrastructure/data_sources/category_drift_data_source_impl.dart';
+import 'package:pocket_guard/infrastructure/repositories/category_repository_impl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'categories_provider.g.dart';

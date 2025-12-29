@@ -1,7 +1,7 @@
-import 'package:money_manager_flutter/domain/data_sources/settings_data_source.dart';
-import 'package:money_manager_flutter/domain/repositories/settings_repository.dart';
-import 'package:money_manager_flutter/infrastructure/data_sources/settings_shared_preference_data_source_impl.dart';
-import 'package:money_manager_flutter/infrastructure/repositories/settings_repository_impl.dart';
+import 'package:pocket_guard/domain/data_sources/settings_data_source.dart';
+import 'package:pocket_guard/domain/repositories/settings_repository.dart';
+import 'package:pocket_guard/infrastructure/data_sources/settings_shared_preference_data_source_impl.dart';
+import 'package:pocket_guard/infrastructure/repositories/settings_repository_impl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

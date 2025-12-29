@@ -1,12 +1,12 @@
 // config/router/router.dart (updated)
 import 'package:go_router/go_router.dart';
-import 'package:money_manager_flutter/config/router/routes.dart';
-import 'package:money_manager_flutter/presentation/screens/account_form_screen.dart';
-import 'package:money_manager_flutter/presentation/screens/home_screen.dart';
-import 'package:money_manager_flutter/presentation/screens/settings/language_settings_screen.dart';
-import 'package:money_manager_flutter/presentation/screens/settings/theme_settings_screen.dart';
-import 'package:money_manager_flutter/presentation/screens/transaction_form_screen.dart';
-import 'package:money_manager_flutter/utils/constants/global_constants.dart';
+import 'package:pocket_guard/config/router/routes.dart';
+import 'package:pocket_guard/presentation/screens/account_form_screen.dart';
+import 'package:pocket_guard/presentation/screens/home_screen.dart';
+import 'package:pocket_guard/presentation/screens/settings/language_settings_screen.dart';
+import 'package:pocket_guard/presentation/screens/settings/theme_settings_screen.dart';
+import 'package:pocket_guard/presentation/screens/transaction_form_screen.dart';
+import 'package:pocket_guard/utils/constants/global_constants.dart';
 
 final appRouter = GoRouter(
   initialLocation: Routes.home,

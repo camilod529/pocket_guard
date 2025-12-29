@@ -1,7 +1,7 @@
-import 'package:money_manager_flutter/domain/data_sources/settings_data_source.dart';
-import 'package:money_manager_flutter/domain/repositories/settings_repository.dart';
-import 'package:money_manager_flutter/domain/services/logger_service.dart';
-import 'package:money_manager_flutter/infrastructure/services/logger_service_impl.dart';
+import 'package:pocket_guard/domain/data_sources/settings_data_source.dart';
+import 'package:pocket_guard/domain/repositories/settings_repository.dart';
+import 'package:pocket_guard/domain/services/logger_service.dart';
+import 'package:pocket_guard/infrastructure/services/logger_service_impl.dart';
 
 class SettingsRepositoryImpl extends SettingsRepository {
   final SettingsDataSource _dataSource;

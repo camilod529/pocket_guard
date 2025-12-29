@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:money_manager_flutter/config/router/router.dart';
-import 'package:money_manager_flutter/config/theme/app_theme.dart';
-import 'package:money_manager_flutter/presentation/providers/settings_providers.dart';
+import 'package:pocket_guard/config/router/router.dart';
+import 'package:pocket_guard/config/theme/app_theme.dart';
+import 'package:pocket_guard/presentation/providers/settings_providers.dart';
 
 import 'l10n/app_localizations.dart';
 

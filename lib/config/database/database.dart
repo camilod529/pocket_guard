@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
-import 'package:money_manager_flutter/domain/entities/category.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pocket_guard/domain/entities/category.dart';
 import 'package:uuid/uuid.dart';
 
 part 'database.g.dart';

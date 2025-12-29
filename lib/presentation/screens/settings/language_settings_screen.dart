@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:money_manager_flutter/domain/entities/localized_language.dart';
-import 'package:money_manager_flutter/l10n/app_localizations.dart';
-import 'package:money_manager_flutter/presentation/providers/settings_providers.dart';
+import 'package:pocket_guard/domain/entities/localized_language.dart';
+import 'package:pocket_guard/l10n/app_localizations.dart';
+import 'package:pocket_guard/presentation/providers/settings_providers.dart';
 
 List<LocalizedLanguage> _getLocalizedLanguages(AppLocalizations localizations) {
   return [

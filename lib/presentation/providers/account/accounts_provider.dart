@@ -1,9 +1,9 @@
-import 'package:money_manager_flutter/domain/data_sources/account_data_source.dart';
-import 'package:money_manager_flutter/domain/entities/account.dart';
-import 'package:money_manager_flutter/domain/repositories/account_repository.dart';
-import 'package:money_manager_flutter/infrastructure/data_sources/account_drift_data_source_impl.dart';
-import 'package:money_manager_flutter/infrastructure/repositories/account_repository_impl.dart';
-import 'package:money_manager_flutter/presentation/providers/transaction/transactions_provider.dart';
+import 'package:pocket_guard/domain/data_sources/account_data_source.dart';
+import 'package:pocket_guard/domain/entities/account.dart';
+import 'package:pocket_guard/domain/repositories/account_repository.dart';
+import 'package:pocket_guard/infrastructure/data_sources/account_drift_data_source_impl.dart';
+import 'package:pocket_guard/infrastructure/repositories/account_repository_impl.dart';
+import 'package:pocket_guard/presentation/providers/transaction/transactions_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'accounts_provider.g.dart';

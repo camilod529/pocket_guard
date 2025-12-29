@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
-import 'package:money_manager_flutter/domain/services/logger_service.dart';
+import 'package:pocket_guard/domain/services/logger_service.dart';
 
 class LoggerServiceImpl implements LoggerService {
   final String context;

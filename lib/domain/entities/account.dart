@@ -1,4 +1,4 @@
-import 'package:money_manager_flutter/utils/constants/global_constants.dart';
+import 'package:pocket_guard/utils/constants/global_constants.dart';
 
 class AccountEntity {
   final String id;

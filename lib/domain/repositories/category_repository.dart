@@ -1,4 +1,4 @@
-import 'package:money_manager_flutter/domain/entities/category.dart';
+import 'package:pocket_guard/domain/entities/category.dart';
 
 abstract class CategoryRepository {
   Future<void> createCategory(CategoryEntity category);

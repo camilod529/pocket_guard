@@ -1,10 +1,10 @@
-import 'package:money_manager_flutter/domain/data_sources/transaction_data_source.dart';
-import 'package:money_manager_flutter/domain/entities/transaction.dart';
-import 'package:money_manager_flutter/domain/repositories/transaction_repository.dart';
-import 'package:money_manager_flutter/infrastructure/data_sources/transaction_drift_data_source_impl.dart';
-import 'package:money_manager_flutter/infrastructure/repositories/transaction_repository_impl.dart';
-import 'package:money_manager_flutter/presentation/providers/account/account_provider.dart';
-import 'package:money_manager_flutter/presentation/providers/selected_date_range_provider.dart';
+import 'package:pocket_guard/domain/data_sources/transaction_data_source.dart';
+import 'package:pocket_guard/domain/entities/transaction.dart';
+import 'package:pocket_guard/domain/repositories/transaction_repository.dart';
+import 'package:pocket_guard/infrastructure/data_sources/transaction_drift_data_source_impl.dart';
+import 'package:pocket_guard/infrastructure/repositories/transaction_repository_impl.dart';
+import 'package:pocket_guard/presentation/providers/account/account_provider.dart';
+import 'package:pocket_guard/presentation/providers/selected_date_range_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'transactions_provider.g.dart';

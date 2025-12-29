@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart';
-import 'package:money_manager_flutter/config/database/database.dart';
-import 'package:money_manager_flutter/domain/data_sources/account_data_source.dart';
-import 'package:money_manager_flutter/domain/entities/account.dart';
-import 'package:money_manager_flutter/infrastructure/errors/data_exceptions.dart';
-import 'package:money_manager_flutter/infrastructure/errors/drift_exception_handler.dart';
+import 'package:pocket_guard/config/database/database.dart';
+import 'package:pocket_guard/domain/data_sources/account_data_source.dart';
+import 'package:pocket_guard/domain/entities/account.dart';
+import 'package:pocket_guard/infrastructure/errors/data_exceptions.dart';
+import 'package:pocket_guard/infrastructure/errors/drift_exception_handler.dart';
 
 class AccountDriftDataSourceImpl extends AccountDataSource {
   final DriftExceptionHandler _exceptionHandler = DriftExceptionHandler();

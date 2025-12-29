@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:money_manager_flutter/presentation/views/account_view.dart';
-import 'package:money_manager_flutter/presentation/views/calendar_view.dart';
-import 'package:money_manager_flutter/presentation/views/more_view.dart';
-import 'package:money_manager_flutter/presentation/widgets/shared/custom_bottom_navigation_bar.dart';
+import 'package:pocket_guard/presentation/views/account_view.dart';
+import 'package:pocket_guard/presentation/views/calendar_view.dart';
+import 'package:pocket_guard/presentation/views/more_view.dart';
+import 'package:pocket_guard/presentation/widgets/shared/custom_bottom_navigation_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   static const name = 'home_screen';

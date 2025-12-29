@@ -1,4 +1,4 @@
-import 'package:money_manager_flutter/domain/data_sources/settings_data_source.dart';
+import 'package:pocket_guard/domain/data_sources/settings_data_source.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsSharedPreferenceDataSourceImpl implements SettingsDataSource {

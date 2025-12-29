@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:money_manager_flutter/infrastructure/errors/data_exceptions.dart';
+import 'package:pocket_guard/infrastructure/errors/data_exceptions.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 class DriftExceptionHandler {

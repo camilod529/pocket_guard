@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:money_manager_flutter/infrastructure/inputs/formatters/currency_input_formatter.dart';
-import 'package:money_manager_flutter/l10n/app_localizations.dart';
-import 'package:money_manager_flutter/presentation/providers/account/account_form_provider.dart';
-import 'package:money_manager_flutter/presentation/providers/account/accounts_provider.dart';
-import 'package:money_manager_flutter/presentation/widgets/shared/delete_confirmation_modal.dart';
-import 'package:money_manager_flutter/presentation/widgets/shared/forms/custom_form_field.dart';
-import 'package:money_manager_flutter/utils/constants/global_constants.dart';
-import 'package:money_manager_flutter/utils/shared/number_formatting.dart';
+import 'package:pocket_guard/infrastructure/inputs/formatters/currency_input_formatter.dart';
+import 'package:pocket_guard/l10n/app_localizations.dart';
+import 'package:pocket_guard/presentation/providers/account/account_form_provider.dart';
+import 'package:pocket_guard/presentation/providers/account/accounts_provider.dart';
+import 'package:pocket_guard/presentation/widgets/shared/delete_confirmation_modal.dart';
+import 'package:pocket_guard/presentation/widgets/shared/forms/custom_form_field.dart';
+import 'package:pocket_guard/utils/constants/global_constants.dart';
+import 'package:pocket_guard/utils/shared/number_formatting.dart';
 
 class AccountFormScreen extends ConsumerWidget {
   final String accountId; // "create" or real UUID
