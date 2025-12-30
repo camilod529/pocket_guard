@@ -39,7 +39,13 @@ android {
         create("release") {
             keyAlias = keystoreProperties["keyAlias"] as String? ?: "upload"
             keyPassword = keystoreProperties["keyPassword"] as String? ?: ""
-            storeFile = keystoreProperties["storeFile"]?.let { file(it) }
+            // This change ensures it looks inside the 'app' folder if it's a relative path
+            val storePath = keystoreProperties["storeFile"] as String?
+            storeFile = if (storePath != null) {
+                if (file(storePath).isAbsolute) file(storePath) else file("app/$storePath")
+            } else {
+                null
+            }
             storePassword = keystoreProperties["storePassword"] as String? ?: ""
         }
     }
