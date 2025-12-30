@@ -1,4 +1,4 @@
-package com.example.money_manager_flutter
+package com.pocket_guard.app
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -3,19 +3,17 @@ import 'package:pocket_guard/domain/repositories/settings_repository.dart';
 import 'package:pocket_guard/infrastructure/data_sources/settings_shared_preference_data_source_impl.dart';
 import 'package:pocket_guard/infrastructure/repositories/settings_repository_impl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'settings_providers.g.dart';
 
 @Riverpod(keepAlive: true)
-Future<SettingsDataSource> settingsDataSource(Ref ref) async {
-  final prefs = await SharedPreferences.getInstance();
-  return SettingsSharedPreferenceDataSourceImpl(prefs);
+SettingsDataSource settingsDataSource(Ref ref) {
+  return SettingsSharedPreferenceDataSourceImpl();
 }
 
 @Riverpod(keepAlive: true)
-Future<SettingsRepository> settingsRepository(Ref ref) async {
-  final dataSource = await ref.watch(settingsDataSourceProvider.future);
+SettingsRepository settingsRepository(Ref ref) {
+  final dataSource = ref.watch(settingsDataSourceProvider);
   return SettingsRepositoryImpl(dataSource: dataSource);
 }
 
@@ -25,7 +23,7 @@ class LocaleNotifier extends _$LocaleNotifier {
 
   @override
   Future<String> build() async {
-    final repository = await ref.watch(settingsRepositoryProvider.future);
+    final repository = ref.watch(settingsRepositoryProvider);
     _repository = repository;
 
     final savedLocale = await _repository!.getLocale();
@@ -47,7 +45,7 @@ class ThemeIndexNotifier extends _$ThemeIndexNotifier {
 
   @override
   Future<int> build() async {
-    final repository = await ref.watch(settingsRepositoryProvider.future);
+    final repository = ref.watch(settingsRepositoryProvider);
     _repository = repository;
 
     final savedIndex = await _repository!.getThemeIndex();

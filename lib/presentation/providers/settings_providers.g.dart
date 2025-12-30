@@ -15,13 +15,11 @@ const settingsDataSourceProvider = SettingsDataSourceProvider._();
 final class SettingsDataSourceProvider
     extends
         $FunctionalProvider<
-          AsyncValue<SettingsDataSource>,
           SettingsDataSource,
-          FutureOr<SettingsDataSource>
+          SettingsDataSource,
+          SettingsDataSource
         >
-    with
-        $FutureModifier<SettingsDataSource>,
-        $FutureProvider<SettingsDataSource> {
+    with $Provider<SettingsDataSource> {
   const SettingsDataSourceProvider._()
     : super(
         from: null,
@@ -38,18 +36,26 @@ final class SettingsDataSourceProvider
 
   @$internal
   @override
-  $FutureProviderElement<SettingsDataSource> $createElement(
+  $ProviderElement<SettingsDataSource> $createElement(
     $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
+  ) => $ProviderElement(pointer);
 
   @override
-  FutureOr<SettingsDataSource> create(Ref ref) {
+  SettingsDataSource create(Ref ref) {
     return settingsDataSource(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SettingsDataSource value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SettingsDataSource>(value),
+    );
   }
 }
 
 String _$settingsDataSourceHash() =>
-    r'9839b68a6e369f5f172346fe9c778a88a2a356a9';
+    r'62e1b27ed574b30a6c6fa92474f64c6ca9d13ad2';
 
 @ProviderFor(settingsRepository)
 const settingsRepositoryProvider = SettingsRepositoryProvider._();
@@ -57,13 +63,11 @@ const settingsRepositoryProvider = SettingsRepositoryProvider._();
 final class SettingsRepositoryProvider
     extends
         $FunctionalProvider<
-          AsyncValue<SettingsRepository>,
           SettingsRepository,
-          FutureOr<SettingsRepository>
+          SettingsRepository,
+          SettingsRepository
         >
-    with
-        $FutureModifier<SettingsRepository>,
-        $FutureProvider<SettingsRepository> {
+    with $Provider<SettingsRepository> {
   const SettingsRepositoryProvider._()
     : super(
         from: null,
@@ -80,18 +84,26 @@ final class SettingsRepositoryProvider
 
   @$internal
   @override
-  $FutureProviderElement<SettingsRepository> $createElement(
+  $ProviderElement<SettingsRepository> $createElement(
     $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
+  ) => $ProviderElement(pointer);
 
   @override
-  FutureOr<SettingsRepository> create(Ref ref) {
+  SettingsRepository create(Ref ref) {
     return settingsRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SettingsRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SettingsRepository>(value),
+    );
   }
 }
 
 String _$settingsRepositoryHash() =>
-    r'49042bb4087468aa4dd34e1b01b768f990af1609';
+    r'44ce80ceb1d82251588c2c9e249fa75bce060e53';
 
 @ProviderFor(LocaleNotifier)
 const localeProvider = LocaleNotifierProvider._();
@@ -117,7 +129,7 @@ final class LocaleNotifierProvider
   LocaleNotifier create() => LocaleNotifier();
 }
 
-String _$localeNotifierHash() => r'0a48323b5dbc60bdf0ba15ee292b0ff8372f4672';
+String _$localeNotifierHash() => r'e6c4a66edcc87437387dcafe98beaf95fa370fba';
 
 abstract class _$LocaleNotifier extends $AsyncNotifier<String> {
   FutureOr<String> build();
@@ -163,7 +175,7 @@ final class ThemeIndexNotifierProvider
 }
 
 String _$themeIndexNotifierHash() =>
-    r'9140f37d2cb4fdad718a4cf3e189f488a41b71b3';
+    r'd6d0415304d876c609aa89b74f8d160f95f2f37f';
 
 abstract class _$ThemeIndexNotifier extends $AsyncNotifier<int> {
   FutureOr<int> build();
