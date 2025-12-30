@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pocket_guard/domain/entities/account.dart';
 import 'package:pocket_guard/infrastructure/inputs/formatters/currency_input_formatter.dart';
 import 'package:pocket_guard/l10n/app_localizations.dart';
 import 'package:pocket_guard/presentation/providers/account/account_form_provider.dart';
@@ -198,7 +199,41 @@ class AccountFormScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
+
+                  const SizedBox(height: 24),
+                  Text(
+                    localizations.accountTypeLabel,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: 8),
+                  SegmentedButton<AccountType>(
+                    segments: [
+                      ButtonSegment<AccountType>(
+                        value: AccountType.cash,
+                        label: Text(localizations.accountTypeCash),
+                        icon: const Icon(Icons.money),
+                      ),
+                      ButtonSegment<AccountType>(
+                        value: AccountType.asset,
+                        label: Text(localizations.accountTypeAsset),
+                        icon: const Icon(Icons.savings),
+                      ),
+                      ButtonSegment<AccountType>(
+                        value: AccountType.credit,
+                        label: Text(localizations.accountTypeCredit),
+                        icon: const Icon(Icons.credit_card),
+                      ),
+                    ],
+                    showSelectedIcon: false,
+                    selected: {formState.type},
+                    onSelectionChanged: (Set<AccountType> newSelection) {
+                      ref
+                          .read(accountFormProvider(accountId).notifier)
+                          .typeChanged(newSelection.first);
+                    },
+                  ),
                   const Spacer(),
+                  // ... rest of the code (Submit Button)
                   ElevatedButton.icon(
                     onPressed: formState.isFormValid
                         ? () => _handleSubmit(context, ref)

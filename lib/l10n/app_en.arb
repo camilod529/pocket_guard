@@ -34,6 +34,22 @@
   "@accounts": {
     "description": "Label for the accounts view"
   },
+  "accountTypeAsset": "Asset",
+  "@accountTypeAsset": {
+    "description": "Account type: Asset"
+  },
+  "accountTypeCash": "Cash",
+  "@accountTypeCash": {
+    "description": "Account type: Cash"
+  },
+  "accountTypeCredit": "Credit",
+  "@accountTypeCredit": {
+    "description": "Account type: Credit"
+  },
+  "accountTypeLabel": "Account Type",
+  "@accountTypeLabel": {
+    "description": "Label for account type selector"
+  },
   "addAccount": "Add Account",
   "@addAccount": {
     "description": "Add new account button"
@@ -74,6 +90,10 @@
   "@cancel": {
     "description": "Cancel action/button"
   },
+  "categories": "Categories",
+  "@categories": {
+    "description": "Label for the categories view"
+  },
   "category_expense_food_dining": "Food",
   "@category_expense_food_dining": {
     "description": "Category for expenses on food and dining"
@@ -98,17 +118,55 @@
   "@category_transfer": {
     "description": "Category for money transfers"
   },
+  "categoryDeletedSuccessfully": "Category deleted successfully",
+  "@categoryDeletedSuccessfully": {
+    "description": "Success message after category deletion"
+  },
+  "categoryDeleteError": "Failed to delete category: {error}",
+  "@categoryDeleteError": {
+    "description": "Error message after failed category deletion",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
   "categoryLabel": "Category",
   "@categoryLabel": {
     "description": "Category selector label"
+  },
+  "categoryName": "Category Name",
+  "@categoryName": {
+    "description": "Label for category name input"
   },
   "chooseYourAppColor": "Choose your app color",
   "@chooseYourAppColor": {
     "description": "Subtitle for the theme settings section"
   },
+  "create": "Create",
+  "@create": {
+    "description": "Create action/button"
+  },
+  "createAccount": "Create Account",
+  "@createAccount": {
+    "description": "Button to create a new account"
+  },
+  "createCategory": "Create Category",
+  "@createCategory": {
+    "description": "Button to create a new category"
+  },
+  "createTransaction": "Create Transaction",
+  "@createTransaction": {
+    "description": "Button to create a new transaction"
+  },
   "createTransactionButton": "Create Transaction",
   "@createTransactionButton": {
     "description": "Button to create new transaction"
+  },
+  "custom": "Custom",
+  "@custom": {
+    "description": "Label indicating that a category is a custom category"
   },
   "cyan": "Cyan",
   "@cyan": {
@@ -148,6 +206,20 @@
   "@deleteAction": {
     "description": "Delete button tooltip"
   },
+  "deleteCategoryConfirmation": "Are you sure you want to delete the category \"{categoryName}\"? This will also delete all associated transactions.",
+  "@deleteCategoryConfirmation": {
+    "description": "Delete category confirmation message with category name",
+    "placeholders": {
+      "categoryName": {
+        "type": "String",
+        "example": "Food"
+      }
+    }
+  },
+  "deleteCategoryTitle": "Delete Category",
+  "@deleteCategoryTitle": {
+    "description": "Title for delete category confirmation dialog"
+  },
   "deleteTransactionDescription": "This action cannot be undone.",
   "@deleteTransactionDescription": {
     "description": "Delete confirmation description"
@@ -167,6 +239,10 @@
   "edit": "Edit",
   "@edit": {
     "description": "Edit action/button"
+  },
+  "editCategory": "Edit Category",
+  "@editCategory": {
+    "description": "AppBar title for editing existing category"
   },
   "editTransactionTitle": "Edit Transaction",
   "@editTransactionTitle": {
@@ -252,6 +328,18 @@
   "@error_unknown_data": {
     "description": "Unknown or unexpected data-related error"
   },
+  "errorCategoryNameEmpty": "Category name cannot be empty",
+  "@errorCategoryNameEmpty": {
+    "description": "Error shown when the category name is empty"
+  },
+  "errorCategoryNameTooLong": "Category name is too long",
+  "@errorCategoryNameTooLong": {
+    "description": "Error shown when the category name is longer than the maximum length"
+  },
+  "errorCategoryNameTooShort": "Category name is too short",
+  "@errorCategoryNameTooShort": {
+    "description": "Error shown when the category name is shorter than the minimum length"
+  },
   "errorLoadingAccounts": "Error loading accounts: {error}",
   "@errorLoadingAccounts": {
     "description": "Error shown when accounts fail to load",
@@ -302,6 +390,10 @@
       }
     }
   },
+  "expense": "Expense",
+  "@expense": {
+    "description": "Expense transaction type"
+  },
   "expenseType": "Expense",
   "@expenseType": {
     "description": "Expense transaction type"
@@ -309,6 +401,14 @@
   "fabAddTransactionTooltip": "Add transaction",
   "@fabAddTransactionTooltip": {
     "description": "Tooltip for FAB that creates a new transaction from the calendar view"
+  },
+  "french": "French",
+  "@french": {
+    "description": "Language name for French"
+  },
+  "frenchNative": "Français",
+  "@frenchNative": {
+    "description": "Native language name for French"
   },
   "fromAccountLabel": "From Account",
   "@fromAccountLabel": {
@@ -321,6 +421,10 @@
   "helloWorld": "Hello World!",
   "@helloWorld": {
     "description": "A simple greeting message"
+  },
+  "income": "Income",
+  "@income": {
+    "description": "Income transaction type"
   },
   "incomeType": "Income",
   "@incomeType": {
@@ -412,6 +516,10 @@
   "@spanishNative": {
     "description": "Native language name for Spanish"
   },
+  "system": "System",
+  "@system": {
+    "description": "Label indicating that a category is a system category"
+  },
   "teal": "Teal",
   "@teal": {
     "description": "Color option: Teal"
@@ -419,6 +527,10 @@
   "theme": "Theme",
   "@theme": {
     "description": "Title for the theme settings section"
+  },
+  "thisCategory": "this category",
+  "@thisCategory": {
+    "description": "Fallback entity name for delete confirmation"
   },
   "thisTransaction": "this transaction",
   "@thisTransaction": {
@@ -473,6 +585,10 @@
   "unknownCategory": "Unknown",
   "@unknownCategory": {
     "description": "Fallback label when a category is missing or unknown"
+  },
+  "update": "Update",
+  "@update": {
+    "description": "Update action/button"
   },
   "updateTransactionButton": "Update Transaction",
   "@updateTransactionButton": {

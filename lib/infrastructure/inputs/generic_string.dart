@@ -1,14 +1,14 @@
 import 'package:formz/formz.dart';
 
-enum CategoryError { empty }
-
-class GenericStringInput extends FormzInput<String, CategoryError> {
+class GenericStringInput extends FormzInput<String, StringInputError> {
   const GenericStringInput.dirty([super.value = '']) : super.dirty();
   const GenericStringInput.pure() : super.pure('');
 
   @override
-  CategoryError? validator(String value) {
-    if (value.isEmpty) return CategoryError.empty;
+  StringInputError? validator(String value) {
+    if (value.isEmpty) return StringInputError.empty;
     return null;
   }
 }
+
+enum StringInputError { empty }

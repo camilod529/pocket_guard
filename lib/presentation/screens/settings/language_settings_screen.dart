@@ -16,6 +16,11 @@ List<LocalizedLanguage> _getLocalizedLanguages(AppLocalizations localizations) {
       displayName: localizations.spanish,
       nativeName: localizations.spanishNative,
     ),
+    LocalizedLanguage(
+      code: 'fr',
+      displayName: localizations.french,
+      nativeName: localizations.frenchNative,
+    ),
   ];
 }
 

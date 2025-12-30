@@ -41,7 +41,7 @@ final class SelectedDateRangeProvider
   }
 }
 
-String _$selectedDateRangeHash() => r'9098e5ada0038bcc3127b605f9be8253c33d79ac';
+String _$selectedDateRangeHash() => r'f749437b7da82b44dcded1002e25b365031b4f92';
 
 abstract class _$SelectedDateRange extends $Notifier<DateRangeSelection> {
   DateRangeSelection build();

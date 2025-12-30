@@ -1,0 +1,1 @@
+enum DropdownActionType { edit, delete }

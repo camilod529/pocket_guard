@@ -7,6 +7,7 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
+import 'app_localizations_fr.dart';
 
 // ignore_for_file: type=lint
 
@@ -92,7 +93,8 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('es')
+    Locale('es'),
+    Locale('fr')
   ];
 
   /// Label for account currency input
@@ -101,7 +103,7 @@ abstract class AppLocalizations {
   /// **'Currency'**
   String get accountCurrency;
 
-  /// Hint text for account currency input
+  /// Hint text for account currency in`put
   ///
   /// In en, this message translates to:
   /// **'USD, EUR, GBP'**
@@ -136,6 +138,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Accounts'**
   String get accounts;
+
+  /// Account type: Asset
+  ///
+  /// In en, this message translates to:
+  /// **'Asset'**
+  String get accountTypeAsset;
+
+  /// Account type: Cash
+  ///
+  /// In en, this message translates to:
+  /// **'Cash'**
+  String get accountTypeCash;
+
+  /// Account type: Credit
+  ///
+  /// In en, this message translates to:
+  /// **'Credit'**
+  String get accountTypeCredit;
+
+  /// Label for account type selector
+  ///
+  /// In en, this message translates to:
+  /// **'Account Type'**
+  String get accountTypeLabel;
 
   /// Add new account button
   ///
@@ -197,6 +223,12 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
+  /// Label for the categories view
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get categories;
+
   /// Category for expenses on food and dining
   ///
   /// In en, this message translates to:
@@ -233,11 +265,29 @@ abstract class AppLocalizations {
   /// **'Transfer'**
   String get category_transfer;
 
+  /// Success message after category deletion
+  ///
+  /// In en, this message translates to:
+  /// **'Category deleted successfully'**
+  String get categoryDeletedSuccessfully;
+
+  /// Error message after failed category deletion
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete category: {error}'**
+  String categoryDeleteError(String error);
+
   /// Category selector label
   ///
   /// In en, this message translates to:
   /// **'Category'**
   String get categoryLabel;
+
+  /// Label for category name input
+  ///
+  /// In en, this message translates to:
+  /// **'Category Name'**
+  String get categoryName;
 
   /// Subtitle for the theme settings section
   ///
@@ -245,11 +295,41 @@ abstract class AppLocalizations {
   /// **'Choose your app color'**
   String get chooseYourAppColor;
 
+  /// Create action/button
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get create;
+
+  /// Button to create a new account
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get createAccount;
+
+  /// Button to create a new category
+  ///
+  /// In en, this message translates to:
+  /// **'Create Category'**
+  String get createCategory;
+
+  /// Button to create a new transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Create Transaction'**
+  String get createTransaction;
+
   /// Button to create new transaction
   ///
   /// In en, this message translates to:
   /// **'Create Transaction'**
   String get createTransactionButton;
+
+  /// Label indicating that a category is a custom category
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get custom;
 
   /// Color option: Cyan
   ///
@@ -299,6 +379,18 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get deleteAction;
 
+  /// Delete category confirmation message with category name
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the category \"{categoryName}\"? This will also delete all associated transactions.'**
+  String deleteCategoryConfirmation(String categoryName);
+
+  /// Title for delete category confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Category'**
+  String get deleteCategoryTitle;
+
   /// Delete confirmation description
   ///
   /// In en, this message translates to:
@@ -328,6 +420,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Edit'**
   String get edit;
+
+  /// AppBar title for editing existing category
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Category'**
+  String get editCategory;
 
   /// AppBar title for editing existing transaction
   ///
@@ -419,6 +517,24 @@ abstract class AppLocalizations {
   /// **'Something went wrong with the data operation. Please try again.'**
   String get error_unknown_data;
 
+  /// Error shown when the category name is empty
+  ///
+  /// In en, this message translates to:
+  /// **'Category name cannot be empty'**
+  String get errorCategoryNameEmpty;
+
+  /// Error shown when the category name is longer than the maximum length
+  ///
+  /// In en, this message translates to:
+  /// **'Category name is too long'**
+  String get errorCategoryNameTooLong;
+
+  /// Error shown when the category name is shorter than the minimum length
+  ///
+  /// In en, this message translates to:
+  /// **'Category name is too short'**
+  String get errorCategoryNameTooShort;
+
   /// Error shown when accounts fail to load
   ///
   /// In en, this message translates to:
@@ -453,6 +569,12 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Expense'**
+  String get expense;
+
+  /// Expense transaction type
+  ///
+  /// In en, this message translates to:
+  /// **'Expense'**
   String get expenseType;
 
   /// Tooltip for FAB that creates a new transaction from the calendar view
@@ -460,6 +582,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add transaction'**
   String get fabAddTransactionTooltip;
+
+  /// Language name for French
+  ///
+  /// In en, this message translates to:
+  /// **'French'**
+  String get french;
+
+  /// Native language name for French
+  ///
+  /// In en, this message translates to:
+  /// **'Français'**
+  String get frenchNative;
 
   /// Label for 'from' account in transfer transaction form
   ///
@@ -478,6 +612,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hello World!'**
   String get helloWorld;
+
+  /// Income transaction type
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get income;
 
   /// Income transaction type
   ///
@@ -605,6 +745,12 @@ abstract class AppLocalizations {
   /// **'Español'**
   String get spanishNative;
 
+  /// Label indicating that a category is a system category
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get system;
+
   /// Color option: Teal
   ///
   /// In en, this message translates to:
@@ -616,6 +762,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Theme'**
   String get theme;
+
+  /// Fallback entity name for delete confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'this category'**
+  String get thisCategory;
 
   /// Fallback entity name for delete confirmation
   ///
@@ -689,6 +841,12 @@ abstract class AppLocalizations {
   /// **'Unknown'**
   String get unknownCategory;
 
+  /// Update action/button
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
+
   /// Button to update existing transaction
   ///
   /// In en, this message translates to:
@@ -753,7 +911,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'es'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'es', 'fr'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -766,6 +924,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'en': return AppLocalizationsEn();
     case 'es': return AppLocalizationsEs();
+    case 'fr': return AppLocalizationsFr();
   }
 
   throw FlutterError(

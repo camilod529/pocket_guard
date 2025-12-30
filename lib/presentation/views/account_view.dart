@@ -7,7 +7,7 @@ import 'package:pocket_guard/l10n/app_localizations.dart';
 import 'package:pocket_guard/presentation/providers/account/accounts_provider.dart';
 import 'package:pocket_guard/presentation/widgets/shared/delete_confirmation_modal.dart';
 import 'package:pocket_guard/utils/constants/global_constants.dart';
-import 'package:pocket_guard/utils/types/account_types.dart';
+import 'package:pocket_guard/utils/types/general_types.dart';
 
 class AccountView extends ConsumerWidget {
   const AccountView({super.key});
@@ -39,26 +39,79 @@ class AccountView extends ConsumerWidget {
       return _buildEmptyState(context, ref, localizations);
     }
 
-    return ListView.separated(
+    final categories = AccountType.values;
+
+    return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: accounts.length,
-      separatorBuilder: (context, index) => const Divider(height: 1),
-      itemBuilder: (context, index) {
-        final account = accounts[index];
-        return _buildAccountTile(context, account, ref, localizations);
+      itemCount: categories.length,
+      itemBuilder: (context, catIndex) {
+        final type = categories[catIndex];
+        // Filter and Sort based on the sortOrder property in your DB
+        final typeAccounts = accounts.where((a) => a.type == type).toList()
+          ..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
+
+        if (typeAccounts.isEmpty) return const SizedBox.shrink();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8.0,
+                horizontal: 4.0,
+              ),
+              child: Text(
+                _getCategoryName(
+                  type,
+                  localizations,
+                ), // Helper for localized names
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+            Card(
+              clipBehavior: Clip.antiAlias,
+              margin: const EdgeInsets.only(bottom: 24),
+              child: ReorderableListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: typeAccounts.length,
+                onReorder: (oldIndex, newIndex) {
+                  ref
+                      .read(accountsProvider.notifier)
+                      .reorderAccounts(oldIndex, newIndex, typeAccounts);
+                },
+                itemBuilder: (context, index) {
+                  final account = typeAccounts[index];
+                  return _buildAccountTile(
+                    context,
+                    account: account,
+                    ref: ref,
+                    localizations: localizations,
+                    key: ValueKey(account.id),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
       },
     );
   }
 
   Widget _buildAccountTile(
-    BuildContext context,
-    AccountEntity account,
-    WidgetRef ref,
-    AppLocalizations localizations,
-  ) {
+    BuildContext context, {
+    required AccountEntity account,
+    required WidgetRef ref,
+    required AppLocalizations localizations,
+    required Key key,
+  }) {
     final colors = Theme.of(context).colorScheme;
 
     return ListTile(
+      key: key,
       contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       leading: CircleAvatar(
         backgroundColor: colors.primaryContainer,
@@ -73,13 +126,13 @@ class AccountView extends ConsumerWidget {
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
       subtitle: Text(account.currency),
-      trailing: PopupMenuButton<AccountActionDropdownEnum>(
+      trailing: PopupMenuButton<DropdownActionType>(
         icon: const Icon(Icons.more_vert),
         onSelected: (value) =>
             _onAccountAction(context, value, account.id, ref, localizations),
         itemBuilder: (context) => [
           PopupMenuItem(
-            value: AccountActionDropdownEnum.edit,
+            value: DropdownActionType.edit,
             child: Row(
               children: [
                 const Icon(Icons.edit, size: 20),
@@ -89,7 +142,7 @@ class AccountView extends ConsumerWidget {
             ),
           ),
           PopupMenuItem(
-            value: AccountActionDropdownEnum.delete,
+            value: DropdownActionType.delete,
             child: Row(
               children: [
                 const Icon(Icons.delete, size: 20, color: Colors.red),
@@ -190,19 +243,30 @@ class AccountView extends ConsumerWidget {
     );
   }
 
+  String _getCategoryName(AccountType type, AppLocalizations localizations) {
+    switch (type) {
+      case AccountType.cash:
+        return localizations.accountTypeCash;
+      case AccountType.asset:
+        return localizations.accountTypeAsset;
+      case AccountType.credit:
+        return localizations.accountTypeCredit;
+    }
+  }
+
   void _onAccountAction(
     BuildContext context,
-    AccountActionDropdownEnum action,
+    DropdownActionType action,
     String accountId,
     WidgetRef ref,
     AppLocalizations localizations,
   ) {
     switch (action) {
-      case AccountActionDropdownEnum.edit:
+      case DropdownActionType.edit:
         // Navigate to edit account screen
         context.push(Routes.accountFormPage(accountId));
         break;
-      case AccountActionDropdownEnum.delete:
+      case DropdownActionType.delete:
         _showDeleteConfirmation(context, accountId, ref, localizations);
         break;
     }

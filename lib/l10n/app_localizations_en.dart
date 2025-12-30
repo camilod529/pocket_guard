@@ -32,6 +32,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accounts => 'Accounts';
 
   @override
+  String get accountTypeAsset => 'Asset';
+
+  @override
+  String get accountTypeCash => 'Cash';
+
+  @override
+  String get accountTypeCredit => 'Credit';
+
+  @override
+  String get accountTypeLabel => 'Account Type';
+
+  @override
   String get addAccount => 'Add Account';
 
   @override
@@ -62,6 +74,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
+  String get categories => 'Categories';
+
+  @override
   String get category_expense_food_dining => 'Food';
 
   @override
@@ -80,13 +95,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get category_transfer => 'Transfer';
 
   @override
+  String get categoryDeletedSuccessfully => 'Category deleted successfully';
+
+  @override
+  String categoryDeleteError(String error) {
+    return 'Failed to delete category: $error';
+  }
+
+  @override
   String get categoryLabel => 'Category';
+
+  @override
+  String get categoryName => 'Category Name';
 
   @override
   String get chooseYourAppColor => 'Choose your app color';
 
   @override
+  String get create => 'Create';
+
+  @override
+  String get createAccount => 'Create Account';
+
+  @override
+  String get createCategory => 'Create Category';
+
+  @override
+  String get createTransaction => 'Create Transaction';
+
+  @override
   String get createTransactionButton => 'Create Transaction';
+
+  @override
+  String get custom => 'Custom';
 
   @override
   String get cyan => 'Cyan';
@@ -115,6 +156,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteAction => 'Delete';
 
   @override
+  String deleteCategoryConfirmation(String categoryName) {
+    return 'Are you sure you want to delete the category \"$categoryName\"? This will also delete all associated transactions.';
+  }
+
+  @override
+  String get deleteCategoryTitle => 'Delete Category';
+
+  @override
   String get deleteTransactionDescription => 'This action cannot be undone.';
 
   @override
@@ -128,6 +177,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get edit => 'Edit';
+
+  @override
+  String get editCategory => 'Edit Category';
 
   @override
   String get editTransactionTitle => 'Edit Transaction';
@@ -183,6 +235,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get error_unknown_data => 'Something went wrong with the data operation. Please try again.';
 
   @override
+  String get errorCategoryNameEmpty => 'Category name cannot be empty';
+
+  @override
+  String get errorCategoryNameTooLong => 'Category name is too long';
+
+  @override
+  String get errorCategoryNameTooShort => 'Category name is too short';
+
+  @override
   String errorLoadingAccounts(String error) {
     return 'Error loading accounts: $error';
   }
@@ -208,10 +269,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get expense => 'Expense';
+
+  @override
   String get expenseType => 'Expense';
 
   @override
   String get fabAddTransactionTooltip => 'Add transaction';
+
+  @override
+  String get french => 'French';
+
+  @override
+  String get frenchNative => 'Français';
 
   @override
   String get fromAccountLabel => 'From Account';
@@ -221,6 +291,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helloWorld => 'Hello World!';
+
+  @override
+  String get income => 'Income';
 
   @override
   String get incomeType => 'Income';
@@ -288,10 +361,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get spanishNative => 'Español';
 
   @override
+  String get system => 'System';
+
+  @override
   String get teal => 'Teal';
 
   @override
   String get theme => 'Theme';
+
+  @override
+  String get thisCategory => 'this category';
 
   @override
   String get thisTransaction => 'this transaction';
@@ -330,6 +409,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unknownCategory => 'Unknown';
+
+  @override
+  String get update => 'Update';
 
   @override
   String get updateTransactionButton => 'Update Transaction';

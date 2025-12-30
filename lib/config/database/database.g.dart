@@ -50,8 +50,37 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _sortOrderMeta = const VerificationMeta(
+    'sortOrder',
+  );
   @override
-  List<GeneratedColumn> get $columns => [balance, currency, id, name];
+  late final GeneratedColumn<int> sortOrder = GeneratedColumn<int>(
+    'sort_order',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<AccountType, int> type =
+      GeneratedColumn<int>(
+        'type',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(0),
+      ).withConverter<AccountType>($AccountsTable.$convertertype);
+  @override
+  List<GeneratedColumn> get $columns => [
+    balance,
+    currency,
+    id,
+    name,
+    sortOrder,
+    type,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -89,6 +118,12 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
+    if (data.containsKey('sort_order')) {
+      context.handle(
+        _sortOrderMeta,
+        sortOrder.isAcceptableOrUnknown(data['sort_order']!, _sortOrderMeta),
+      );
+    }
     return context;
   }
 
@@ -114,6 +149,16 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
         DriftSqlType.string,
         data['${effectivePrefix}name'],
       )!,
+      sortOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sort_order'],
+      )!,
+      type: $AccountsTable.$convertertype.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}type'],
+        )!,
+      ),
     );
   }
 
@@ -121,6 +166,9 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
   $AccountsTable createAlias(String alias) {
     return $AccountsTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<AccountType, int, int> $convertertype =
+      const EnumIndexConverter<AccountType>(AccountType.values);
 }
 
 class Account extends DataClass implements Insertable<Account> {
@@ -128,11 +176,15 @@ class Account extends DataClass implements Insertable<Account> {
   final String currency;
   final String id;
   final String name;
+  final int sortOrder;
+  final AccountType type;
   const Account({
     required this.balance,
     required this.currency,
     required this.id,
     required this.name,
+    required this.sortOrder,
+    required this.type,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -141,6 +193,10 @@ class Account extends DataClass implements Insertable<Account> {
     map['currency'] = Variable<String>(currency);
     map['id'] = Variable<String>(id);
     map['name'] = Variable<String>(name);
+    map['sort_order'] = Variable<int>(sortOrder);
+    {
+      map['type'] = Variable<int>($AccountsTable.$convertertype.toSql(type));
+    }
     return map;
   }
 
@@ -150,6 +206,8 @@ class Account extends DataClass implements Insertable<Account> {
       currency: Value(currency),
       id: Value(id),
       name: Value(name),
+      sortOrder: Value(sortOrder),
+      type: Value(type),
     );
   }
 
@@ -163,6 +221,10 @@ class Account extends DataClass implements Insertable<Account> {
       currency: serializer.fromJson<String>(json['currency']),
       id: serializer.fromJson<String>(json['id']),
       name: serializer.fromJson<String>(json['name']),
+      sortOrder: serializer.fromJson<int>(json['sortOrder']),
+      type: $AccountsTable.$convertertype.fromJson(
+        serializer.fromJson<int>(json['type']),
+      ),
     );
   }
   @override
@@ -173,6 +235,10 @@ class Account extends DataClass implements Insertable<Account> {
       'currency': serializer.toJson<String>(currency),
       'id': serializer.toJson<String>(id),
       'name': serializer.toJson<String>(name),
+      'sortOrder': serializer.toJson<int>(sortOrder),
+      'type': serializer.toJson<int>(
+        $AccountsTable.$convertertype.toJson(type),
+      ),
     };
   }
 
@@ -181,11 +247,15 @@ class Account extends DataClass implements Insertable<Account> {
     String? currency,
     String? id,
     String? name,
+    int? sortOrder,
+    AccountType? type,
   }) => Account(
     balance: balance ?? this.balance,
     currency: currency ?? this.currency,
     id: id ?? this.id,
     name: name ?? this.name,
+    sortOrder: sortOrder ?? this.sortOrder,
+    type: type ?? this.type,
   );
   Account copyWithCompanion(AccountsCompanion data) {
     return Account(
@@ -193,6 +263,8 @@ class Account extends DataClass implements Insertable<Account> {
       currency: data.currency.present ? data.currency.value : this.currency,
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
+      sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
+      type: data.type.present ? data.type.value : this.type,
     );
   }
 
@@ -202,13 +274,15 @@ class Account extends DataClass implements Insertable<Account> {
           ..write('balance: $balance, ')
           ..write('currency: $currency, ')
           ..write('id: $id, ')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('type: $type')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(balance, currency, id, name);
+  int get hashCode => Object.hash(balance, currency, id, name, sortOrder, type);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -216,7 +290,9 @@ class Account extends DataClass implements Insertable<Account> {
           other.balance == this.balance &&
           other.currency == this.currency &&
           other.id == this.id &&
-          other.name == this.name);
+          other.name == this.name &&
+          other.sortOrder == this.sortOrder &&
+          other.type == this.type);
 }
 
 class AccountsCompanion extends UpdateCompanion<Account> {
@@ -224,12 +300,16 @@ class AccountsCompanion extends UpdateCompanion<Account> {
   final Value<String> currency;
   final Value<String> id;
   final Value<String> name;
+  final Value<int> sortOrder;
+  final Value<AccountType> type;
   final Value<int> rowid;
   const AccountsCompanion({
     this.balance = const Value.absent(),
     this.currency = const Value.absent(),
     this.id = const Value.absent(),
     this.name = const Value.absent(),
+    this.sortOrder = const Value.absent(),
+    this.type = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   AccountsCompanion.insert({
@@ -237,6 +317,8 @@ class AccountsCompanion extends UpdateCompanion<Account> {
     required String currency,
     this.id = const Value.absent(),
     required String name,
+    this.sortOrder = const Value.absent(),
+    this.type = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : currency = Value(currency),
        name = Value(name);
@@ -245,6 +327,8 @@ class AccountsCompanion extends UpdateCompanion<Account> {
     Expression<String>? currency,
     Expression<String>? id,
     Expression<String>? name,
+    Expression<int>? sortOrder,
+    Expression<int>? type,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -252,6 +336,8 @@ class AccountsCompanion extends UpdateCompanion<Account> {
       if (currency != null) 'currency': currency,
       if (id != null) 'id': id,
       if (name != null) 'name': name,
+      if (sortOrder != null) 'sort_order': sortOrder,
+      if (type != null) 'type': type,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -261,6 +347,8 @@ class AccountsCompanion extends UpdateCompanion<Account> {
     Value<String>? currency,
     Value<String>? id,
     Value<String>? name,
+    Value<int>? sortOrder,
+    Value<AccountType>? type,
     Value<int>? rowid,
   }) {
     return AccountsCompanion(
@@ -268,6 +356,8 @@ class AccountsCompanion extends UpdateCompanion<Account> {
       currency: currency ?? this.currency,
       id: id ?? this.id,
       name: name ?? this.name,
+      sortOrder: sortOrder ?? this.sortOrder,
+      type: type ?? this.type,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -287,6 +377,14 @@ class AccountsCompanion extends UpdateCompanion<Account> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
+    if (sortOrder.present) {
+      map['sort_order'] = Variable<int>(sortOrder.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<int>(
+        $AccountsTable.$convertertype.toSql(type.value),
+      );
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -300,6 +398,8 @@ class AccountsCompanion extends UpdateCompanion<Account> {
           ..write('currency: $currency, ')
           ..write('id: $id, ')
           ..write('name: $name, ')
+          ..write('sortOrder: $sortOrder, ')
+          ..write('type: $type, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1186,6 +1286,8 @@ typedef $$AccountsTableCreateCompanionBuilder =
       required String currency,
       Value<String> id,
       required String name,
+      Value<int> sortOrder,
+      Value<AccountType> type,
       Value<int> rowid,
     });
 typedef $$AccountsTableUpdateCompanionBuilder =
@@ -1194,6 +1296,8 @@ typedef $$AccountsTableUpdateCompanionBuilder =
       Value<String> currency,
       Value<String> id,
       Value<String> name,
+      Value<int> sortOrder,
+      Value<AccountType> type,
       Value<int> rowid,
     });
 
@@ -1225,6 +1329,17 @@ class $$AccountsTableFilterComposer
     column: $table.name,
     builder: (column) => ColumnFilters(column),
   );
+
+  ColumnFilters<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<AccountType, AccountType, int> get type =>
+      $composableBuilder(
+        column: $table.type,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 }
 
 class $$AccountsTableOrderingComposer
@@ -1255,6 +1370,16 @@ class $$AccountsTableOrderingComposer
     column: $table.name,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<int> get sortOrder => $composableBuilder(
+    column: $table.sortOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$AccountsTableAnnotationComposer
@@ -1277,6 +1402,12 @@ class $$AccountsTableAnnotationComposer
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<int> get sortOrder =>
+      $composableBuilder(column: $table.sortOrder, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<AccountType, int> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
 }
 
 class $$AccountsTableTableManager
@@ -1311,12 +1442,16 @@ class $$AccountsTableTableManager
                 Value<String> currency = const Value.absent(),
                 Value<String> id = const Value.absent(),
                 Value<String> name = const Value.absent(),
+                Value<int> sortOrder = const Value.absent(),
+                Value<AccountType> type = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AccountsCompanion(
                 balance: balance,
                 currency: currency,
                 id: id,
                 name: name,
+                sortOrder: sortOrder,
+                type: type,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -1325,12 +1460,16 @@ class $$AccountsTableTableManager
                 required String currency,
                 Value<String> id = const Value.absent(),
                 required String name,
+                Value<int> sortOrder = const Value.absent(),
+                Value<AccountType> type = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AccountsCompanion.insert(
                 balance: balance,
                 currency: currency,
                 id: id,
                 name: name,
+                sortOrder: sortOrder,
+                type: type,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
