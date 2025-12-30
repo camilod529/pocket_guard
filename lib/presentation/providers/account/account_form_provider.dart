@@ -41,13 +41,17 @@ class AccountForm extends _$AccountForm {
           name: AccountName.dirty(account.name),
           currency: AccountCurrency.dirty(account.currency),
           balance: AccountBalanceInput.dirty(account.balance),
+          type: account.type,
           isFormValid: true,
         );
       }
     }
 
     // Return empty state for create mode
-    return const AccountFormState(id: GlobalConstants.createId);
+    return const AccountFormState(
+      id: GlobalConstants.createId,
+      type: AccountType.asset,
+    );
   }
 
   void currencyChanged(String value) {
@@ -85,40 +89,69 @@ class AccountForm extends _$AccountForm {
   }
 
   Future<bool> onFormSubmit() async {
-    final currentState = state.value;
-    if (currentState == null) return false;
-
     _touchAllFields();
 
-    final validState = state.value;
-    if (validState == null || !validState.isFormValid) return false;
+    final currentState = state.value;
+
+    if (currentState == null || !currentState.isFormValid) return false;
 
     try {
-      final account = AccountEntity(
-        id: validState.id,
-        name: validState.name.value,
-        currency: validState.currency.value,
-        balance: validState.balance.value,
-      );
+      final isEditing = currentState.id != GlobalConstants.createId;
+      int finalSortOrder = 0;
 
-      final isEditing = validState.id != GlobalConstants.createId;
+      if (isEditing) {
+        // 1. Fetch current data to preserve existing sort order
+        final existingAccount = await ref.read(
+          accountProvider(currentState.id).future,
+        );
+        finalSortOrder = existingAccount?.sortOrder ?? 0;
+      } else {
+        // 2. Calculate next sort order: Count accounts of the SAME type
+        final allAccounts = await ref.read(accountsProvider.future);
+        finalSortOrder = allAccounts
+            .where((a) => a.type == currentState.type)
+            .length;
+      }
+
+      final account = AccountEntity(
+        id: currentState.id,
+        name: currentState.name.value,
+        currency: currentState.currency.value,
+        balance: currentState.balance.value,
+        type: currentState.type,
+        sortOrder: finalSortOrder,
+      );
 
       if (isEditing) {
         await ref
             .read(accountsProvider.notifier)
-            .updateAccount(validState.id, account);
-
+            .updateAccount(currentState.id, account);
         await ref
-            .read(accountProvider(validState.id).notifier)
+            .read(accountProvider(currentState.id).notifier)
             .refreshAccount();
       } else {
         await ref.read(accountsProvider.notifier).createAccount(account);
       }
-
       return true;
     } catch (e) {
       return false;
     }
+  }
+
+  void typeChanged(AccountType value) {
+    final currentState = state.value;
+    if (currentState == null) return;
+
+    state = AsyncValue.data(
+      currentState.copyWith(
+        type: value,
+        isFormValid: Formz.validate([
+          currentState.name,
+          currentState.currency,
+          currentState.balance,
+        ]),
+      ),
+    );
   }
 
   void _touchAllFields() {
@@ -147,6 +180,7 @@ class AccountFormState {
   final AccountName name;
   final AccountCurrency currency;
   final AccountBalanceInput balance;
+  final AccountType type;
   final bool isFormPure;
 
   const AccountFormState({
@@ -156,6 +190,7 @@ class AccountFormState {
     this.id = GlobalConstants.createId,
     this.name = const AccountName.pure(),
     this.currency = const AccountCurrency.pure(),
+    required this.type,
   });
 
   AccountFormState copyWith({
@@ -165,6 +200,7 @@ class AccountFormState {
     AccountCurrency? currency,
     bool? isFormPure,
     AccountBalanceInput? balance,
+    AccountType? type,
   }) {
     return AccountFormState(
       isFormValid: isFormValid ?? this.isFormValid,
@@ -173,6 +209,7 @@ class AccountFormState {
       currency: currency ?? this.currency,
       isFormPure: isFormPure ?? this.isFormPure,
       balance: balance ?? this.balance,
+      type: type ?? this.type,
     );
   }
 }

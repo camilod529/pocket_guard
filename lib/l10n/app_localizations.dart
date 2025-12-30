@@ -137,6 +137,30 @@ abstract class AppLocalizations {
   /// **'Accounts'**
   String get accounts;
 
+  /// Account type: Asset
+  ///
+  /// In en, this message translates to:
+  /// **'Asset'**
+  String get accountTypeAsset;
+
+  /// Account type: Cash
+  ///
+  /// In en, this message translates to:
+  /// **'Cash'**
+  String get accountTypeCash;
+
+  /// Account type: Credit
+  ///
+  /// In en, this message translates to:
+  /// **'Credit'**
+  String get accountTypeCredit;
+
+  /// Label for account type selector
+  ///
+  /// In en, this message translates to:
+  /// **'Account Type'**
+  String get accountTypeLabel;
+
   /// Add new account button
   ///
   /// In en, this message translates to:

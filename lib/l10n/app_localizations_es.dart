@@ -32,6 +32,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get accounts => 'Cuentas';
 
   @override
+  String get accountTypeAsset => 'Activo';
+
+  @override
+  String get accountTypeCash => 'Efectivo';
+
+  @override
+  String get accountTypeCredit => 'Crédito';
+
+  @override
+  String get accountTypeLabel => 'Tipo de Cuenta';
+
+  @override
   String get addAccount => 'Agregar Cuenta';
 
   @override

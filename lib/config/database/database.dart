@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:pocket_guard/domain/entities/account.dart';
 import 'package:pocket_guard/domain/entities/category.dart';
 import 'package:uuid/uuid.dart';
 
@@ -11,15 +12,21 @@ const _uuid = Uuid();
 final AppDatabase database = AppDatabase();
 
 // Table definitions
+// 1. Define an Enum for Account Types
 class Accounts extends Table {
   RealColumn get balance => real().withDefault(const Constant(0.0))();
   TextColumn get currency => text()();
-  TextColumn get id =>
-      text().clientDefault(() => _uuid.v4())(); // UUID v4 as text
+  TextColumn get id => text().clientDefault(() => _uuid.v4())();
   TextColumn get name => text()();
 
   @override
   Set<Column> get primaryKey => {id};
+  // 2. Add New Columns
+  IntColumn get sortOrder => integer().withDefault(const Constant(0))();
+
+  IntColumn get type => intEnum<AccountType>().withDefault(
+    const Constant(0),
+  )(); // Default to cash
 }
 
 @DriftDatabase(tables: [Accounts, Categories, Transactions])
@@ -41,6 +48,11 @@ class AppDatabase extends _$AppDatabase {
           // Add toAccountId column for transfers
           await m.addColumn(transactions, transactions.toAccountId);
         }
+        if (from < 4) {
+          // Add sortOrder column to accounts
+          await m.addColumn(accounts, accounts.sortOrder);
+          await m.addColumn(accounts, accounts.type);
+        }
       },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
@@ -51,7 +63,8 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
+
   Future<double> getAccountBalance(String accountId) {
     return (select(accounts)..where((tbl) => tbl.id.equals(accountId)))
         .map((row) => row.balance)

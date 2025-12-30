@@ -35,30 +35,83 @@ class AccountView extends ConsumerWidget {
     WidgetRef ref,
     AppLocalizations localizations,
   ) {
-    if (accounts.isEmpty) {
-      return _buildEmptyState(context, ref, localizations);
-    }
+    final categories = AccountType.values;
 
-    return ListView.separated(
+    return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: accounts.length,
-      separatorBuilder: (context, index) => const Divider(height: 1),
-      itemBuilder: (context, index) {
-        final account = accounts[index];
-        return _buildAccountTile(context, account, ref, localizations);
+      itemCount: categories.length,
+      itemBuilder: (context, catIndex) {
+        final type = categories[catIndex];
+        // Filter and Sort based on the sortOrder property in your DB
+        final typeAccounts = accounts.where((a) => a.type == type).toList()
+          ..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
+
+        if (typeAccounts.isEmpty) return const SizedBox.shrink();
+
+        if (accounts.isEmpty) {
+          return _buildEmptyState(context, ref, localizations);
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8.0,
+                horizontal: 4.0,
+              ),
+              child: Text(
+                _getCategoryName(
+                  type,
+                  localizations,
+                ), // Helper for localized names
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+            Card(
+              clipBehavior: Clip.antiAlias,
+              margin: const EdgeInsets.only(bottom: 24),
+              child: ReorderableListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: typeAccounts.length,
+                onReorder: (oldIndex, newIndex) {
+                  ref
+                      .read(accountsProvider.notifier)
+                      .reorderAccounts(oldIndex, newIndex, typeAccounts);
+                },
+                itemBuilder: (context, index) {
+                  final account = typeAccounts[index];
+                  return _buildAccountTile(
+                    context,
+                    account: account,
+                    ref: ref,
+                    localizations: localizations,
+                    key: ValueKey(account.id),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
       },
     );
   }
 
   Widget _buildAccountTile(
-    BuildContext context,
-    AccountEntity account,
-    WidgetRef ref,
-    AppLocalizations localizations,
-  ) {
+    BuildContext context, {
+    required AccountEntity account,
+    required WidgetRef ref,
+    required AppLocalizations localizations,
+    required Key key,
+  }) {
     final colors = Theme.of(context).colorScheme;
 
     return ListTile(
+      key: key,
       contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       leading: CircleAvatar(
         backgroundColor: colors.primaryContainer,
@@ -188,6 +241,17 @@ class AccountView extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  String _getCategoryName(AccountType type, AppLocalizations localizations) {
+    switch (type) {
+      case AccountType.cash:
+        return localizations.accountTypeCash;
+      case AccountType.asset:
+        return localizations.accountTypeAsset;
+      case AccountType.credit:
+        return localizations.accountTypeCredit;
+    }
   }
 
   void _onAccountAction(

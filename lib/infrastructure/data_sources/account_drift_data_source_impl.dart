@@ -17,6 +17,9 @@ class AccountDriftDataSourceImpl extends AccountDataSource {
             AccountsCompanion(
               name: Value(account.name),
               currency: Value(account.currency),
+              balance: Value(account.balance),
+              type: Value(account.type),
+              sortOrder: Value(account.sortOrder),
             ),
           );
     } catch (e, stackTrace) {
@@ -64,6 +67,8 @@ class AccountDriftDataSourceImpl extends AccountDataSource {
         name: account.name,
         currency: account.currency,
         balance: account.balance,
+        type: account.type,
+        sortOrder: account.sortOrder,
       );
     } catch (e, stackTrace) {
       throw _exceptionHandler.handleDriftException(
@@ -86,6 +91,8 @@ class AccountDriftDataSourceImpl extends AccountDataSource {
           name: account.name,
           currency: account.currency,
           balance: account.balance,
+          type: account.type,
+          sortOrder: account.sortOrder,
         );
       }).toList();
 
@@ -117,6 +124,8 @@ class AccountDriftDataSourceImpl extends AccountDataSource {
           name: account.name,
           currency: account.currency,
           balance: account.balance,
+          type: account.type,
+          sortOrder: account.sortOrder,
         );
       }).toList();
     } catch (e, stackTrace) {
@@ -146,6 +155,8 @@ class AccountDriftDataSourceImpl extends AccountDataSource {
               name: Value(account.name),
               currency: Value(account.currency),
               balance: Value(account.balance),
+              type: Value(account.type),
+              sortOrder: Value(account.sortOrder),
             ),
           );
 

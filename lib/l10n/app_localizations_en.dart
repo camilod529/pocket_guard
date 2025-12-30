@@ -32,6 +32,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accounts => 'Accounts';
 
   @override
+  String get accountTypeAsset => 'Asset';
+
+  @override
+  String get accountTypeCash => 'Cash';
+
+  @override
+  String get accountTypeCredit => 'Credit';
+
+  @override
+  String get accountTypeLabel => 'Account Type';
+
+  @override
   String get addAccount => 'Add Account';
 
   @override

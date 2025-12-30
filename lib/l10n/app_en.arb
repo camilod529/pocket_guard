@@ -34,6 +34,22 @@
   "@accounts": {
     "description": "Label for the accounts view"
   },
+  "accountTypeAsset": "Asset",
+  "@accountTypeAsset": {
+    "description": "Account type: Asset"
+  },
+  "accountTypeCash": "Cash",
+  "@accountTypeCash": {
+    "description": "Account type: Cash"
+  },
+  "accountTypeCredit": "Credit",
+  "@accountTypeCredit": {
+    "description": "Account type: Credit"
+  },
+  "accountTypeLabel": "Account Type",
+  "@accountTypeLabel": {
+    "description": "Label for account type selector"
+  },
   "addAccount": "Add Account",
   "@addAccount": {
     "description": "Add new account button"

@@ -68,6 +68,26 @@ class AccountsNotifier extends _$AccountsNotifier {
     }
   }
 
+  Future<void> reorderAccounts(
+    int oldIndex,
+    int newIndex,
+    List<AccountEntity> categoryAccounts,
+  ) async {
+    if (newIndex > oldIndex) newIndex -= 1;
+
+    final items = [...categoryAccounts];
+    final movedItem = items.removeAt(oldIndex);
+    items.insert(newIndex, movedItem);
+
+    final repository = ref.read(accountRepositoryProvider);
+    for (int i = 0; i < items.length; i++) {
+      final updatedAccount = items[i].copyWith(sortOrder: i);
+      await repository.updateAccount(updatedAccount.id, updatedAccount);
+    }
+
+    refresh();
+  }
+
   Future<List<AccountEntity>> searchAccounts(String query) async {
     if (!ref.mounted) return [];
     final repository = ref.read(accountRepositoryProvider);
