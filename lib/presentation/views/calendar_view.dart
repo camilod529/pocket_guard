@@ -12,7 +12,6 @@ import 'package:pocket_guard/presentation/providers/account/accounts_provider.da
 import 'package:pocket_guard/presentation/providers/category/categories_provider.dart';
 import 'package:pocket_guard/presentation/providers/selected_date_range_provider.dart';
 import 'package:pocket_guard/presentation/providers/transaction/transactions_provider.dart';
-import 'package:pocket_guard/utils/constants/global_constants.dart';
 import 'package:pocket_guard/utils/shared/dates/calendar_date_formatter.dart';
 import 'package:pocket_guard/utils/shared/number_formatting.dart';
 
@@ -24,17 +23,16 @@ class CalendarView extends ConsumerStatefulWidget {
 }
 
 class _CalendarViewState extends ConsumerState<CalendarView> {
-  DateTime _selectedDay = DateTime.now();
   // Key to trigger animation on day selection
   Key _selectedDayKey = UniqueKey();
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final dateRange = ref.watch(selectedDateRangeProvider);
     final transactionsAsync = ref.watch(transactionsProvider);
     final categoriesAsync = ref.watch(categoriesProvider);
     final accountsAsync = ref.watch(accountsProvider);
+    final selectedDay = dateRange.selectedDay;
 
     return Scaffold(
       appBar: _buildCustomAppBar(dateRange),
@@ -47,19 +45,10 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
               transactionsAsync,
               categoriesAsync,
               accountsAsync,
+              selectedDay,
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.push(
-            Routes.transactionFormPage(GlobalConstants.createId),
-            extra: {_selectedDay},
-          );
-        },
-        tooltip: l10n.fabAddTransactionTooltip,
-        child: const Icon(Icons.add),
       ),
     );
   }
@@ -67,7 +56,6 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
   @override
   void initState() {
     super.initState();
-    // Set initial month view
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final now = DateTime.now();
       ref
@@ -80,11 +68,10 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
     final dateRange = ref.read(selectedDateRangeProvider);
     final firstDayOfMonth = dateRange.start;
     final lastDayOfMonth = dateRange.end;
+    final selectedDay = dateRange.selectedDay;
 
-    // Get the weekday of the first day (1 = Monday, 7 = Sunday)
     int firstWeekday = firstDayOfMonth.weekday;
 
-    // Calculate how many days to show from previous month
     final daysFromPreviousMonth = firstWeekday - 1;
 
     // Calculate total cells needed
@@ -94,7 +81,6 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
 
     final today = DateTime.now();
 
-    // Group transactions by day
     final transactionsByDay = <int, List<TransactionEntity>>{};
     for (final transaction in transactions) {
       final day = transaction.date.day;
@@ -109,7 +95,6 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
             final cellIndex = weekIndex * 7 + dayIndex;
             final dayNumber = cellIndex - daysFromPreviousMonth + 1;
 
-            // Check if this cell should show a day from current month
             if (dayNumber < 1 || dayNumber > totalDays) {
               return const Expanded(child: SizedBox(height: 48));
             }
@@ -125,18 +110,20 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
                 cellDate.day == today.day;
 
             final isSelected =
-                cellDate.year == _selectedDay.year &&
-                cellDate.month == _selectedDay.month &&
-                cellDate.day == _selectedDay.day;
+                cellDate.year == selectedDay.year &&
+                cellDate.month == selectedDay.month &&
+                cellDate.day == selectedDay.day;
 
             final hasTransactions = transactionsByDay.containsKey(dayNumber);
 
             return Expanded(
               child: GestureDetector(
                 onTap: () {
+                  ref
+                      .read(selectedDateRangeProvider.notifier)
+                      .selectDay(cellDate);
                   setState(() {
-                    _selectedDay = cellDate;
-                    _selectedDayKey = UniqueKey(); // Trigger animation
+                    _selectedDayKey = UniqueKey();
                   });
                 },
                 child: _buildDayCell(
@@ -248,7 +235,6 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
       ),
     );
 
-    // Animate only when selected
     if (isSelected && key != null) {
       return FadeIn(
         key: key,
@@ -300,7 +286,6 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final textTheme = Theme.of(context).textTheme;
 
-    // Determine transaction type from amount or category
     final TransactionType type =
         category?.type ??
         (transaction.amount > 0
@@ -401,6 +386,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
     AsyncValue<List<TransactionEntity>> transactionsAsync,
     AsyncValue<List<CategoryEntity>> categoriesAsync,
     AsyncValue<List<AccountEntity>> accountsAsync,
+    DateTime selectedDay,
   ) {
     final l10n = AppLocalizations.of(context)!;
 
@@ -410,11 +396,10 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
 
     return transactionsAsync.when(
       data: (allTransactions) {
-        // Filter transactions for selected day
         final selectedDayTransactions = allTransactions.where((transaction) {
-          return transaction.date.year == _selectedDay.year &&
-              transaction.date.month == _selectedDay.month &&
-              transaction.date.day == _selectedDay.day;
+          return transaction.date.year == selectedDay.year &&
+              transaction.date.month == selectedDay.month &&
+              transaction.date.day == selectedDay.day;
         }).toList()..sort((a, b) => b.date.compareTo(a.date));
 
         if (selectedDayTransactions.isEmpty) {
@@ -430,7 +415,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
                 const SizedBox(height: 16),
                 Text(
                   l10n.noTransactionsOnDate(
-                    dateFormatter.formatShortDate(_selectedDay),
+                    dateFormatter.formatShortDate(selectedDay),
                   ),
                   style: TextStyle(color: Colors.grey[600], fontSize: 16),
                 ),
@@ -441,7 +426,6 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
 
         return categoriesAsync.when(
           data: (categories) {
-            // Create a map for quick category lookup
             final categoryMap = {for (var cat in categories) cat.id: cat};
 
             return accountsAsync.when(
@@ -514,9 +498,9 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
 
   void _goToToday() {
     final now = DateTime.now();
+    ref.read(selectedDateRangeProvider.notifier).selectDay(now);
     setState(() {
-      _selectedDay = now;
-      _selectedDayKey = UniqueKey(); // Trigger animation
+      _selectedDayKey = UniqueKey();
     });
     ref
         .read(selectedDateRangeProvider.notifier)
@@ -529,13 +513,14 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
     final now = DateTime.now();
 
     setState(() {
-      // If navigating to current month, select current day
       if (nextMonth.year == now.year && nextMonth.month == now.month) {
-        _selectedDay = now;
+        ref.read(selectedDateRangeProvider.notifier).selectDay(now);
       } else {
-        _selectedDay = DateTime(nextMonth.year, nextMonth.month, 1);
+        ref
+            .read(selectedDateRangeProvider.notifier)
+            .selectDay(DateTime(nextMonth.year, nextMonth.month, 1));
       }
-      _selectedDayKey = UniqueKey(); // Trigger animation
+      _selectedDayKey = UniqueKey();
     });
 
     ref
@@ -549,13 +534,14 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
     final now = DateTime.now();
 
     setState(() {
-      // If navigating to current month, select current day
       if (prevMonth.year == now.year && prevMonth.month == now.month) {
-        _selectedDay = now;
+        ref.read(selectedDateRangeProvider.notifier).selectDay(now);
       } else {
-        _selectedDay = DateTime(prevMonth.year, prevMonth.month, 1);
+        ref
+            .read(selectedDateRangeProvider.notifier)
+            .selectDay(DateTime(prevMonth.year, prevMonth.month, 1));
       }
-      _selectedDayKey = UniqueKey(); // Trigger animation
+      _selectedDayKey = UniqueKey();
     });
 
     ref

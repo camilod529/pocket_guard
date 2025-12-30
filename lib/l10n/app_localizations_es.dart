@@ -62,6 +62,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cancel => 'Cancelar';
 
   @override
+  String get categories => 'Categorías';
+
+  @override
   String get category_expense_food_dining => 'Comida';
 
   @override
@@ -80,13 +83,39 @@ class AppLocalizationsEs extends AppLocalizations {
   String get category_transfer => 'Transferencia';
 
   @override
+  String get categoryDeletedSuccessfully => 'Categoría eliminada con éxito';
+
+  @override
+  String categoryDeleteError(String error) {
+    return 'Error al eliminar la categoría: $error';
+  }
+
+  @override
   String get categoryLabel => 'Categoría';
+
+  @override
+  String get categoryName => 'Nombre de Categoría';
 
   @override
   String get chooseYourAppColor => 'Elige el color de tu aplicación';
 
   @override
+  String get create => 'Crear';
+
+  @override
+  String get createAccount => 'Crear Cuenta';
+
+  @override
+  String get createCategory => 'Crear Categoría';
+
+  @override
+  String get createTransaction => 'Crear Transacción';
+
+  @override
   String get createTransactionButton => 'Crear Transacción';
+
+  @override
+  String get custom => 'Personalizado';
 
   @override
   String get cyan => 'Cían';
@@ -115,6 +144,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get deleteAction => 'Eliminar';
 
   @override
+  String deleteCategoryConfirmation(String categoryName) {
+    return '¿Estás seguro de que deseas eliminar la categoría \"$categoryName\"? Esto también eliminará todas las transacciones asociadas.';
+  }
+
+  @override
+  String get deleteCategoryTitle => 'Eliminar Categoría';
+
+  @override
   String get deleteTransactionDescription => 'Esta acción no se puede deshacer.';
 
   @override
@@ -128,6 +165,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get edit => 'Editar';
+
+  @override
+  String get editCategory => 'Editar Categoría';
 
   @override
   String get editTransactionTitle => 'Editar Transacción';
@@ -183,6 +223,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get error_unknown_data => 'Algo salió mal con la operación de datos. Inténtalo de nuevo.';
 
   @override
+  String get errorCategoryNameEmpty => 'El nombre de la categoría no puede estar vacío';
+
+  @override
+  String get errorCategoryNameTooLong => 'El nombre de la categoría es demasiado largo';
+
+  @override
+  String get errorCategoryNameTooShort => 'El nombre de la categoría es demasiado corto';
+
+  @override
   String errorLoadingAccounts(String error) {
     return 'Error al cargar las cuentas: $error';
   }
@@ -208,6 +257,9 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get expense => 'Gasto';
+
+  @override
   String get expenseType => 'Gasto';
 
   @override
@@ -221,6 +273,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get helloWorld => '¡Hola Mundo!';
+
+  @override
+  String get income => 'Ingreso';
 
   @override
   String get incomeType => 'Ingreso';
@@ -288,10 +343,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get spanishNative => 'Español';
 
   @override
+  String get system => 'Sistema';
+
+  @override
   String get teal => 'Verde azulado';
 
   @override
   String get theme => 'Tema';
+
+  @override
+  String get thisCategory => 'esta categoría';
 
   @override
   String get thisTransaction => 'esta transacción';
@@ -330,6 +391,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get unknownCategory => 'Desconocida';
+
+  @override
+  String get update => 'Actualizar';
 
   @override
   String get updateTransactionButton => 'Actualizar Transacción';

@@ -1,19 +1,24 @@
 abstract class Routes {
-  static const String home = '/home/:page';
-  static const String accountForm = '/account/form/:id';
-  static const String transactionForm = '/transaction/form/:id';
-
-  // Settings routes
+  // --- Shell Routes (Tabs) ---
+  static const String calendar = '/calendar';
+  static const String accounts = '/accounts';
+  static const String categories = '/categories';
   static const String more = '/more';
-  static const String themeSettings = '/more/theme';
-  static const String languageSettings = '/more/language';
-  static const String notificationsSettings = '/more/notifications';
-  static const String securitySettings = '/more/security';
-  static const String dataExportSettings = '/more/data';
-  static const String helpSupportSettings = '/more/help';
 
+  // --- Root Routes (Full Screen / No Bottom Nav) ---
+  // Note: These start with / so they are absolute top-level paths
+  static const String transactionForm = '/transaction/form/:id';
+  static const String accountForm = '/account/form/:id';
+  static const String categoryForm = '/category/form/:id';
+
+  // Settings
+  static const String themeSettings = '/settings/theme';
+  static const String languageSettings = '/settings/language';
+
+  // --- Helper Methods ---
   static String accountFormPage(String id) => accountForm.replaceAll(':id', id);
-  static String changeViewPage(int page) => home.replaceAll(':page', '$page');
+  static String categoryFormPage(String id) =>
+      categoryForm.replaceAll(':id', id);
   static String transactionFormPage(String id) =>
       transactionForm.replaceAll(':id', id);
 }

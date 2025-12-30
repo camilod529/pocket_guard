@@ -7,7 +7,7 @@ import 'package:pocket_guard/l10n/app_localizations.dart';
 import 'package:pocket_guard/presentation/providers/account/accounts_provider.dart';
 import 'package:pocket_guard/presentation/widgets/shared/delete_confirmation_modal.dart';
 import 'package:pocket_guard/utils/constants/global_constants.dart';
-import 'package:pocket_guard/utils/types/account_types.dart';
+import 'package:pocket_guard/utils/types/general_types.dart';
 
 class AccountView extends ConsumerWidget {
   const AccountView({super.key});
@@ -73,13 +73,13 @@ class AccountView extends ConsumerWidget {
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
       subtitle: Text(account.currency),
-      trailing: PopupMenuButton<AccountActionDropdownEnum>(
+      trailing: PopupMenuButton<DropdownActionType>(
         icon: const Icon(Icons.more_vert),
         onSelected: (value) =>
             _onAccountAction(context, value, account.id, ref, localizations),
         itemBuilder: (context) => [
           PopupMenuItem(
-            value: AccountActionDropdownEnum.edit,
+            value: DropdownActionType.edit,
             child: Row(
               children: [
                 const Icon(Icons.edit, size: 20),
@@ -89,7 +89,7 @@ class AccountView extends ConsumerWidget {
             ),
           ),
           PopupMenuItem(
-            value: AccountActionDropdownEnum.delete,
+            value: DropdownActionType.delete,
             child: Row(
               children: [
                 const Icon(Icons.delete, size: 20, color: Colors.red),
@@ -192,17 +192,17 @@ class AccountView extends ConsumerWidget {
 
   void _onAccountAction(
     BuildContext context,
-    AccountActionDropdownEnum action,
+    DropdownActionType action,
     String accountId,
     WidgetRef ref,
     AppLocalizations localizations,
   ) {
     switch (action) {
-      case AccountActionDropdownEnum.edit:
+      case DropdownActionType.edit:
         // Navigate to edit account screen
         context.push(Routes.accountFormPage(accountId));
         break;
-      case AccountActionDropdownEnum.delete:
+      case DropdownActionType.delete:
         _showDeleteConfirmation(context, accountId, ref, localizations);
         break;
     }
