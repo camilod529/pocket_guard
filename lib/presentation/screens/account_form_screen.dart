@@ -234,7 +234,6 @@ class AccountFormScreen extends ConsumerWidget {
                   ),
                   const Spacer(),
                   // ... rest of the code (Submit Button)
-                  const Spacer(),
                   ElevatedButton.icon(
                     onPressed: formState.isFormValid
                         ? () => _handleSubmit(context, ref)
