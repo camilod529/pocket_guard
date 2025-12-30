@@ -35,6 +35,10 @@ class AccountView extends ConsumerWidget {
     WidgetRef ref,
     AppLocalizations localizations,
   ) {
+    if (accounts.isEmpty) {
+      return _buildEmptyState(context, ref, localizations);
+    }
+
     final categories = AccountType.values;
 
     return ListView.builder(
@@ -47,10 +51,6 @@ class AccountView extends ConsumerWidget {
           ..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
 
         if (typeAccounts.isEmpty) return const SizedBox.shrink();
-
-        if (accounts.isEmpty) {
-          return _buildEmptyState(context, ref, localizations);
-        }
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
