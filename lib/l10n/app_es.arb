@@ -180,6 +180,8 @@
     "expense": "Gasto",
     "expenseType": "Gasto",
     "fabAddTransactionTooltip": "Agregar transacción",
+    "french": "Francés",
+    "frenchNative": "Français",
     "fromAccountLabel": "Cuenta de Origen",
     "goBackAction": "Regresar",
     "helloWorld": "¡Hola Mundo!",

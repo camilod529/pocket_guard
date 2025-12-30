@@ -1,0 +1,245 @@
+{
+    "@@locale": "fr",
+    "accountCurrency": "Devise",
+    "accountCurrencyHint": "USD, EUR, GBP",
+    "accountDeletedSuccessfully": "Compte supprimé avec succès",
+    "accountLabel": "Compte",
+    "@accountLabel": {
+        "description": "Étiquette pour le nom du compte dans l'élément de transaction",
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "Compte principal"
+            }
+        }
+    },
+    "accountName": "Nom du compte",
+    "accountNameHint": "Entrez le nom du compte",
+    "accounts": "Comptes",
+    "accountTypeAsset": "Actif",
+    "accountTypeCash": "Espèces",
+    "accountTypeCredit": "Crédit",
+    "accountTypeLabel": "Type de compte",
+    "addAccount": "Ajouter un compte",
+    "amountHint": "0,00",
+    "amountLabel": "Somme",
+    "appTitle": "Gestionnaire de Budget",
+    "blue": "Bleu",
+    "calendar": "Calendrier",
+    "calendarGoToToday": "Aller à aujourd'hui",
+    "calendarNextMonth": "Mois suivant",
+    "calendarPreviousMonth": "Mois dernier",
+    "cancel": "Annuler",
+    "categories": "Catégories",
+    "category_expense_food_dining": "Alimentation",
+    "category_expense_rent": "Loyer",
+    "category_expense_transportation": "Transport",
+    "category_income_freelance": "Freelance",
+    "category_income_salary": "Salaire",
+    "category_transfer": "Virement",
+    "categoryDeletedSuccessfully": "Catégorie supprimée avec succès",
+    "categoryDeleteError": "Erreur lors de la suppression de la catégorie : {error}",
+    "categoryLabel": "Catégorie",
+    "categoryName": "Nom de la catégorie",
+    "chooseYourAppColor": "Choisissez la couleur de votre application",
+    "create": "Créer",
+    "createAccount": "Créer un compte",
+    "createCategory": "Créer une catégorie",
+    "createTransaction": "Créer une transaction",
+    "createTransactionButton": "Créer la transaction",
+    "custom": "Personnalisé",
+    "cyan": "Cyan",
+    "dateLabel": "Date",
+    "deepPurple": "Violet profond",
+    "delete": "Supprimer",
+    "deleteAccount": "Supprimer le compte",
+    "deleteAccountConfirmation": "Êtes-vous sûr de vouloir supprimer le compte « {accountName} » ? Cette action est irréversible.",
+    "@deleteAccountConfirmation": {
+        "description": "Message de confirmation de suppression de compte avec le nom du compte",
+        "placeholders": {
+            "accountName": {
+                "type": "String",
+                "example": "Compte principal"
+            }
+        }
+    },
+    "deleteAccountSuccess": "Compte supprimé avec succès",
+    "deleteAction": "Supprimer",
+    "deleteCategoryConfirmation": "Êtes-vous sûr de vouloir supprimer la catégorie « {categoryName} » ? Cela supprimera également toutes les transactions associées.",
+    "@deleteCategoryConfirmation": {
+        "description": "Message de confirmation pour supprimer une catégorie avec le nom de la catégorie",
+        "placeholders": {
+            "categoryName": {
+                "type": "String",
+                "example": "Alimentation"
+            }
+        }
+    },
+    "deleteCategoryTitle": "Supprimer la catégorie",
+    "deleteTransactionDescription": "Cette action est irréversible.",
+    "deleteTransactionTitle": "Supprimer la transaction",
+    "descriptionHint": "Entrez la description de la transaction",
+    "descriptionLabel": "Description",
+    "edit": "Modifier",
+    "editCategory": "Modifier la catégorie",
+    "editTransactionTitle": "Modifier la transaction",
+    "english": "Anglais",
+    "englishNative": "English",
+    "error_data_not_found": "Les données demandées n'ont pas été trouvées.",
+    "error_data_not_found_entity": "L'élément {entity} demandé n'a pas été trouvé.",
+    "@error_data_not_found_entity": {
+        "description": "Erreur de données non trouvées avec le nom de l'entité",
+        "placeholders": {
+            "entity": {
+                "type": "String",
+                "example": "transaction"
+            }
+        }
+    },
+    "error_db_closed": "La connexion à la base de données n'est pas disponible. Veuillez redémarrer l'application.",
+    "error_db_constraint_violation": "Une contrainte de base de données a été violée. Il peut s'agir d'une entrée en double ou d'une référence invalide.",
+    "error_db_operation_failed": "L'opération sur la base de données a échoué. Veuillez réessayer.",
+    "error_db_operation_failed_operation": "Impossible de {operation}. Veuillez réessayer.",
+    "@error_db_operation_failed_operation": {
+        "description": "Erreur d'opération de base de données avec le nom de l'opération",
+        "placeholders": {
+            "operation": {
+                "type": "String",
+                "example": "enregistrer la transaction"
+            }
+        }
+    },
+    "error_foreign_key_violation": "Impossible de terminer l'opération car elle fait référence à des données qui n'existent plus.",
+    "error_foreign_key_violation_table": "Impossible de terminer l'opération car elle fait référence à un(e) {table} qui n'existe plus.",
+    "@error_foreign_key_violation_table": {
+        "description": "Violation de clé étrangère avec le nom de la table",
+        "placeholders": {
+            "table": {
+                "type": "String",
+                "example": "catégorie"
+            }
+        }
+    },
+    "error_storage_full": "L'espace de stockage de l'appareil est plein. Veuillez libérer de l'espace et réessayer.",
+    "error_unique_constraint_violation": "Cet enregistrement existe déjà.",
+    "error_unique_constraint_violation_field": "Un enregistrement avec ce champ {field} existe déjà.",
+    "@error_unique_constraint_violation_field": {
+        "description": "Violation de contrainte unique pour un champ spécifique",
+        "placeholders": {
+            "field": {
+                "type": "String",
+                "example": "e-mail"
+            }
+        }
+    },
+    "error_unknown_data": "Une erreur est survenue lors de l'opération de données. Veuillez réessayer.",
+    "errorCategoryNameEmpty": "Le nom de la catégorie ne peut pas être vide",
+    "errorCategoryNameTooLong": "Le nom de la catégorie est trop long",
+    "errorCategoryNameTooShort": "Le nom de la catégorie est trop court",
+    "errorLoadingAccounts": "Erreur lors du chargement des comptes : {error}",
+    "@errorLoadingAccounts": {
+        "description": "Erreur affichée lorsque le chargement des comptes échoue",
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Stockage plein"
+            }
+        }
+    },
+    "errorLoadingCalendar": "Erreur lors du chargement du calendrier : {error}",
+    "@errorLoadingCalendar": {
+        "description": "Erreur affichée lorsque le chargement du calendrier échoue",
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Erreur réseau"
+            }
+        }
+    },
+    "errorLoadingCategories": "Erreur lors du chargement des catégories : {error}",
+    "@errorLoadingCategories": {
+        "description": "Erreur affichée lorsque le chargement des catégories échoue",
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Délai expiré"
+            }
+        }
+    },
+    "errorLoadingTransaction": "Erreur lors du chargement de la transaction : {error}",
+    "errorLoadingTransactions": "Erreur lors du chargement des transactions : {error}",
+    "@errorLoadingTransactions": {
+        "description": "Erreur affichée lorsque le chargement des transactions échoue",
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Erreur de base de données"
+            }
+        }
+    },
+    "expense": "Dépense",
+    "expenseType": "Dépense",
+    "fabAddTransactionTooltip": "Ajouter une transaction",
+    "french": "Français",
+    "frenchNative": "Français",
+    "fromAccountLabel": "Compte source",
+    "goBackAction": "Retour",
+    "helloWorld": "Bonjour le monde !",
+    "income": "Revenu",
+    "incomeType": "Revenu",
+    "indigo": "Indigo",
+    "language": "Langue",
+    "lime": "Citron vert",
+    "more": "Plus",
+    "newTransactionTitle": "Nouvelle transaction",
+    "noAccountInfo": "Aucune information de compte",
+    "noDescription": "Aucune description",
+    "noTransactionsOnDate": "Aucune transaction le {date}",
+    "@noTransactionsOnDate": {
+        "description": "Message lorsqu'il n'y a pas de transactions à la date sélectionnée",
+        "placeholders": {
+            "date": {
+                "type": "String",
+                "example": "5 janv."
+            }
+        }
+    },
+    "primaryColor": "Couleur primaire",
+    "purple": "Violet",
+    "selectAccountError": "Veuillez sélectionner un compte",
+    "selectAccountHint": "Sélectionner un compte",
+    "selectAppLanguage": "Sélectionnez la langue de l'application",
+    "selectCategoryError": "Veuillez sélectionner une catégorie",
+    "selectCategoryHint": "Sélectionner une catégorie",
+    "selectDateHint": "Sélectionner une date",
+    "selectTimeHint": "Sélectionner une heure",
+    "settings": "Paramètres",
+    "spanish": "Espagnol",
+    "spanishNative": "Español",
+    "system": "Système",
+    "teal": "Sarcelle",
+    "theme": "Thème",
+    "thisCategory": "cette catégorie",
+    "thisTransaction": "cette transaction",
+    "timeLabel": "Heure",
+    "toAccountLabel": "Compte de destination",
+    "transactionCreatedSuccess": "Transaction créée avec succès !",
+    "transactionDeletedSuccess": "Transaction supprimée avec succès",
+    "transactionDeleteError": "Erreur lors de la suppression de la transaction : {error}",
+    "transactionSaveError": "Erreur lors de l'enregistrement de la transaction",
+    "transactionTitle": "Transaction",
+    "transactionTypeLabel": "Type de transaction",
+    "transactionUpdatedSuccess": "Transaction mise à jour avec succès !",
+    "transferType": "Virement",
+    "unknownCategory": "Inconnue",
+    "update": "Mettre à jour",
+    "updateTransactionButton": "Mettre à jour la transaction",
+    "weekdayFri": "Ven",
+    "weekdayMon": "Lun",
+    "weekdaySat": "Sam",
+    "weekdaySun": "Dim",
+    "weekdayThu": "Jeu",
+    "weekdayTue": "Mar",
+    "weekdayWed": "Mer",
+    "yellow": "Jaune"
+}

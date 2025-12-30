@@ -402,6 +402,14 @@
   "@fabAddTransactionTooltip": {
     "description": "Tooltip for FAB that creates a new transaction from the calendar view"
   },
+  "french": "French",
+  "@french": {
+    "description": "Language name for French"
+  },
+  "frenchNative": "Français",
+  "@frenchNative": {
+    "description": "Native language name for French"
+  },
   "fromAccountLabel": "From Account",
   "@fromAccountLabel": {
     "description": "Label for 'from' account in transfer transaction form"

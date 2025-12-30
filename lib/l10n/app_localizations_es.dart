@@ -278,6 +278,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get fabAddTransactionTooltip => 'Agregar transacción';
 
   @override
+  String get french => 'Francés';
+
+  @override
+  String get frenchNative => 'Français';
+
+  @override
   String get fromAccountLabel => 'Cuenta de Origen';
 
   @override

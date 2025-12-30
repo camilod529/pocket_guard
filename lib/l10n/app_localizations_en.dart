@@ -278,6 +278,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fabAddTransactionTooltip => 'Add transaction';
 
   @override
+  String get french => 'French';
+
+  @override
+  String get frenchNative => 'Français';
+
+  @override
   String get fromAccountLabel => 'From Account';
 
   @override

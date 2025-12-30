@@ -7,6 +7,7 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
+import 'app_localizations_fr.dart';
 
 // ignore_for_file: type=lint
 
@@ -92,7 +93,8 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('es')
+    Locale('es'),
+    Locale('fr')
   ];
 
   /// Label for account currency input
@@ -581,6 +583,18 @@ abstract class AppLocalizations {
   /// **'Add transaction'**
   String get fabAddTransactionTooltip;
 
+  /// Language name for French
+  ///
+  /// In en, this message translates to:
+  /// **'French'**
+  String get french;
+
+  /// Native language name for French
+  ///
+  /// In en, this message translates to:
+  /// **'Français'**
+  String get frenchNative;
+
   /// Label for 'from' account in transfer transaction form
   ///
   /// In en, this message translates to:
@@ -897,7 +911,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'es'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'es', 'fr'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -910,6 +924,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'en': return AppLocalizationsEn();
     case 'es': return AppLocalizationsEs();
+    case 'fr': return AppLocalizationsFr();
   }
 
   throw FlutterError(
