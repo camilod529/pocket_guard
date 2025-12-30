@@ -15,15 +15,7 @@ class CategoryView extends ConsumerWidget {
     final categoriesAsync = ref.watch(categoriesProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(localizations.categories),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () => ref.read(categoriesProvider.notifier).refresh(),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text(localizations.categories)),
       body: categoriesAsync.when(
         data: (categories) => _buildCategoriesList(
           context,
