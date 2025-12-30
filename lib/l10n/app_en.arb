@@ -6,7 +6,7 @@
   },
   "accountCurrencyHint": "USD, EUR, GBP",
   "@accountCurrencyHint": {
-    "description": "Hint text for account currency in`put"
+    "description": "Hint text for account currency input"
   },
   "accountDeletedSuccessfully": "Account deleted successfully",
   "@accountDeletedSuccessfully": {
