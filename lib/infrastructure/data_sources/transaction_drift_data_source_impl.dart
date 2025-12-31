@@ -3,6 +3,7 @@ import 'package:pocket_guard/config/database/database.dart';
 import 'package:pocket_guard/domain/data_sources/transaction_data_source.dart';
 import 'package:pocket_guard/domain/entities/category.dart';
 import 'package:pocket_guard/domain/entities/transaction.dart';
+import 'package:pocket_guard/domain/entities/transaction_filter.dart';
 import 'package:pocket_guard/infrastructure/errors/data_exceptions.dart';
 import 'package:pocket_guard/infrastructure/errors/drift_exception_handler.dart';
 
@@ -156,25 +157,46 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
 
   @override
   Future<List<TransactionEntity>> getAllTransactions({
-    DateTime? startDate,
-    DateTime? endDate,
+    TransactionFilter? filter,
   }) async {
     try {
       final query = database.select(database.transactions);
 
-      if (startDate != null) {
-        query.where(
-          (tbl) =>
-              tbl.date.isBiggerOrEqualValue(startDate.millisecondsSinceEpoch),
-        );
+      if (filter != null) {
+        query.where((tbl) {
+          final predicates = <Expression<bool>>[];
+
+          if (filter.startDate != null) {
+            predicates.add(
+              tbl.date.isBiggerOrEqualValue(
+                filter.startDate!.millisecondsSinceEpoch,
+              ),
+            );
+          }
+          if (filter.endDate != null) {
+            predicates.add(
+              tbl.date.isSmallerOrEqualValue(
+                filter.endDate!.millisecondsSinceEpoch,
+              ),
+            );
+          }
+          if (filter.searchQuery != null && filter.searchQuery!.isNotEmpty) {
+            predicates.add(tbl.description.like('%${filter.searchQuery}%'));
+          }
+          if (filter.categoryIds != null && filter.categoryIds!.isNotEmpty) {
+            predicates.add(tbl.categoryId.isIn(filter.categoryIds!));
+          }
+
+          return predicates.isEmpty
+              ? const Constant(true)
+              : predicates.reduce((value, element) => value & element);
+        });
       }
 
-      if (endDate != null) {
-        query.where(
-          (tbl) =>
-              tbl.date.isSmallerOrEqualValue(endDate.millisecondsSinceEpoch),
-        );
-      }
+      // Always sort by date descending for better UX
+      query.orderBy([
+        (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc),
+      ]);
 
       final transactions = await query.get();
 

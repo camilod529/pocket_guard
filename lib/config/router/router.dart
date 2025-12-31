@@ -5,6 +5,7 @@ import 'package:pocket_guard/presentation/screens/account_form_screen.dart';
 import 'package:pocket_guard/presentation/screens/category_form_screen.dart';
 import 'package:pocket_guard/presentation/screens/settings/language_settings_screen.dart';
 import 'package:pocket_guard/presentation/screens/settings/theme_settings_screen.dart';
+import 'package:pocket_guard/presentation/screens/stats/monthly_insights_screen.dart';
 import 'package:pocket_guard/presentation/screens/transaction_form_screen.dart';
 import 'package:pocket_guard/presentation/views/account_view.dart';
 import 'package:pocket_guard/presentation/views/calendar_view.dart';
@@ -90,6 +91,13 @@ final appRouter = GoRouter(
         return CategoryFormScreen(
           categoryId: categoryId ?? GlobalConstants.createId,
         );
+      },
+    ),
+    GoRoute(
+      path: Routes.insights,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) {
+        return MonthlyInsightsScreen();
       },
     ),
     GoRoute(

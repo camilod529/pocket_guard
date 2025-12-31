@@ -16,4 +16,9 @@ class TransactionEntity {
     this.description,
     this.toAccountId,
   });
+
+  @override
+  String toString() {
+    return 'TransactionEntity{id: $id, accountId: $accountId, amount: $amount, date: $date, categoryId: $categoryId, description: $description, toAccountId: $toAccountId}';
+  }
 }

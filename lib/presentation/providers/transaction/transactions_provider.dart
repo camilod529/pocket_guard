@@ -4,7 +4,7 @@ import 'package:pocket_guard/domain/repositories/transaction_repository.dart';
 import 'package:pocket_guard/infrastructure/data_sources/transaction_drift_data_source_impl.dart';
 import 'package:pocket_guard/infrastructure/repositories/transaction_repository_impl.dart';
 import 'package:pocket_guard/presentation/providers/account/account_provider.dart';
-import 'package:pocket_guard/presentation/providers/selected_date_range_provider.dart';
+import 'package:pocket_guard/presentation/providers/transaction/transaction_filter_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'transactions_provider.g.dart';
@@ -25,13 +25,10 @@ class TransactionsNotifier extends _$TransactionsNotifier {
   @override
   Future<List<TransactionEntity>> build() async {
     // Watch the selected date range
-    final dateRange = ref.watch(selectedDateRangeProvider);
+    final filter = ref.watch(transactionSearchFilterProvider);
 
     final repository = ref.read(transactionRepositoryProvider);
-    return await repository.getAllTransactions(
-      startDate: dateRange.start,
-      endDate: dateRange.end,
-    );
+    return await repository.getAllTransactions(filter: filter);
   }
 
   Future<void> createTransaction(TransactionEntity transaction) async {

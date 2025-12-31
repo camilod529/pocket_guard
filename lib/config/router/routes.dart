@@ -10,6 +10,7 @@ abstract class Routes {
   static const String transactionForm = '/transaction/form/:id';
   static const String accountForm = '/account/form/:id';
   static const String categoryForm = '/category/form/:id';
+  static const String insights = '/insights';
 
   // Settings
   static const String themeSettings = '/settings/theme';

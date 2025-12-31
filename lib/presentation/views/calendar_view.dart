@@ -159,6 +159,13 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
         tooltip: l10n.calendarPreviousMonth,
       ),
       actions: [
+        IconButton(
+          icon: const Icon(Icons.bar_chart_rounded),
+          tooltip: 'View Insights', //TODO: Add to l10n
+          onPressed: () {
+            context.push(Routes.insights);
+          },
+        ),
         if (!isCurrentMonth)
           IconButton(
             icon: const Icon(Icons.today),
