@@ -70,6 +70,10 @@
   "@amountLabel": {
     "description": "Amount field label"
   },
+  "applyFilters": "Apply Filters",
+  "@applyFilters": {
+    "description": "Button to apply selected filters"
+  },
   "appTitle": "Money Manager",
   "@appTitle": {
     "description": "The title of the application"
@@ -97,6 +101,10 @@
   "calendarPreviousMonth": "Previous month",
   "@calendarPreviousMonth": {
     "description": "Tooltip for going to previous month in the calendar"
+  },
+  "calendarToday": "Go to today",
+  "@calendarToday": {
+    "description": "Tooltip for jumping back to the current day/month"
   },
   "cancel": "Cancel",
   "@cancel": {
@@ -155,6 +163,10 @@
   "chooseYourAppColor": "Choose your app color",
   "@chooseYourAppColor": {
     "description": "Subtitle for the theme settings section"
+  },
+  "clearAll": "Clear All",
+  "@clearAll": {
+    "description": "Button to clear all filters"
   },
   "create": "Create",
   "@create": {
@@ -431,6 +443,10 @@
   "fabAddTransactionTooltip": "Add transaction",
   "@fabAddTransactionTooltip": {
     "description": "Tooltip for FAB that creates a new transaction from the calendar view"
+  },
+  "filterTitle": "Filter Transactions",
+  "@filterTitle": {
+    "description": "Title for the transaction filter dialog"
   },
   "french": "French",
   "@french": {

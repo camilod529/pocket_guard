@@ -42,7 +42,7 @@ class AccountView extends ConsumerWidget {
     final categories = AccountType.values;
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 80),
       itemCount: categories.length,
       itemBuilder: (context, catIndex) {
         final type = categories[catIndex];

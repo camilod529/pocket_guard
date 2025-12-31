@@ -59,6 +59,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get amountLabel => 'Amount';
 
   @override
+  String get applyFilters => 'Apply Filters';
+
+  @override
   String get appTitle => 'Money Manager';
 
   @override
@@ -78,6 +81,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendarPreviousMonth => 'Previous month';
+
+  @override
+  String get calendarToday => 'Go to today';
 
   @override
   String get cancel => 'Cancel';
@@ -119,6 +125,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chooseYourAppColor => 'Choose your app color';
+
+  @override
+  String get clearAll => 'Clear All';
 
   @override
   String get create => 'Create';
@@ -296,6 +305,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fabAddTransactionTooltip => 'Add transaction';
+
+  @override
+  String get filterTitle => 'Filter Transactions';
 
   @override
   String get french => 'French';

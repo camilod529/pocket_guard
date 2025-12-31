@@ -11,7 +11,10 @@ import 'package:pocket_guard/l10n/app_localizations.dart';
 import 'package:pocket_guard/presentation/providers/account/accounts_provider.dart';
 import 'package:pocket_guard/presentation/providers/category/categories_provider.dart';
 import 'package:pocket_guard/presentation/providers/selected_date_range_provider.dart';
+import 'package:pocket_guard/presentation/providers/transaction/transaction_filter_provider.dart';
 import 'package:pocket_guard/presentation/providers/transaction/transactions_provider.dart';
+import 'package:pocket_guard/presentation/providers/transaction/ui_visibility_provider.dart';
+import 'package:pocket_guard/presentation/widgets/transactions/transaction_filter_sheet.dart';
 import 'package:pocket_guard/utils/shared/dates/calendar_date_formatter.dart';
 import 'package:pocket_guard/utils/shared/number_formatting.dart';
 
@@ -25,6 +28,7 @@ class CalendarView extends ConsumerStatefulWidget {
 class _CalendarViewState extends ConsumerState<CalendarView> {
   // Key to trigger animation on day selection
   Key _selectedDayKey = UniqueKey();
+  bool _isSearching = false;
 
   @override
   Widget build(BuildContext context) {
@@ -142,40 +146,55 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
   }
 
   PreferredSizeWidget _buildCustomAppBar(DateRangeSelection dateRange) {
-    final l10n = AppLocalizations.of(context)!;
-    final isCurrentMonth =
-        dateRange.start.year == DateTime.now().year &&
-        dateRange.start.month == DateTime.now().month;
-    final dateFormatter = CalendarDateFormatter(
-      Localizations.localeOf(context),
-    );
-
-    return AppBar(
-      title: Text(dateFormatter.formatMonthYear(dateRange.start)),
-      centerTitle: true,
-      leading: IconButton(
-        icon: const Icon(Icons.chevron_left),
-        onPressed: _previousMonth,
-        tooltip: l10n.calendarPreviousMonth,
-      ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.bar_chart_rounded),
-          tooltip: 'View Insights', //TODO: Add to l10n
+    if (_isSearching) {
+      return AppBar(
+        title: TextField(
+          autofocus: true,
+          decoration: const InputDecoration(
+            hintText: 'Search...',
+            border: InputBorder.none,
+          ),
+          onChanged: (val) => ref
+              .read(transactionSearchFilterProvider.notifier)
+              .updateSearchQuery(val),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.push(Routes.insights);
+            setState(() => _isSearching = false);
+            ref
+                .read(transactionSearchFilterProvider.notifier)
+                .updateSearchQuery('');
           },
         ),
-        if (!isCurrentMonth)
-          IconButton(
-            icon: const Icon(Icons.today),
-            onPressed: _goToToday,
-            tooltip: l10n.calendarGoToToday,
-          ),
+      );
+    }
+    return AppBar(
+      actions: [
         IconButton(
-          icon: const Icon(Icons.chevron_right),
-          onPressed: _nextMonth,
-          tooltip: l10n.calendarNextMonth,
+          icon: const Icon(Icons.search),
+          onPressed: () => setState(() => _isSearching = true),
+        ),
+        IconButton(
+          icon: Badge(
+            isLabelVisible:
+                !(ref
+                        .watch(transactionSearchFilterProvider)
+                        .categoryIds
+                        ?.isEmpty ??
+                    true) ||
+                (ref
+                        .watch(transactionSearchFilterProvider)
+                        .searchQuery
+                        ?.isNotEmpty ??
+                    false),
+            child: const Icon(Icons.filter_list),
+          ),
+          onPressed: () => _showFilterSheet(context),
+        ),
+        IconButton(
+          onPressed: () => context.push(Routes.insights),
+          icon: const Icon(Icons.bar_chart_rounded),
         ),
       ],
     );
@@ -256,12 +275,44 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
   Widget _buildMonthCalendar(
     AsyncValue<List<TransactionEntity>> transactionsAsync,
   ) {
+    final dateRange = ref.watch(selectedDateRangeProvider);
+    final dateFormatter = CalendarDateFormatter(
+      Localizations.localeOf(context),
+    );
     final l10n = AppLocalizations.of(context)!;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.chevron_left),
+                onPressed: _previousMonth,
+                tooltip: l10n.calendarPreviousMonth,
+              ),
+              Text(
+                dateFormatter.formatMonthYear(dateRange.start),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              Spacer(),
+              IconButton(
+                onPressed: _goToToday,
+                icon: const Icon(Icons.today),
+                tooltip: l10n.calendarToday,
+              ),
+              IconButton(
+                icon: const Icon(Icons.chevron_right),
+                onPressed: _nextMonth,
+                tooltip: l10n.calendarNextMonth,
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
           _buildWeekdayHeaders(),
           const SizedBox(height: 8),
           transactionsAsync.when(
@@ -396,7 +447,6 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
     DateTime selectedDay,
   ) {
     final l10n = AppLocalizations.of(context)!;
-
     final dateFormatter = CalendarDateFormatter(
       Localizations.localeOf(context),
     );
@@ -438,8 +488,10 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
             return accountsAsync.when(
               data: (accounts) {
                 final accountMap = {for (var acc in accounts) acc.id: acc};
+
                 return ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  // ADDED PADDING: 80px at bottom to clear the FAB
+                  padding: const EdgeInsets.only(top: 8, bottom: 80),
                   itemCount: selectedDayTransactions.length,
                   itemBuilder: (context, index) {
                     final transaction = selectedDayTransactions[index];
@@ -554,5 +606,21 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
     ref
         .read(selectedDateRangeProvider.notifier)
         .selectMonth(prevMonth.year, prevMonth.month);
+  }
+
+  void _showFilterSheet(BuildContext context) {
+    ref.read(filterSheetVisibilityProvider.notifier).show();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => const TransactionFilterSheet(),
+    ).whenComplete(() {
+      // 2. Notify that sheet is closed (FAB returns)
+      ref.read(filterSheetVisibilityProvider.notifier).hide();
+    });
   }
 }

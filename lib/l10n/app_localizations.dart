@@ -193,6 +193,12 @@ abstract class AppLocalizations {
   /// **'Amount'**
   String get amountLabel;
 
+  /// Button to apply selected filters
+  ///
+  /// In en, this message translates to:
+  /// **'Apply Filters'**
+  String get applyFilters;
+
   /// The title of the application
   ///
   /// In en, this message translates to:
@@ -234,6 +240,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Previous month'**
   String get calendarPreviousMonth;
+
+  /// Tooltip for jumping back to the current day/month
+  ///
+  /// In en, this message translates to:
+  /// **'Go to today'**
+  String get calendarToday;
 
   /// Cancel action/button
   ///
@@ -312,6 +324,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose your app color'**
   String get chooseYourAppColor;
+
+  /// Button to clear all filters
+  ///
+  /// In en, this message translates to:
+  /// **'Clear All'**
+  String get clearAll;
 
   /// Create action/button
   ///
@@ -618,6 +636,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add transaction'**
   String get fabAddTransactionTooltip;
+
+  /// Title for the transaction filter dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Filter Transactions'**
+  String get filterTitle;
 
   /// Language name for French
   ///

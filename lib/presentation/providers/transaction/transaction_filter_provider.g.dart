@@ -42,7 +42,7 @@ final class TransactionSearchFilterProvider
 }
 
 String _$transactionSearchFilterHash() =>
-    r'1353a93f3c77daabbfcf9126605c60015745f760';
+    r'8b84ceee5afc8d40b166f1a88aa1f7ca92539fbc';
 
 abstract class _$TransactionSearchFilter extends $Notifier<TransactionFilter> {
   TransactionFilter build();
