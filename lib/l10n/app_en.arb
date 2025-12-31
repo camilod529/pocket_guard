@@ -12,6 +12,10 @@
   "@accountDeletedSuccessfully": {
     "description": "Success message after account deletion"
   },
+  "accountFilterLabel": "Account",
+  "@accountFilterLabel": {
+    "description": "Label for account filter selector"
+  },
   "accountLabel": "Account: {name}",
   "@accountLabel": {
     "description": "Label for account name in transaction list item",
@@ -54,6 +58,10 @@
   "@addAccount": {
     "description": "Add new account button"
   },
+  "allAccounts": "All Accounts",
+  "@allAccounts": {
+    "description": "Option to show data from all accounts"
+  },
   "amountHint": "0.00",
   "@amountHint": {
     "description": "Amount field hint text"
@@ -65,6 +73,10 @@
   "appTitle": "Money Manager",
   "@appTitle": {
     "description": "The title of the application"
+  },
+  "balanceTrend": "Balance Trend",
+  "@balanceTrend": {
+    "description": "Title for the balance trend line chart"
   },
   "blue": "Blue",
   "@blue": {
@@ -163,6 +175,10 @@
   "createTransactionButton": "Create Transaction",
   "@createTransactionButton": {
     "description": "Button to create new transaction"
+  },
+  "currencyLabel": "Currency",
+  "@currencyLabel": {
+    "description": "Label for currency selector"
   },
   "custom": "Custom",
   "@custom": {
@@ -370,6 +386,16 @@
       }
     }
   },
+  "errorLoadingInsights": "Error loading insights: {error}",
+  "@errorLoadingInsights": {
+    "description": "Error message when insights fail to load",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
   "errorLoadingTransaction": "Error loading transaction: {error}",
   "@errorLoadingTransaction": {
     "description": "Error loading transaction data",
@@ -393,6 +419,10 @@
   "expense": "Expense",
   "@expense": {
     "description": "Expense transaction type"
+  },
+  "expensesByCategory": "Expenses by Category",
+  "@expensesByCategory": {
+    "description": "Title for the expenses by category pie chart section"
   },
   "expenseType": "Expense",
   "@expenseType": {
@@ -442,6 +472,10 @@
   "@lime": {
     "description": "Color option: Lime"
   },
+  "monthlyInsights": "Monthly Insights",
+  "@monthlyInsights": {
+    "description": "Title for the monthly insights screen"
+  },
   "more": "More",
   "@more": {
     "description": "Label for the more options view"
@@ -454,9 +488,17 @@
   "@noAccountInfo": {
     "description": "Shown when a transaction has no account associated"
   },
+  "noDataForPeriod": "No data for this period",
+  "@noDataForPeriod": {
+    "description": "Message when there is no transaction data for the selected period"
+  },
   "noDescription": "No description",
   "@noDescription": {
     "description": "Shown when a transaction has no description"
+  },
+  "noExpensesFound": "No expenses found",
+  "@noExpensesFound": {
+    "description": "Message when there are no expenses to display"
   },
   "noTransactionsOnDate": "No transactions on {date}",
   "@noTransactionsOnDate": {
@@ -543,6 +585,14 @@
   "toAccountLabel": "To Account",
   "@toAccountLabel": {
     "description": "Label for 'to' account in transfer transaction form"
+  },
+  "totalExpense": "Total Expense",
+  "@totalExpense": {
+    "description": "Label for total expense stat card"
+  },
+  "totalIncome": "Total Income",
+  "@totalIncome": {
+    "description": "Label for total income stat card"
   },
   "transactionCreatedSuccess": "Transaction created successfully!",
   "@transactionCreatedSuccess": {

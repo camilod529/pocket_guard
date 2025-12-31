@@ -18,6 +18,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get accountDeletedSuccessfully => 'Compte supprimé avec succès';
 
   @override
+  String get accountFilterLabel => 'Compte';
+
+  @override
   String accountLabel(String name) {
     return 'Compte';
   }
@@ -47,6 +50,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get addAccount => 'Ajouter un compte';
 
   @override
+  String get allAccounts => 'Tous les Comptes';
+
+  @override
   String get amountHint => '0,00';
 
   @override
@@ -54,6 +60,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get appTitle => 'Gestionnaire de Budget';
+
+  @override
+  String get balanceTrend => 'Tendance du Solde';
 
   @override
   String get blue => 'Bleu';
@@ -125,6 +134,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get createTransactionButton => 'Créer la transaction';
+
+  @override
+  String get currencyLabel => 'Devise';
 
   @override
   String get custom => 'Personnalisé';
@@ -259,6 +271,11 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String errorLoadingInsights(String error) {
+    return 'Erreur lors du chargement des aperçus: $error';
+  }
+
+  @override
   String errorLoadingTransaction(String error) {
     return 'Erreur lors du chargement de la transaction : $error';
   }
@@ -270,6 +287,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get expense => 'Dépense';
+
+  @override
+  String get expensesByCategory => 'Dépenses par Catégorie';
 
   @override
   String get expenseType => 'Dépense';
@@ -308,6 +328,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get lime => 'Citron vert';
 
   @override
+  String get monthlyInsights => 'Aperçus Mensuels';
+
+  @override
   String get more => 'Plus';
 
   @override
@@ -317,7 +340,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noAccountInfo => 'Aucune information de compte';
 
   @override
+  String get noDataForPeriod => 'Aucune donnée pour cette période';
+
+  @override
   String get noDescription => 'Aucune description';
+
+  @override
+  String get noExpensesFound => 'Aucune dépense trouvée';
 
   @override
   String noTransactionsOnDate(String date) {
@@ -380,6 +409,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get toAccountLabel => 'Compte de destination';
+
+  @override
+  String get totalExpense => 'Dépenses Totales';
+
+  @override
+  String get totalIncome => 'Revenu Total';
 
   @override
   String get transactionCreatedSuccess => 'Transaction créée avec succès !';

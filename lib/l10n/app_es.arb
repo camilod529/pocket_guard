@@ -3,6 +3,7 @@
     "accountCurrency": "Moneda",
     "accountCurrencyHint": "USD, EUR, GBP",
     "accountDeletedSuccessfully": "Cuenta eliminada con éxito",
+    "accountFilterLabel": "Cuenta",
     "accountLabel": "Cuenta",
     "@accountLabel": {
         "description": "Etiqueta para el nombre de la cuenta en el ítem de transacción",
@@ -21,9 +22,11 @@
     "accountTypeCredit": "Crédito",
     "accountTypeLabel": "Tipo de Cuenta",
     "addAccount": "Agregar Cuenta",
+    "allAccounts": "Todas las Cuentas",
     "amountHint": "0.00",
     "amountLabel": "Monto",
     "appTitle": "Administrador de Dinero",
+    "balanceTrend": "Tendencia del Saldo",
     "blue": "Azul",
     "calendar": "Calendario",
     "calendarGoToToday": "Ir a hoy",
@@ -47,6 +50,7 @@
     "createCategory": "Crear Categoría",
     "createTransaction": "Crear Transacción",
     "createTransactionButton": "Crear Transacción",
+    "currencyLabel": "Moneda",
     "custom": "Personalizado",
     "cyan": "Cían",
     "dateLabel": "Fecha",
@@ -166,6 +170,16 @@
             }
         }
     },
+    "errorLoadingInsights": "Error al cargar perspectivas: {error}",
+    "@errorLoadingInsights": {
+        "description": "Error message when insights fail to load",
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Network error"
+            }
+        }
+    },
     "errorLoadingTransaction": "Error al cargar transacción: {error}",
     "errorLoadingTransactions": "Error al cargar las transacciones: {error}",
     "@errorLoadingTransactions": {
@@ -178,6 +192,7 @@
         }
     },
     "expense": "Gasto",
+    "expensesByCategory": "Gastos por Categoría",
     "expenseType": "Gasto",
     "fabAddTransactionTooltip": "Agregar transacción",
     "french": "Francés",
@@ -190,10 +205,13 @@
     "indigo": "Índigo",
     "language": "Idioma",
     "lime": "Lima",
+    "monthlyInsights": "Perspectivas Mensuales",
     "more": "Más",
     "newTransactionTitle": "Nueva Transacción",
     "noAccountInfo": "Sin información de cuenta",
+    "noDataForPeriod": "No hay datos para este período",
     "noDescription": "Sin descripción",
+    "noExpensesFound": "No se encontraron gastos",
     "noTransactionsOnDate": "Sin transacciones el {date}",
     "@noTransactionsOnDate": {
         "description": "Mensaje cuando no hay transacciones en el día seleccionado",
@@ -223,6 +241,8 @@
     "thisTransaction": "esta transacción",
     "timeLabel": "Hora",
     "toAccountLabel": "Cuenta de Destino",
+    "totalExpense": "Gastos Totales",
+    "totalIncome": "Ingresos Totales",
     "transactionCreatedSuccess": "¡Transacción creada exitosamente!",
     "transactionDeletedSuccess": "Transacción eliminada exitosamente",
     "transactionDeleteError": "Error al eliminar transacción: {error}",

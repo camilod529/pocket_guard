@@ -18,6 +18,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountDeletedSuccessfully => 'Account deleted successfully';
 
   @override
+  String get accountFilterLabel => 'Account';
+
+  @override
   String accountLabel(String name) {
     return 'Account: $name';
   }
@@ -47,6 +50,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addAccount => 'Add Account';
 
   @override
+  String get allAccounts => 'All Accounts';
+
+  @override
   String get amountHint => '0.00';
 
   @override
@@ -54,6 +60,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appTitle => 'Money Manager';
+
+  @override
+  String get balanceTrend => 'Balance Trend';
 
   @override
   String get blue => 'Blue';
@@ -125,6 +134,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createTransactionButton => 'Create Transaction';
+
+  @override
+  String get currencyLabel => 'Currency';
 
   @override
   String get custom => 'Custom';
@@ -259,6 +271,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String errorLoadingInsights(String error) {
+    return 'Error loading insights: $error';
+  }
+
+  @override
   String errorLoadingTransaction(String error) {
     return 'Error loading transaction: $error';
   }
@@ -270,6 +287,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get expense => 'Expense';
+
+  @override
+  String get expensesByCategory => 'Expenses by Category';
 
   @override
   String get expenseType => 'Expense';
@@ -308,6 +328,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lime => 'Lime';
 
   @override
+  String get monthlyInsights => 'Monthly Insights';
+
+  @override
   String get more => 'More';
 
   @override
@@ -317,7 +340,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noAccountInfo => 'No account info';
 
   @override
+  String get noDataForPeriod => 'No data for this period';
+
+  @override
   String get noDescription => 'No description';
+
+  @override
+  String get noExpensesFound => 'No expenses found';
 
   @override
   String noTransactionsOnDate(String date) {
@@ -380,6 +409,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toAccountLabel => 'To Account';
+
+  @override
+  String get totalExpense => 'Total Expense';
+
+  @override
+  String get totalIncome => 'Total Income';
 
   @override
   String get transactionCreatedSuccess => 'Transaction created successfully!';

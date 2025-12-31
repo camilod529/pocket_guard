@@ -103,7 +103,7 @@ abstract class AppLocalizations {
   /// **'Currency'**
   String get accountCurrency;
 
-  /// Hint text for account currency in`put
+  /// Hint text for account currency input
   ///
   /// In en, this message translates to:
   /// **'USD, EUR, GBP'**
@@ -114,6 +114,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Account deleted successfully'**
   String get accountDeletedSuccessfully;
+
+  /// Label for account filter selector
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get accountFilterLabel;
 
   /// Label for account name in transaction list item
   ///
@@ -169,6 +175,12 @@ abstract class AppLocalizations {
   /// **'Add Account'**
   String get addAccount;
 
+  /// Option to show data from all accounts
+  ///
+  /// In en, this message translates to:
+  /// **'All Accounts'**
+  String get allAccounts;
+
   /// Amount field hint text
   ///
   /// In en, this message translates to:
@@ -186,6 +198,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Money Manager'**
   String get appTitle;
+
+  /// Title for the balance trend line chart
+  ///
+  /// In en, this message translates to:
+  /// **'Balance Trend'**
+  String get balanceTrend;
 
   /// Color option: Blue
   ///
@@ -324,6 +342,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create Transaction'**
   String get createTransactionButton;
+
+  /// Label for currency selector
+  ///
+  /// In en, this message translates to:
+  /// **'Currency'**
+  String get currencyLabel;
 
   /// Label indicating that a category is a custom category
   ///
@@ -553,6 +577,12 @@ abstract class AppLocalizations {
   /// **'Error loading categories: {error}'**
   String errorLoadingCategories(String error);
 
+  /// Error message when insights fail to load
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading insights: {error}'**
+  String errorLoadingInsights(String error);
+
   /// Error loading transaction data
   ///
   /// In en, this message translates to:
@@ -570,6 +600,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Expense'**
   String get expense;
+
+  /// Title for the expenses by category pie chart section
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses by Category'**
+  String get expensesByCategory;
 
   /// Expense transaction type
   ///
@@ -643,6 +679,12 @@ abstract class AppLocalizations {
   /// **'Lime'**
   String get lime;
 
+  /// Title for the monthly insights screen
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Insights'**
+  String get monthlyInsights;
+
   /// Label for the more options view
   ///
   /// In en, this message translates to:
@@ -661,11 +703,23 @@ abstract class AppLocalizations {
   /// **'No account info'**
   String get noAccountInfo;
 
+  /// Message when there is no transaction data for the selected period
+  ///
+  /// In en, this message translates to:
+  /// **'No data for this period'**
+  String get noDataForPeriod;
+
   /// Shown when a transaction has no description
   ///
   /// In en, this message translates to:
   /// **'No description'**
   String get noDescription;
+
+  /// Message when there are no expenses to display
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses found'**
+  String get noExpensesFound;
 
   /// Message when there are no transactions on the selected day
   ///
@@ -786,6 +840,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'To Account'**
   String get toAccountLabel;
+
+  /// Label for total expense stat card
+  ///
+  /// In en, this message translates to:
+  /// **'Total Expense'**
+  String get totalExpense;
+
+  /// Label for total income stat card
+  ///
+  /// In en, this message translates to:
+  /// **'Total Income'**
+  String get totalIncome;
 
   /// Success message after creation
   ///

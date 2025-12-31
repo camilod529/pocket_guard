@@ -3,6 +3,7 @@
     "accountCurrency": "Devise",
     "accountCurrencyHint": "USD, EUR, GBP",
     "accountDeletedSuccessfully": "Compte supprimé avec succès",
+    "accountFilterLabel": "Compte",
     "accountLabel": "Compte",
     "@accountLabel": {
         "description": "Étiquette pour le nom du compte dans l'élément de transaction",
@@ -21,9 +22,11 @@
     "accountTypeCredit": "Crédit",
     "accountTypeLabel": "Type de compte",
     "addAccount": "Ajouter un compte",
+    "allAccounts": "Tous les Comptes",
     "amountHint": "0,00",
     "amountLabel": "Somme",
     "appTitle": "Gestionnaire de Budget",
+    "balanceTrend": "Tendance du Solde",
     "blue": "Bleu",
     "calendar": "Calendrier",
     "calendarGoToToday": "Aller à aujourd'hui",
@@ -47,6 +50,7 @@
     "createCategory": "Créer une catégorie",
     "createTransaction": "Créer une transaction",
     "createTransactionButton": "Créer la transaction",
+    "currencyLabel": "Devise",
     "custom": "Personnalisé",
     "cyan": "Cyan",
     "dateLabel": "Date",
@@ -166,6 +170,16 @@
             }
         }
     },
+    "errorLoadingInsights": "Erreur lors du chargement des aperçus: {error}",
+    "@errorLoadingInsights": {
+        "description": "Erreur affichée lorsque le chargement des aperçus échoue",
+        "placeholders": {
+            "error": {
+                "type": "String",
+                "example": "Erreur de base de données"
+            }
+        }
+    },
     "errorLoadingTransaction": "Erreur lors du chargement de la transaction : {error}",
     "errorLoadingTransactions": "Erreur lors du chargement des transactions : {error}",
     "@errorLoadingTransactions": {
@@ -178,6 +192,7 @@
         }
     },
     "expense": "Dépense",
+    "expensesByCategory": "Dépenses par Catégorie",
     "expenseType": "Dépense",
     "fabAddTransactionTooltip": "Ajouter une transaction",
     "french": "Français",
@@ -190,10 +205,13 @@
     "indigo": "Indigo",
     "language": "Langue",
     "lime": "Citron vert",
+    "monthlyInsights": "Aperçus Mensuels",
     "more": "Plus",
     "newTransactionTitle": "Nouvelle transaction",
     "noAccountInfo": "Aucune information de compte",
+    "noDataForPeriod": "Aucune donnée pour cette période",
     "noDescription": "Aucune description",
+    "noExpensesFound": "Aucune dépense trouvée",
     "noTransactionsOnDate": "Aucune transaction le {date}",
     "@noTransactionsOnDate": {
         "description": "Message lorsqu'il n'y a pas de transactions à la date sélectionnée",
@@ -223,6 +241,8 @@
     "thisTransaction": "cette transaction",
     "timeLabel": "Heure",
     "toAccountLabel": "Compte de destination",
+    "totalExpense": "Dépenses Totales",
+    "totalIncome": "Revenu Total",
     "transactionCreatedSuccess": "Transaction créée avec succès !",
     "transactionDeletedSuccess": "Transaction supprimée avec succès",
     "transactionDeleteError": "Erreur lors de la suppression de la transaction : {error}",

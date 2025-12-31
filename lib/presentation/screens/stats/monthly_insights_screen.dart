@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_guard/domain/entities/account.dart';
 import 'package:pocket_guard/domain/entities/category.dart';
 import 'package:pocket_guard/domain/entities/transaction.dart';
+import 'package:pocket_guard/l10n/app_localizations.dart';
 import 'package:pocket_guard/presentation/providers/account/accounts_provider.dart';
 import 'package:pocket_guard/presentation/providers/category/categories_provider.dart';
 import 'package:pocket_guard/presentation/providers/transaction/transactions_provider.dart';
@@ -15,12 +16,13 @@ class MonthlyInsightsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final transactionsAsync = ref.watch(transactionsProvider);
     final categoriesAsync = ref.watch(categoriesProvider);
     final accountsAsync = ref.watch(accountsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Monthly Insights')),
+      appBar: AppBar(title: Text(l10n.monthlyInsights)),
       body: transactionsAsync.when(
         data: (transactions) => categoriesAsync.when(
           data: (categories) => accountsAsync.when(
@@ -30,13 +32,16 @@ class MonthlyInsightsScreen extends ConsumerWidget {
               accounts: accounts,
             ),
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, _) => Center(child: Text('Error loading accounts: $e')),
+            error: (e, _) =>
+                Center(child: Text(l10n.errorLoadingAccounts(e.toString()))),
           ),
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) => Center(child: Text('Error loading categories: $e')),
+          error: (e, _) =>
+              Center(child: Text(l10n.errorLoadingCategories(e.toString()))),
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error loading transactions: $e')),
+        error: (e, _) =>
+            Center(child: Text(l10n.errorLoadingTransactions(e.toString()))),
       ),
     );
   }
@@ -63,6 +68,7 @@ class _InsightsContentState extends State<_InsightsContent> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final categoryMap = {for (var c in widget.categories) c.id: c};
     final accountMap = {for (var a in widget.accounts) a.id: a};
 
@@ -103,15 +109,19 @@ class _InsightsContentState extends State<_InsightsContent> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Currency", style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            l10n.currencyLabel,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 8),
           _buildCurrencySelector(currencies),
-
           const SizedBox(height: 16),
-          const Text("Account", style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            l10n.accountFilterLabel,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 8),
           _buildAccountSelector(accountsInCurrency),
-
           const SizedBox(height: 24),
           _buildSummaryCards(
             context,
@@ -121,11 +131,10 @@ class _InsightsContentState extends State<_InsightsContent> {
           ),
           const SizedBox(height: 24),
           _buildLineChart(filteredTxs, currentCurrency),
-
           const SizedBox(height: 32),
-          const Text(
-            'Expenses by Category',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          Text(
+            l10n.expensesByCategory,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
           _buildPieChart(expenseByCategory, categoryMap, currentCurrency),
@@ -144,12 +153,14 @@ class _InsightsContentState extends State<_InsightsContent> {
   }
 
   Widget _buildAccountSelector(List<AccountEntity> accounts) {
+    final l10n = AppLocalizations.of(context)!;
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
           ChoiceChip(
-            label: const Text('All Accounts'),
+            label: Text(l10n.allAccounts),
             selected: selectedAccountId == null,
             onSelected: (_) => setState(() => selectedAccountId = null),
           ),
@@ -198,14 +209,15 @@ class _InsightsContentState extends State<_InsightsContent> {
   }
 
   Widget _buildLineChart(List<TransactionEntity> txs, String currency) {
+    final l10n = AppLocalizations.of(context)!;
     final chartDate = txs.isNotEmpty ? txs.first.date : DateTime.now();
     final spots = _generateDailySpots(txs, chartDate);
     final colors = Theme.of(context).colorScheme;
 
     if (spots.isEmpty) {
-      return const SizedBox(
+      return SizedBox(
         height: 300,
-        child: Center(child: Text("No data for this period")),
+        child: Center(child: Text(l10n.noDataForPeriod)),
       );
     }
 
@@ -218,9 +230,9 @@ class _InsightsContentState extends State<_InsightsContent> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Balance Trend',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        Text(
+          l10n.balanceTrend,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         Container(
@@ -339,7 +351,11 @@ class _InsightsContentState extends State<_InsightsContent> {
     Map<String, CategoryEntity> catMap,
     String currency,
   ) {
-    if (data.isEmpty) return const Center(child: Text('No expenses found'));
+    final l10n = AppLocalizations.of(context)!;
+
+    if (data.isEmpty) {
+      return Center(child: Text(l10n.noExpensesFound));
+    }
 
     return Column(
       children: [
@@ -365,7 +381,7 @@ class _InsightsContentState extends State<_InsightsContent> {
         ...data.entries.map((entry) {
           final index = data.keys.toList().indexOf(entry.key);
           final color = Colors.primaries[index % Colors.primaries.length];
-          final label = catMap[entry.key]?.label ?? 'Other';
+          final label = catMap[entry.key]?.label ?? l10n.unknownCategory;
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
@@ -399,6 +415,7 @@ class _InsightsContentState extends State<_InsightsContent> {
     required double expense,
     required String currency,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     final colors = Theme.of(context).colorScheme;
 
     final green = colors.brightness == Brightness.dark
@@ -408,14 +425,14 @@ class _InsightsContentState extends State<_InsightsContent> {
     return Row(
       children: [
         StatCard(
-          label: 'Total Income',
+          label: l10n.totalIncome,
           value: income,
           color: green,
           currency: currency,
         ),
         const SizedBox(width: 16),
         StatCard(
-          label: 'Total Expense',
+          label: l10n.totalExpense,
           value: expense,
           color: colors.error,
           currency: currency,
