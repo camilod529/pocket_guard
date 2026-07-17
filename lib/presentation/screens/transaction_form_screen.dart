@@ -991,8 +991,7 @@ class _TransferFormState extends ConsumerState<_TransferForm> {
           accountId: formState.toAccountId,
         ),
         if (formState.accountId != null &&
-            formState.accountId == formState.toAccountId &&
-            !formState.isFormPure)
+            formState.accountId == formState.toAccountId)
           Padding(
             padding: const EdgeInsets.only(left: 12, top: 8),
             child: Text(
