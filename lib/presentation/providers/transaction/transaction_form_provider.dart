@@ -15,6 +15,8 @@ part 'transaction_form_provider.g.dart';
 
 @Riverpod(keepAlive: false)
 class TransactionForm extends _$TransactionForm {
+  int _overdraftPreviewToken = 0;
+
   void accountChanged(String? accountId) {
     final currentState = state.value;
     if (currentState == null) return;
@@ -37,6 +39,7 @@ class TransactionForm extends _$TransactionForm {
         ),
       ),
     );
+    _refreshOverdraftPreview();
   }
 
   void amountChanged(double value) {
@@ -58,6 +61,7 @@ class TransactionForm extends _$TransactionForm {
         ),
       ),
     );
+    _refreshOverdraftPreview();
   }
 
   @override
@@ -186,11 +190,25 @@ class TransactionForm extends _$TransactionForm {
     final currentState = state.value;
     if (currentState == null) return false;
 
-    _touchAllFields();
+    await _touchAllFields();
 
     final validState = state.value;
 
     if (validState == null || !validState.isFormValid) return false;
+
+    final overdraftError = await _checkOverdraft(
+      transactionId: validState.id,
+      accountId: validState.accountId,
+      amount: validState.amount.value,
+      type: validState.type,
+    );
+    if (overdraftError != null) {
+      final latest = state.value;
+      if (latest != null) {
+        state = AsyncValue.data(latest.copyWith(overdraftError: overdraftError));
+      }
+      return false;
+    }
 
     try {
       // Create transaction entity based on type
@@ -286,6 +304,7 @@ class TransactionForm extends _$TransactionForm {
           isFormValid: false,
         ),
       );
+      _refreshOverdraftPreview();
       return;
     }
 
@@ -303,6 +322,7 @@ class TransactionForm extends _$TransactionForm {
         isFormValid: false,
       ),
     );
+    _refreshOverdraftPreview();
   }
 
   bool _isValid({
@@ -333,7 +353,7 @@ class TransactionForm extends _$TransactionForm {
     return Formz.validate([description, amount, category, account]);
   }
 
-  void _touchAllFields() {
+  Future<void> _touchAllFields() async {
     final currentState = state.value;
     if (currentState == null) return;
 
@@ -371,6 +391,71 @@ class TransactionForm extends _$TransactionForm {
       ),
     );
   }
+
+  /// Authoritative overdraft check: returns an error message if [amount]
+  /// would overdraw [accountId], or `null` if the transaction can proceed.
+  /// Does not touch `state` - callers decide what to do with the result,
+  /// so this is safe to call both for live UI feedback and as the actual
+  /// submit-time gate.
+  Future<String?> _checkOverdraft({
+    required String transactionId,
+    required String? accountId,
+    required double amount,
+    required TransactionType type,
+  }) async {
+    if (accountId == null || type == TransactionType.income) return null;
+
+    final account = await ref.read(accountProvider(accountId).future);
+    if (account == null) return null;
+
+    var availableBalance = account.balance;
+
+    // If we're editing, the old amount is still reflected in the account's
+    // current balance, so add it back before checking the new amount fits.
+    final isEditing = transactionId != GlobalConstants.createId;
+    if (isEditing) {
+      final originalTransaction = await ref.read(
+        transactionProvider(transactionId).future,
+      );
+      if (originalTransaction != null &&
+          originalTransaction.accountId == accountId) {
+        availableBalance += originalTransaction.amount;
+      }
+    }
+
+    if (amount > availableBalance) {
+      return 'Insufficient funds. Available: ${availableBalance.toStringAsFixed(2)}';
+    }
+    return null;
+  }
+
+  /// Best-effort live feedback shown while the user edits amount/account/
+  /// type. Not authoritative - onFormSubmit always re-checks before
+  /// actually submitting, so a stale preview here can't let an overdrawn
+  /// transaction through. A token guards against an older, slower check
+  /// overwriting a newer result if the user edits again before it resolves.
+  Future<void> _refreshOverdraftPreview() async {
+    final current = state.value;
+    if (current == null) return;
+
+    final token = ++_overdraftPreviewToken;
+    final error = await _checkOverdraft(
+      transactionId: current.id,
+      accountId: current.accountId,
+      amount: current.amount.value,
+      type: current.type,
+    );
+
+    if (!ref.mounted || token != _overdraftPreviewToken) return;
+    final latest = state.value;
+    if (latest == null) return;
+
+    state = AsyncValue.data(
+      error == null
+          ? latest.copyWith(forceNullOverdraft: true)
+          : latest.copyWith(overdraftError: error),
+    );
+  }
 }
 
 class TransactionFormState {
@@ -384,6 +469,7 @@ class TransactionFormState {
   final String? toAccountId;
   final String? categoryId;
   final String? accountId;
+  final String? overdraftError;
   final DateTime date;
   final TransactionType type;
   final bool isFormPure;
@@ -404,6 +490,7 @@ class TransactionFormState {
     required this.type,
     this.isFormPure = true,
     this.hasFormBeenModified = false,
+    this.overdraftError,
   });
 
   String? get amountError =>
@@ -431,6 +518,8 @@ class TransactionFormState {
     bool? isFormPure,
     String? accountId,
     bool? hasFormBeenModified,
+    String? overdraftError,
+    bool? forceNullOverdraft,
   }) {
     return TransactionFormState(
       isFormValid: isFormValid ?? this.isFormValid,
@@ -447,6 +536,9 @@ class TransactionFormState {
       hasFormBeenModified: hasFormBeenModified ?? this.hasFormBeenModified,
       toAccount: toAccount ?? this.toAccount,
       toAccountId: toAccountId ?? this.toAccountId,
+      overdraftError: forceNullOverdraft == true
+          ? null
+          : (overdraftError ?? this.overdraftError),
     );
   }
 }
