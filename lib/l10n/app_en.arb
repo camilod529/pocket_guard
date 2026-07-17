@@ -534,6 +534,10 @@
   "@purple": {
     "description": "Color option: Purple"
   },
+  "sameTransferAccountError": "From and To accounts must be different",
+  "@sameTransferAccountError": {
+    "description": "Validation error when a transfer's from and to accounts are the same"
+  },
   "selectAccountError": "Please select an account",
   "@selectAccountError": {
     "description": "Account validation error"

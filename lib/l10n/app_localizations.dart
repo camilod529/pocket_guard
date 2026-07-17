@@ -763,6 +763,12 @@ abstract class AppLocalizations {
   /// **'Purple'**
   String get purple;
 
+  /// Validation error when a transfer's from and to accounts are the same
+  ///
+  /// In en, this message translates to:
+  /// **'From and To accounts must be different'**
+  String get sameTransferAccountError;
+
   /// Account validation error
   ///
   /// In en, this message translates to:

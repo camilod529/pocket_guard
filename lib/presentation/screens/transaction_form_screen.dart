@@ -55,7 +55,6 @@ class _AccountSelector extends ConsumerWidget {
   final String transactionId;
   final DateTime? selectedDate;
   final String? targetCurrency;
-  final String? excludeAccountId;
   final String? labelOverride;
   final void Function(String)? onChanged;
 
@@ -68,7 +67,6 @@ class _AccountSelector extends ConsumerWidget {
     required this.onChanged,
     this.selectedDate,
     this.labelOverride,
-    this.excludeAccountId,
     this.targetCurrency,
   });
 
@@ -89,10 +87,7 @@ class _AccountSelector extends ConsumerWidget {
     final showError = accountId == null && !formState.isFormPure;
 
     final filteredAccounts = accounts.where((account) {
-      final excludeMatch = account.id != excludeAccountId;
-      final currencyMatch =
-          targetCurrency == null || account.currency == targetCurrency;
-      return excludeMatch && currencyMatch;
+      return targetCurrency == null || account.currency == targetCurrency;
     }).toList();
 
     return IntrinsicHeight(
@@ -942,8 +937,14 @@ class _TransferFormState extends ConsumerState<_TransferForm> {
     required AsyncValue<List<AccountEntity>> accountsAsync,
     required AppLocalizations l10n,
   }) {
-    final fromAccount = findAccountById(accountsAsync.value, formState.accountId);
-    final toAccount = findAccountById(accountsAsync.value, formState.toAccountId);
+    final fromAccount = findAccountById(
+      accountsAsync.value,
+      formState.accountId,
+    );
+    final toAccount = findAccountById(
+      accountsAsync.value,
+      formState.toAccountId,
+    );
 
     final fromCurrency = fromAccount?.currency;
     final toCurrency = toAccount?.currency;
@@ -959,7 +960,6 @@ class _TransferFormState extends ConsumerState<_TransferForm> {
           transactionId: widget.transactionId,
           selectedDate: widget.selectedDate,
           labelOverride: l10n.fromAccountLabel,
-          excludeAccountId: formState.toAccountId,
           targetCurrency: toCurrency,
           onChanged: (value) => ref
               .read(
@@ -980,7 +980,6 @@ class _TransferFormState extends ConsumerState<_TransferForm> {
           selectedDate: widget.selectedDate,
           targetCurrency: fromCurrency,
           labelOverride: l10n.toAccountLabel,
-          excludeAccountId: formState.accountId,
           onChanged: (value) => ref
               .read(
                 transactionFormProvider(
@@ -991,6 +990,19 @@ class _TransferFormState extends ConsumerState<_TransferForm> {
               .toAccountChanged(value),
           accountId: formState.toAccountId,
         ),
+        if (formState.accountId != null &&
+            formState.accountId == formState.toAccountId &&
+            !formState.isFormPure)
+          Padding(
+            padding: const EdgeInsets.only(left: 12, top: 8),
+            child: Text(
+              l10n.sameTransferAccountError,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.error,
+                fontSize: 12,
+              ),
+            ),
+          ),
         const SizedBox(height: 16),
         _AmountField(
           formState: formState,

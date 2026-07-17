@@ -228,6 +228,7 @@
     },
     "primaryColor": "Couleur primaire",
     "purple": "Violet",
+    "sameTransferAccountError": "Les comptes source et destination doivent être différents",
     "selectAccountError": "Veuillez sélectionner un compte",
     "selectAccountHint": "Sélectionner un compte",
     "selectAppLanguage": "Sélectionnez la langue de l'application",

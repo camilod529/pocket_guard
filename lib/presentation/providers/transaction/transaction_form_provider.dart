@@ -14,6 +14,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'transaction_form_provider.g.dart';
 
+/// Sentinel for [TransactionFormState.copyWith] - see its doc comment.
+const _unset = Object();
+
 @Riverpod(keepAlive: false)
 class TransactionForm extends _$TransactionForm {
   int _overdraftPreviewToken = 0;
@@ -206,7 +209,9 @@ class TransactionForm extends _$TransactionForm {
     if (overdraftError != null) {
       final latest = state.value;
       if (latest != null) {
-        state = AsyncValue.data(latest.copyWith(overdraftError: overdraftError));
+        state = AsyncValue.data(
+          latest.copyWith(overdraftError: overdraftError),
+        );
       }
       return false;
     }
@@ -346,73 +351,6 @@ class TransactionForm extends _$TransactionForm {
     _refreshOverdraftPreview();
   }
 
-  bool _isValid({
-    required TransactionDescription description,
-    required TransactionAmount amount,
-    String? categoryId,
-    String? accountId,
-    String? toAccountId,
-    required TransactionType type,
-  }) {
-    final category = categoryId != null
-        ? GenericStringInput.dirty(categoryId)
-        : const GenericStringInput.pure();
-    final account = accountId != null
-        ? GenericStringInput.dirty(accountId)
-        : const GenericStringInput.pure();
-    final toAccount = toAccountId != null
-        ? GenericStringInput.dirty(toAccountId)
-        : const GenericStringInput.pure();
-
-    if (type == TransactionType.transfer) {
-      // For transfer: description + amount + from + to
-      // No category required for transfers
-      return Formz.validate([description, amount, account, toAccount]);
-    }
-
-    // For income/expense: description + amount + category + account
-    return Formz.validate([description, amount, category, account]);
-  }
-
-  Future<void> _touchAllFields() async {
-    final currentState = state.value;
-    if (currentState == null) return;
-
-    final amount = TransactionAmount.dirty(currentState.amount.value);
-    final description = TransactionDescription.dirty(
-      currentState.description.value,
-    );
-    final category = currentState.categoryId != null
-        ? GenericStringInput.dirty(currentState.categoryId!)
-        : const GenericStringInput.pure();
-    final account = currentState.accountId != null
-        ? GenericStringInput.dirty(currentState.accountId!)
-        : const GenericStringInput.pure();
-    final toAccount = currentState.toAccountId != null
-        ? GenericStringInput.dirty(currentState.toAccountId!)
-        : const GenericStringInput.pure();
-
-    final List<FormzInput> fieldsToValidate;
-    if (currentState.type == TransactionType.transfer) {
-      fieldsToValidate = [amount, description, account, toAccount];
-    } else {
-      fieldsToValidate = [amount, description, category, account];
-    }
-
-    state = AsyncValue.data(
-      currentState.copyWith(
-        amount: amount,
-        description: description,
-        category: category,
-        account: account,
-        toAccount: toAccount,
-        isFormPure: false,
-        hasFormBeenModified: true,
-        isFormValid: Formz.validate(fieldsToValidate),
-      ),
-    );
-  }
-
   /// Authoritative overdraft check: returns an error message if [amount]
   /// would overdraw [accountId], or `null` if the transaction can proceed.
   /// Does not touch `state` - callers decide what to do with the result,
@@ -450,6 +388,36 @@ class TransactionForm extends _$TransactionForm {
     return null;
   }
 
+  bool _isValid({
+    required TransactionDescription description,
+    required TransactionAmount amount,
+    String? categoryId,
+    String? accountId,
+    String? toAccountId,
+    required TransactionType type,
+  }) {
+    final category = categoryId != null
+        ? GenericStringInput.dirty(categoryId)
+        : const GenericStringInput.pure();
+    final account = accountId != null
+        ? GenericStringInput.dirty(accountId)
+        : const GenericStringInput.pure();
+    final toAccount = toAccountId != null
+        ? GenericStringInput.dirty(toAccountId)
+        : const GenericStringInput.pure();
+
+    if (type == TransactionType.transfer) {
+      // For transfer: description + amount + from + to, and the two
+      // accounts must be different.
+      final accountsDiffer = accountId != null && accountId != toAccountId;
+      return Formz.validate([description, amount, account, toAccount]) &&
+          accountsDiffer;
+    }
+
+    // For income/expense: description + amount + category + account
+    return Formz.validate([description, amount, category, account]);
+  }
+
   /// Best-effort live feedback shown while the user edits amount/account/
   /// type. Not authoritative - onFormSubmit always re-checks before
   /// actually submitting, so a stale preview here can't let an overdrawn
@@ -475,6 +443,45 @@ class TransactionForm extends _$TransactionForm {
       error == null
           ? latest.copyWith(forceNullOverdraft: true)
           : latest.copyWith(overdraftError: error),
+    );
+  }
+
+  Future<void> _touchAllFields() async {
+    final currentState = state.value;
+    if (currentState == null) return;
+
+    final amount = TransactionAmount.dirty(currentState.amount.value);
+    final description = TransactionDescription.dirty(
+      currentState.description.value,
+    );
+    final category = currentState.categoryId != null
+        ? GenericStringInput.dirty(currentState.categoryId!)
+        : const GenericStringInput.pure();
+    final account = currentState.accountId != null
+        ? GenericStringInput.dirty(currentState.accountId!)
+        : const GenericStringInput.pure();
+    final toAccount = currentState.toAccountId != null
+        ? GenericStringInput.dirty(currentState.toAccountId!)
+        : const GenericStringInput.pure();
+
+    state = AsyncValue.data(
+      currentState.copyWith(
+        amount: amount,
+        description: description,
+        category: category,
+        account: account,
+        toAccount: toAccount,
+        isFormPure: false,
+        hasFormBeenModified: true,
+        isFormValid: _isValid(
+          description: description,
+          amount: amount,
+          categoryId: currentState.categoryId,
+          accountId: currentState.accountId,
+          toAccountId: currentState.toAccountId,
+          type: currentState.type,
+        ),
+      ),
     );
   }
 }
@@ -577,6 +584,3 @@ class TransactionFormState {
     );
   }
 }
-
-/// Sentinel for [TransactionFormState.copyWith] - see its doc comment.
-const _unset = Object();

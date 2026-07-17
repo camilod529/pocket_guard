@@ -372,6 +372,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get purple => 'Purple';
 
   @override
+  String get sameTransferAccountError => 'From and To accounts must be different';
+
+  @override
   String get selectAccountError => 'Please select an account';
 
   @override
