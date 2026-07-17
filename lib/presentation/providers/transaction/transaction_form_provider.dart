@@ -5,6 +5,7 @@ import 'package:pocket_guard/infrastructure/inputs/generic_string.dart';
 import 'package:pocket_guard/infrastructure/inputs/transactions/amount.dart';
 import 'package:pocket_guard/infrastructure/inputs/transactions/description.dart';
 import 'package:pocket_guard/presentation/providers/account/account_provider.dart';
+import 'package:pocket_guard/presentation/providers/account/accounts_provider.dart';
 import 'package:pocket_guard/presentation/providers/category/categories_provider.dart';
 import 'package:pocket_guard/presentation/providers/transaction/transaction_provider.dart';
 import 'package:pocket_guard/presentation/providers/transaction/transactions_provider.dart';
@@ -211,6 +212,22 @@ class TransactionForm extends _$TransactionForm {
     }
 
     try {
+      final isEditing = validState.id != GlobalConstants.createId;
+
+      // Capture which accounts the old version of the transaction touched
+      // before it's overwritten - reverting its effect changes their
+      // balance too, even if they're no longer part of the new version
+      // (e.g. editing a transfer into an expense drops the "to" account).
+      String? oldAccountId;
+      String? oldToAccountId;
+      if (isEditing) {
+        final oldTransaction = await ref.read(
+          transactionProvider(validState.id).future,
+        );
+        oldAccountId = oldTransaction?.accountId;
+        oldToAccountId = oldTransaction?.toAccountId;
+      }
+
       // Create transaction entity based on type
       final transaction = TransactionEntity(
         id: validState.id,
@@ -225,8 +242,6 @@ class TransactionForm extends _$TransactionForm {
             : null,
       );
 
-      final isEditing = validState.id != GlobalConstants.createId;
-
       if (isEditing) {
         await ref
             .read(transactionsProvider.notifier)
@@ -237,18 +252,24 @@ class TransactionForm extends _$TransactionForm {
             .createTransaction(transaction);
       }
 
-      // Refresh affected accounts
-      ref
-          .read(accountProvider(transaction.accountId).notifier)
-          .refreshAccount();
-
-      // If transfer, also refresh the destination account
-      if (validState.type == TransactionType.transfer &&
-          transaction.toAccountId != null) {
-        ref
-            .read(accountProvider(transaction.toAccountId!).notifier)
-            .refreshAccount();
+      // Refresh every account whose balance could have changed: the ones
+      // used by the transaction as saved, plus (when editing) whichever
+      // ones the old version used.
+      final accountIdsToRefresh = <String>{
+        transaction.accountId,
+        if (transaction.toAccountId != null) transaction.toAccountId!,
+        if (oldAccountId != null) oldAccountId,
+        if (oldToAccountId != null) oldToAccountId,
+      };
+      for (final accountId in accountIdsToRefresh) {
+        ref.read(accountProvider(accountId).notifier).refreshAccount();
       }
+      // accountsProvider (the list the Accounts screen renders from) is a
+      // separate cache from accountProvider(id) above - nothing else in
+      // the transaction save flow invalidates it, so without this the
+      // Accounts screen keeps showing pre-edit balances until manually
+      // refreshed.
+      ref.invalidate(accountsProvider);
 
       return true;
     } catch (e) {
@@ -503,6 +524,14 @@ class TransactionFormState {
   bool get isAmountPure => amount.isPure;
   bool get isDescriptionPure => description.isPure;
 
+  /// copyWith uses `param ?? this.field` for most fields, which can't tell
+  /// "not passed" apart from "explicitly passed null" - so it can never
+  /// clear a field, only replace it with a non-null value. accountId,
+  /// categoryId, and toAccountId all need to be explicitly nulled out (e.g.
+  /// typeChanged resetting the category when switching away from transfer),
+  /// so they're typed as Object? with this sentinel default instead of
+  /// their real (nullable String) type: only an omitted argument equals
+  /// _unset, an explicit null is passed straight through.
   TransactionFormState copyWith({
     bool? isFormValid,
     String? id,
@@ -511,12 +540,12 @@ class TransactionFormState {
     GenericStringInput? category,
     GenericStringInput? account,
     GenericStringInput? toAccount,
-    String? toAccountId,
-    String? categoryId,
+    Object? toAccountId = _unset,
+    Object? categoryId = _unset,
     DateTime? date,
     TransactionType? type,
     bool? isFormPure,
-    String? accountId,
+    Object? accountId = _unset,
     bool? hasFormBeenModified,
     String? overdraftError,
     bool? forceNullOverdraft,
@@ -528,17 +557,26 @@ class TransactionFormState {
       description: description ?? this.description,
       category: category ?? this.category,
       account: account ?? this.account,
-      categoryId: categoryId ?? this.categoryId,
+      categoryId: identical(categoryId, _unset)
+          ? this.categoryId
+          : categoryId as String?,
       date: date ?? this.date,
       type: type ?? this.type,
       isFormPure: isFormPure ?? this.isFormPure,
-      accountId: accountId ?? this.accountId,
+      accountId: identical(accountId, _unset)
+          ? this.accountId
+          : accountId as String?,
       hasFormBeenModified: hasFormBeenModified ?? this.hasFormBeenModified,
       toAccount: toAccount ?? this.toAccount,
-      toAccountId: toAccountId ?? this.toAccountId,
+      toAccountId: identical(toAccountId, _unset)
+          ? this.toAccountId
+          : toAccountId as String?,
       overdraftError: forceNullOverdraft == true
           ? null
           : (overdraftError ?? this.overdraftError),
     );
   }
 }
+
+/// Sentinel for [TransactionFormState.copyWith] - see its doc comment.
+const _unset = Object();

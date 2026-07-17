@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:pocket_guard/config/database/database.dart' as db;
 import 'package:pocket_guard/config/database/database.dart';
 import 'package:pocket_guard/domain/data_sources/category_data_source.dart';
 import 'package:pocket_guard/domain/entities/category.dart';
@@ -6,6 +7,10 @@ import 'package:pocket_guard/infrastructure/errors/data_exceptions.dart';
 import 'package:pocket_guard/infrastructure/errors/drift_exception_handler.dart';
 
 class CategoryDriftDataSourceImpl extends CategoryDataSource {
+  CategoryDriftDataSourceImpl({AppDatabase? database})
+    : database = database ?? db.database;
+
+  final AppDatabase database;
   final DriftExceptionHandler _exceptionHandler = DriftExceptionHandler();
 
   @override

@@ -4,6 +4,7 @@ import 'package:pocket_guard/domain/repositories/transaction_repository.dart';
 import 'package:pocket_guard/infrastructure/data_sources/transaction_drift_data_source_impl.dart';
 import 'package:pocket_guard/infrastructure/repositories/transaction_repository_impl.dart';
 import 'package:pocket_guard/presentation/providers/account/account_provider.dart';
+import 'package:pocket_guard/presentation/providers/account/accounts_provider.dart';
 import 'package:pocket_guard/presentation/providers/transaction/transaction_filter_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -71,6 +72,7 @@ class TransactionsNotifier extends _$TransactionsNotifier {
             .read(accountProvider(transaction.toAccountId!).notifier)
             .refreshAccount();
       }
+      ref.invalidate(accountsProvider);
     } catch (e, stackTrace) {
       state = AsyncValue.error(e, stackTrace);
     }
