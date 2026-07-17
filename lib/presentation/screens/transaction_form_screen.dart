@@ -15,6 +15,7 @@ import 'package:pocket_guard/presentation/widgets/shared/forms/common_drop_down.
 import 'package:pocket_guard/presentation/widgets/shared/forms/custom_form_field.dart';
 import 'package:pocket_guard/utils/constants/global_constants.dart';
 import 'package:pocket_guard/utils/shared/dates/calendar_date_formatter.dart';
+import 'package:pocket_guard/utils/shared/find_account_by_id.dart';
 import 'package:pocket_guard/utils/shared/number_formatting.dart';
 
 class TransactionFormScreen extends ConsumerStatefulWidget {
@@ -56,7 +57,6 @@ class _AccountSelector extends ConsumerWidget {
   final String? targetCurrency;
   final String? excludeAccountId;
   final String? labelOverride;
-  final bool? readonly;
   final void Function(String)? onChanged;
 
   const _AccountSelector({
@@ -68,7 +68,6 @@ class _AccountSelector extends ConsumerWidget {
     required this.onChanged,
     this.selectedDate,
     this.labelOverride,
-    this.readonly,
     this.excludeAccountId,
     this.targetCurrency,
   });
@@ -125,13 +124,11 @@ class _AccountSelector extends ConsumerWidget {
                     ),
                   )
                   .toList(),
-              onChanged: readonly == true
-                  ? null
-                  : (value) {
-                      if (value != null) {
-                        onChanged?.call(value);
-                      }
-                    },
+              onChanged: (value) {
+                if (value != null) {
+                  onChanged?.call(value);
+                }
+              },
             ),
           ),
           if (showError)
@@ -208,9 +205,8 @@ class _AmountField extends ConsumerWidget {
     WidgetRef ref,
     List<AccountEntity> accounts,
   ) {
-    final currency = formState.accountId == null
-        ? 'USD'
-        : accounts.firstWhere((acc) => acc.id == formState.accountId).currency;
+    final currency =
+        findAccountById(accounts, formState.accountId)?.currency ?? 'USD';
 
     return Row(
       children: [
@@ -223,7 +219,9 @@ class _AmountField extends ConsumerWidget {
             initialValue: NumberFormatting.formatNumber(formState.amount.value),
             label: l10n.amountLabel,
             hintText: l10n.amountHint,
-            errorText: formState.isFormPure ? null : formState.amountError,
+            errorText: formState.isFormPure
+                ? null
+                : (formState.amountError ?? formState.overdraftError),
             prefixIcon: const Icon(Icons.attach_money),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [
@@ -944,20 +942,13 @@ class _TransferFormState extends ConsumerState<_TransferForm> {
     required AsyncValue<List<AccountEntity>> accountsAsync,
     required AppLocalizations l10n,
   }) {
-    // TODO: for now, cant edit transfers
-    final isEditing = widget.transactionId != GlobalConstants.createId;
+    final fromAccount = findAccountById(accountsAsync.value, formState.accountId);
+    final toAccount = findAccountById(accountsAsync.value, formState.toAccountId);
 
-    final fromCurrency = formState.accountId == null
-        ? null
-        : accountsAsync.value
-              ?.firstWhere((acc) => acc.id == formState.accountId)
-              .currency;
-
-    final toCurrency = formState.toAccountId == null
-        ? null
-        : accountsAsync.value
-              ?.firstWhere((acc) => acc.id == formState.toAccountId)
-              .currency;
+    final fromCurrency = fromAccount?.currency;
+    final toCurrency = toAccount?.currency;
+    final fromAccountName = fromAccount?.name ?? '';
+    final toAccountName = toAccount?.name ?? '';
 
     return Column(
       children: [
@@ -979,7 +970,6 @@ class _TransferFormState extends ConsumerState<_TransferForm> {
               )
               .accountChanged(value),
           accountId: formState.accountId,
-          readonly: isEditing,
         ),
         const SizedBox(height: 16),
         _AccountSelector(
@@ -1000,7 +990,6 @@ class _TransferFormState extends ConsumerState<_TransferForm> {
               )
               .toAccountChanged(value),
           accountId: formState.toAccountId,
-          readonly: isEditing,
         ),
         const SizedBox(height: 16),
         _AmountField(
@@ -1025,6 +1014,26 @@ class _TransferFormState extends ConsumerState<_TransferForm> {
           timeController: widget.timeController,
           selectTime: widget.selectTime,
         ),
+        if (formState.accountId != null && formState.toAccountId != null)
+          Container(
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.info_outline, size: 20),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    "This will move ${formState.amount.value} from $fromAccountName to $toAccountName.",
+                    style: TextStyle(fontSize: 13),
+                  ),
+                ),
+              ],
+            ),
+          ),
         const SizedBox(height: 32),
       ],
     );
