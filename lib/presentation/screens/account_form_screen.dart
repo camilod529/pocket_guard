@@ -298,7 +298,7 @@ class AccountFormScreen extends ConsumerWidget {
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(l10n.accountDeletedSuccessfully),
+                content: Text(l10n.deleteAccountSuccess),
                 backgroundColor: Colors.green,
                 duration: const Duration(seconds: 2),
               ),

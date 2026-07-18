@@ -2,7 +2,6 @@
     "@@locale": "es",
     "accountCurrency": "Moneda",
     "accountCurrencyHint": "USD, EUR, GBP",
-    "accountDeletedSuccessfully": "Cuenta eliminada con éxito",
     "accountFilterLabel": "Cuenta",
     "accountLabel": "Cuenta",
     "@accountLabel": {
@@ -22,17 +21,14 @@
     "accountTypeCredit": "Crédito",
     "accountTypeLabel": "Tipo de Cuenta",
     "activeLabel": "Activo",
-    "addAccount": "Agregar Cuenta",
     "addRecurringTransaction": "Agregar Transacción Recurrente",
     "allAccounts": "Todas las Cuentas",
     "amountHint": "0.00",
     "amountLabel": "Monto",
     "applyFilters": "Aplicar Filtros",
-    "appTitle": "Administrador de Dinero",
     "balanceTrend": "Tendencia del Saldo",
     "blue": "Azul",
     "calendar": "Calendario",
-    "calendarGoToToday": "Ir a hoy",
     "calendarNextMonth": "Mes siguiente",
     "calendarPreviousMonth": "Mes anterior",
     "calendarToday": "Ir a hoy",
@@ -62,7 +58,6 @@
     "dateLabel": "Fecha",
     "deepPurple": "Púrpura Profundo",
     "delete": "Eliminar",
-    "deleteAccount": "Eliminar Cuenta",
     "deleteAccountConfirmation": "¿Estás seguro de que deseas eliminar la cuenta \"{accountName}\"? Esto también eliminará todas las transacciones y transacciones recurrentes asociadas.",
     "@deleteAccountConfirmation": {
         "description": "Delete account confirmation message with account name",
@@ -101,53 +96,7 @@
     "endDateLabel": "Fecha de Finalización",
     "english": "Inglés",
     "englishNative": "English",
-    "error_data_not_found": "Los datos solicitados no fueron encontrados.",
-    "error_data_not_found_entity": "La {entity} solicitada no fue encontrada.",
-    "@error_data_not_found_entity": {
-        "description": "Error de datos no encontrados con el nombre de la entidad",
-        "placeholders": {
-            "entity": {
-                "type": "String",
-                "example": "transacción"
-            }
-        }
-    },
-    "error_db_closed": "La conexión con la base de datos no está disponible. Por favor, reinicia la aplicación.",
-    "error_db_constraint_violation": "Se violó una restricción de la base de datos. Puede ser una entrada duplicada o una referencia no válida.",
     "error_db_operation_failed": "La operación en la base de datos falló. Inténtalo de nuevo.",
-    "error_db_operation_failed_operation": "No se pudo {operation}. Inténtalo de nuevo.",
-    "@error_db_operation_failed_operation": {
-        "description": "Error de operación de base de datos con el nombre de la operación",
-        "placeholders": {
-            "operation": {
-                "type": "String",
-                "example": "guardar la transacción"
-            }
-        }
-    },
-    "error_foreign_key_violation": "No se puede completar la operación porque hace referencia a datos que ya no existen.",
-    "error_foreign_key_violation_table": "No se puede completar la operación porque hace referencia a una {table} que ya no existe.",
-    "@error_foreign_key_violation_table": {
-        "description": "Violación de clave foránea con el nombre de la tabla",
-        "placeholders": {
-            "table": {
-                "type": "String",
-                "example": "categoría"
-            }
-        }
-    },
-    "error_storage_full": "El almacenamiento del dispositivo está lleno. Libera espacio e inténtalo de nuevo.",
-    "error_unique_constraint_violation": "Este registro ya existe.",
-    "error_unique_constraint_violation_field": "Ya existe un registro con este {field}.",
-    "@error_unique_constraint_violation_field": {
-        "description": "Violación de restricción única para un campo específico",
-        "placeholders": {
-            "field": {
-                "type": "String",
-                "example": "correo electrónico"
-            }
-        }
-    },
     "error_unknown_data": "Algo salió mal con la operación de datos. Inténtalo de nuevo.",
     "errorCategoryNameEmpty": "El nombre de la categoría no puede estar vacío",
     "errorCategoryNameTooLong": "El nombre de la categoría es demasiado largo",
@@ -182,16 +131,6 @@
             }
         }
     },
-    "errorLoadingInsights": "Error al cargar perspectivas: {error}",
-    "@errorLoadingInsights": {
-        "description": "Error message when insights fail to load",
-        "placeholders": {
-            "error": {
-                "type": "String",
-                "example": "Network error"
-            }
-        }
-    },
     "errorLoadingTransaction": "Error al cargar transacción: {error}",
     "errorLoadingTransactions": "Error al cargar las transacciones: {error}",
     "@errorLoadingTransactions": {
@@ -206,7 +145,6 @@
     "expense": "Gasto",
     "expensesByCategory": "Gastos por Categoría",
     "expenseType": "Gasto",
-    "fabAddTransactionTooltip": "Agregar transacción",
     "filterTitle": "Filtrar Transacciones",
     "french": "Francés",
     "frenchNative": "Français",
@@ -217,7 +155,6 @@
     "frequencyYearly": "Anual",
     "fromAccountLabel": "Cuenta de Origen",
     "goBackAction": "Regresar",
-    "helloWorld": "¡Hola Mundo!",
     "income": "Ingreso",
     "incomeType": "Ingreso",
     "indigo": "Índigo",

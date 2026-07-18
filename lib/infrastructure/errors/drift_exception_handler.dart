@@ -60,16 +60,6 @@ class DriftExceptionHandler {
     );
   }
 
-  String? _extractConstraintMessage(String errorMessage) {
-    if (errorMessage.contains('not null')) {
-      return 'error_not_null_constraint';
-    }
-    if (errorMessage.contains('check constraint')) {
-      return 'error_check_constraint';
-    }
-    return null;
-  }
-
   String? _extractFieldName(String errorMessage) {
     final patterns = [
       // captures "column foo", "column named foo", "no such column: foo", or quoted variations
@@ -212,7 +202,6 @@ class DriftExceptionHandler {
         return ConstraintViolation(
           originalError: originalError ?? exception,
           stackTrace: stackTrace,
-          userMessage: _extractConstraintMessage(message),
         );
       case 5: // SQLITE_BUSY
         return DatabaseOperationException(

@@ -2,7 +2,6 @@
     "@@locale": "fr",
     "accountCurrency": "Devise",
     "accountCurrencyHint": "USD, EUR, GBP",
-    "accountDeletedSuccessfully": "Compte supprimé avec succès",
     "accountFilterLabel": "Compte",
     "accountLabel": "Compte",
     "@accountLabel": {
@@ -22,17 +21,14 @@
     "accountTypeCredit": "Crédit",
     "accountTypeLabel": "Type de compte",
     "activeLabel": "Actif",
-    "addAccount": "Ajouter un compte",
     "addRecurringTransaction": "Ajouter une Transaction Récurrente",
     "allAccounts": "Tous les Comptes",
     "amountHint": "0,00",
     "amountLabel": "Somme",
     "applyFilters": "Appliquer les filtres",
-    "appTitle": "Gestionnaire de Budget",
     "balanceTrend": "Tendance du Solde",
     "blue": "Bleu",
     "calendar": "Calendrier",
-    "calendarGoToToday": "Aller à aujourd'hui",
     "calendarNextMonth": "Mois suivant",
     "calendarPreviousMonth": "Mois dernier",
     "calendarToday": "Aller à aujourd'hui",
@@ -62,7 +58,6 @@
     "dateLabel": "Date",
     "deepPurple": "Violet profond",
     "delete": "Supprimer",
-    "deleteAccount": "Supprimer le compte",
     "deleteAccountConfirmation": "Êtes-vous sûr de vouloir supprimer le compte « {accountName} » ? Cela supprimera également toutes les transactions et transactions récurrentes associées.",
     "@deleteAccountConfirmation": {
         "description": "Message de confirmation de suppression de compte avec le nom du compte",
@@ -101,53 +96,7 @@
     "endDateLabel": "Date de Fin",
     "english": "Anglais",
     "englishNative": "English",
-    "error_data_not_found": "Les données demandées n'ont pas été trouvées.",
-    "error_data_not_found_entity": "L'élément {entity} demandé n'a pas été trouvé.",
-    "@error_data_not_found_entity": {
-        "description": "Erreur de données non trouvées avec le nom de l'entité",
-        "placeholders": {
-            "entity": {
-                "type": "String",
-                "example": "transaction"
-            }
-        }
-    },
-    "error_db_closed": "La connexion à la base de données n'est pas disponible. Veuillez redémarrer l'application.",
-    "error_db_constraint_violation": "Une contrainte de base de données a été violée. Il peut s'agir d'une entrée en double ou d'une référence invalide.",
     "error_db_operation_failed": "L'opération sur la base de données a échoué. Veuillez réessayer.",
-    "error_db_operation_failed_operation": "Impossible de {operation}. Veuillez réessayer.",
-    "@error_db_operation_failed_operation": {
-        "description": "Erreur d'opération de base de données avec le nom de l'opération",
-        "placeholders": {
-            "operation": {
-                "type": "String",
-                "example": "enregistrer la transaction"
-            }
-        }
-    },
-    "error_foreign_key_violation": "Impossible de terminer l'opération car elle fait référence à des données qui n'existent plus.",
-    "error_foreign_key_violation_table": "Impossible de terminer l'opération car elle fait référence à un(e) {table} qui n'existe plus.",
-    "@error_foreign_key_violation_table": {
-        "description": "Violation de clé étrangère avec le nom de la table",
-        "placeholders": {
-            "table": {
-                "type": "String",
-                "example": "catégorie"
-            }
-        }
-    },
-    "error_storage_full": "L'espace de stockage de l'appareil est plein. Veuillez libérer de l'espace et réessayer.",
-    "error_unique_constraint_violation": "Cet enregistrement existe déjà.",
-    "error_unique_constraint_violation_field": "Un enregistrement avec ce champ {field} existe déjà.",
-    "@error_unique_constraint_violation_field": {
-        "description": "Violation de contrainte unique pour un champ spécifique",
-        "placeholders": {
-            "field": {
-                "type": "String",
-                "example": "e-mail"
-            }
-        }
-    },
     "error_unknown_data": "Une erreur est survenue lors de l'opération de données. Veuillez réessayer.",
     "errorCategoryNameEmpty": "Le nom de la catégorie ne peut pas être vide",
     "errorCategoryNameTooLong": "Le nom de la catégorie est trop long",
@@ -182,16 +131,6 @@
             }
         }
     },
-    "errorLoadingInsights": "Erreur lors du chargement des aperçus: {error}",
-    "@errorLoadingInsights": {
-        "description": "Erreur affichée lorsque le chargement des aperçus échoue",
-        "placeholders": {
-            "error": {
-                "type": "String",
-                "example": "Erreur de base de données"
-            }
-        }
-    },
     "errorLoadingTransaction": "Erreur lors du chargement de la transaction : {error}",
     "errorLoadingTransactions": "Erreur lors du chargement des transactions : {error}",
     "@errorLoadingTransactions": {
@@ -206,7 +145,6 @@
     "expense": "Dépense",
     "expensesByCategory": "Dépenses par Catégorie",
     "expenseType": "Dépense",
-    "fabAddTransactionTooltip": "Ajouter une transaction",
     "filterTitle": "Filtrer les transactions",
     "french": "Français",
     "frenchNative": "Français",
@@ -217,7 +155,6 @@
     "frequencyYearly": "Annuel",
     "fromAccountLabel": "Compte source",
     "goBackAction": "Retour",
-    "helloWorld": "Bonjour le monde !",
     "income": "Revenu",
     "incomeType": "Revenu",
     "indigo": "Indigo",

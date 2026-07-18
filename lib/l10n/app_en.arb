@@ -8,10 +8,6 @@
   "@accountCurrencyHint": {
     "description": "Hint text for account currency input"
   },
-  "accountDeletedSuccessfully": "Account deleted successfully",
-  "@accountDeletedSuccessfully": {
-    "description": "Success message after account deletion"
-  },
   "accountFilterLabel": "Account",
   "@accountFilterLabel": {
     "description": "Label for account filter selector"
@@ -58,10 +54,6 @@
   "@activeLabel": {
     "description": "Label/switch for whether a recurring transaction rule is active"
   },
-  "addAccount": "Add Account",
-  "@addAccount": {
-    "description": "Add new account button"
-  },
   "addRecurringTransaction": "Add Recurring Transaction",
   "@addRecurringTransaction": {
     "description": "Tooltip for the button that creates a new recurring transaction"
@@ -82,10 +74,6 @@
   "@applyFilters": {
     "description": "Button to apply selected filters"
   },
-  "appTitle": "Money Manager",
-  "@appTitle": {
-    "description": "The title of the application"
-  },
   "balanceTrend": "Balance Trend",
   "@balanceTrend": {
     "description": "Title for the balance trend line chart"
@@ -97,10 +85,6 @@
   "calendar": "Calendar",
   "@calendar": {
     "description": "Label for the calendar view"
-  },
-  "calendarGoToToday": "Go to today",
-  "@calendarGoToToday": {
-    "description": "Tooltip for jumping back to the current day/month"
   },
   "calendarNextMonth": "Next month",
   "@calendarNextMonth": {
@@ -224,10 +208,6 @@
   "@delete": {
     "description": "Delete action/button"
   },
-  "deleteAccount": "Delete Account",
-  "@deleteAccount": {
-    "description": "Delete account button"
-  },
   "deleteAccountConfirmation": "Are you sure you want to delete the account \"{accountName}\"? This will also delete all associated transactions and recurring transactions.",
   "@deleteAccountConfirmation": {
     "description": "Delete account confirmation message with account name, warning about cascading deletes",
@@ -326,73 +306,9 @@
   "@englishNative": {
     "description": "Native language name for English"
   },
-  "error_data_not_found": "The requested data was not found.",
-  "@error_data_not_found": {
-    "description": "Generic data not found error"
-  },
-  "error_data_not_found_entity": "The requested {entity} was not found.",
-  "@error_data_not_found_entity": {
-    "description": "Data not found error with the entity name",
-    "placeholders": {
-      "entity": {
-        "type": "String",
-        "example": "transaction"
-      }
-    }
-  },
-  "error_db_closed": "Database connection is not available. Please restart the app.",
-  "@error_db_closed": {
-    "description": "Shown when the database is closed or not available"
-  },
-  "error_db_constraint_violation": "A database constraint was violated. This might be a duplicate entry or invalid reference.",
-  "@error_db_constraint_violation": {
-    "description": "Generic database constraint violation message"
-  },
   "error_db_operation_failed": "Database operation failed. Please try again.",
   "@error_db_operation_failed": {
     "description": "Generic database operation failure message"
-  },
-  "error_db_operation_failed_operation": "Failed to {operation}. Please try again.",
-  "@error_db_operation_failed_operation": {
-    "description": "Database operation failure message with the operation name",
-    "placeholders": {
-      "operation": {
-        "type": "String",
-        "example": "save transaction"
-      }
-    }
-  },
-  "error_foreign_key_violation": "Cannot complete operation because it references data that no longer exists.",
-  "@error_foreign_key_violation": {
-    "description": "Foreign key violation without specifying the table"
-  },
-  "error_foreign_key_violation_table": "Cannot complete operation because it references a {table} that no longer exists.",
-  "@error_foreign_key_violation_table": {
-    "description": "Foreign key violation specifying the referenced table",
-    "placeholders": {
-      "table": {
-        "type": "String",
-        "example": "category"
-      }
-    }
-  },
-  "error_storage_full": "Device storage is full. Please free up space and try again.",
-  "@error_storage_full": {
-    "description": "Device storage is full"
-  },
-  "error_unique_constraint_violation": "This record already exists.",
-  "@error_unique_constraint_violation": {
-    "description": "Unique constraint violation without specifying the field"
-  },
-  "error_unique_constraint_violation_field": "A record with this {field} already exists.",
-  "@error_unique_constraint_violation_field": {
-    "description": "Unique constraint violation for a specific field",
-    "placeholders": {
-      "field": {
-        "type": "String",
-        "example": "email"
-      }
-    }
   },
   "error_unknown_data": "Something went wrong with the data operation. Please try again.",
   "@error_unknown_data": {
@@ -440,16 +356,6 @@
       }
     }
   },
-  "errorLoadingInsights": "Error loading insights: {error}",
-  "@errorLoadingInsights": {
-    "description": "Error message when insights fail to load",
-    "placeholders": {
-      "error": {
-        "type": "String",
-        "example": "Network error"
-      }
-    }
-  },
   "errorLoadingTransaction": "Error loading transaction: {error}",
   "@errorLoadingTransaction": {
     "description": "Error loading transaction data",
@@ -481,10 +387,6 @@
   "expenseType": "Expense",
   "@expenseType": {
     "description": "Expense transaction type"
-  },
-  "fabAddTransactionTooltip": "Add transaction",
-  "@fabAddTransactionTooltip": {
-    "description": "Tooltip for FAB that creates a new transaction from the calendar view"
   },
   "filterTitle": "Filter Transactions",
   "@filterTitle": {
@@ -525,10 +427,6 @@
   "goBackAction": "Go Back",
   "@goBackAction": {
     "description": "Button to go back from error screen"
-  },
-  "helloWorld": "Hello World!",
-  "@helloWorld": {
-    "description": "A simple greeting message"
   },
   "income": "Income",
   "@income": {
