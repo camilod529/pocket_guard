@@ -40,53 +40,41 @@ class AmountField extends ConsumerWidget {
   ) {
     final currency =
         findAccountById(accounts, formState.accountId)?.currency ?? 'USD';
+    final errorText = formState.isFormPure
+        ? null
+        : (formState.amountError ?? formState.overdraftError);
 
-    return Row(
-      children: [
-        Expanded(
-          child: CustomFormField(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(12),
-              bottomLeft: Radius.circular(12),
+    // The currency label lives inside the field's own InputDecoration
+    // (as a suffixIcon) rather than a separate sibling box next to it -
+    // that way it's part of the exact same bordered box Flutter lays out
+    // and colors for focus/error states, so it can never fall out of sync
+    // with the field's height or error styling the way a manually
+    // height-matched sibling widget can.
+    return CustomFormField(
+      initialValue: NumberFormatting.formatNumber(formState.amount.value),
+      label: l10n.amountLabel,
+      hintText: l10n.amountHint,
+      errorText: errorText,
+      prefixIcon: const Icon(Icons.attach_money),
+      suffixIcon: Padding(
+        padding: const EdgeInsets.only(right: 16),
+        child: Center(
+          widthFactor: 1,
+          child: Text(
+            currency.isEmpty ? 'USD' : currency,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
-            initialValue: NumberFormatting.formatNumber(formState.amount.value),
-            label: l10n.amountLabel,
-            hintText: l10n.amountHint,
-            errorText: formState.isFormPure
-                ? null
-                : (formState.amountError ?? formState.overdraftError),
-            prefixIcon: const Icon(Icons.attach_money),
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-            ],
-            onChanged: (value) => _handleAmountChange(ref, value, currency),
           ),
         ),
-        _buildCurrencyBadge(context, currency),
+      ),
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
       ],
-    );
-  }
-
-  Widget _buildCurrencyBadge(BuildContext context, String currency) {
-    return Container(
-      width: 64,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        borderRadius: const BorderRadius.only(
-          topRight: Radius.circular(12),
-          bottomRight: Radius.circular(12),
-        ),
-      ),
-      child: Center(
-        child: Text(
-          currency.isEmpty ? 'USD' : currency,
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-        ),
-      ),
+      selectAllOnFocus: true,
+      onChanged: (value) => _handleAmountChange(ref, value, currency),
     );
   }
 

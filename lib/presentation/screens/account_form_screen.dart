@@ -87,117 +87,73 @@ class AccountFormScreen extends ConsumerWidget {
                         .currencyChanged(value),
                   ),
                   const SizedBox(height: 16),
-                  IntrinsicHeight(
-                    child: IntrinsicHeight(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          GestureDetector(
-                            onTap: formState.balance.value != 0
-                                ? () {
-                                    final newValue = -formState.balance.value;
-                                    ref
-                                        .read(
-                                          accountFormProvider(
-                                            accountId,
-                                          ).notifier,
-                                        )
-                                        .balanceChanged(newValue);
-                                  }
-                                : null,
-                            child: Container(
-                              height: double.infinity,
-                              width: 48,
-                              decoration: BoxDecoration(
+                  // Sign-toggle and currency both live inside the field's
+                  // own InputDecoration (prefixIcon/suffixIcon) rather than
+                  // as separate sibling boxes - keeps them in the exact
+                  // same bordered box Flutter lays out and colors for
+                  // focus/error states, the same fix applied to the
+                  // transaction amount field's currency indicator.
+                  CustomFormField(
+                    initialValue: NumberFormatting.formatNumber(
+                      formState.balance.value.abs(),
+                    ),
+                    label: localizations.amountLabel,
+                    hintText: localizations.amountHint,
+                    prefixIcon: IconButton(
+                      icon: Icon(
+                        formState.balance.value > 0
+                            ? Icons.add
+                            : Icons.remove,
+                      ),
+                      onPressed: formState.balance.value != 0
+                          ? () {
+                              final newValue = -formState.balance.value;
+                              ref
+                                  .read(accountFormProvider(accountId).notifier)
+                                  .balanceChanged(newValue);
+                            }
+                          : null,
+                    ),
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: Center(
+                        widthFactor: 1,
+                        child: Text(
+                          formState.currency.value.isEmpty
+                              ? 'USD'
+                              : formState.currency.value,
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.w600,
                                 color: Theme.of(
                                   context,
-                                ).colorScheme.surfaceContainerHighest,
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(12),
-                                  bottomLeft: Radius.circular(12),
-                                ),
+                                ).colorScheme.onSurfaceVariant,
                               ),
-                              child: Icon(
-                                formState.balance.value > 0
-                                    ? Icons.add
-                                    : Icons.remove,
-                                size: 20,
-                                color: formState.balance.value == 0
-                                    ? Theme.of(
-                                        context,
-                                      ).colorScheme.onSurface.withAlpha(100)
-                                    : null,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: CustomFormField(
-                              borderRadius: BorderRadius.circular(0),
-                              initialValue: NumberFormatting.formatNumber(
-                                formState.balance.value.abs(),
-                              ),
-                              label: localizations.amountLabel,
-                              hintText: localizations.amountHint,
-                              prefixIcon: const Icon(
-                                Icons.attach_money_outlined,
-                              ),
-                              keyboardType:
-                                  const TextInputType.numberWithOptions(
-                                    signed: true,
-                                    decimal: true,
-                                  ),
-                              inputFormatters: [CurrencyInputFormatter()],
-                              onChanged: (value) {
-                                final parsedValue =
-                                    NumberFormatting.parseUserInput(
-                                      value,
-                                      formState.currency.value.isEmpty
-                                          ? 'USD'
-                                          : formState.currency.value,
-                                      removeNegative: false,
-                                    );
-                                if (parsedValue != null || value.isEmpty) {
-                                  ref
-                                      .read(
-                                        accountFormProvider(accountId).notifier,
-                                      )
-                                      .balanceChanged(
-                                        parsedValue ?? formState.balance.value,
-                                      );
-                                }
-                              },
-                            ),
-                          ),
-                          // Toggle Sign Button - Updates TEXT display
-                          // Currency Container
-                          Container(
-                            width: 64,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 16,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.surfaceContainerHighest,
-                              borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(12),
-                                bottomRight: Radius.circular(12),
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                formState.currency.value.isEmpty
-                                    ? 'USD'
-                                    : formState.currency.value,
-                                style: Theme.of(context).textTheme.titleMedium
-                                    ?.copyWith(fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      signed: true,
+                      decimal: true,
+                    ),
+                    inputFormatters: [CurrencyInputFormatter()],
+                    selectAllOnFocus: true,
+                    onChanged: (value) {
+                      final parsedValue = NumberFormatting.parseUserInput(
+                        value,
+                        formState.currency.value.isEmpty
+                            ? 'USD'
+                            : formState.currency.value,
+                        removeNegative: false,
+                      );
+                      if (parsedValue != null || value.isEmpty) {
+                        ref
+                            .read(accountFormProvider(accountId).notifier)
+                            .balanceChanged(
+                              parsedValue ?? formState.balance.value,
+                            );
+                      }
+                    },
                   ),
 
                   const SizedBox(height: 24),

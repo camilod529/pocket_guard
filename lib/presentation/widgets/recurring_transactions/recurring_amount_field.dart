@@ -44,6 +44,7 @@ class RecurringAmountField extends StatelessWidget {
           prefixIcon: const Icon(Icons.attach_money),
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           inputFormatters: [CurrencyInputFormatter()],
+          selectAllOnFocus: true,
           onChanged: (value) {
             final parsed = NumberFormatting.parseUserInput(value, currency);
             if (parsed != null || value.isEmpty) {

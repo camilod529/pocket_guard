@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CustomFormField extends ConsumerWidget {
+class CustomFormField extends StatefulWidget {
   final String label;
   final String? hintText;
   final String? helperText;
@@ -23,6 +22,16 @@ class CustomFormField extends ConsumerWidget {
   final bool readOnly;
   final BorderRadius borderRadius;
   final VoidCallback? onTap;
+
+  /// When true, tapping into the field selects its entire current value so
+  /// the first keystroke replaces it instead of appending to it. Meant for
+  /// money fields, which are pre-filled with a formatted value (e.g.
+  /// "0.00", or the real amount on edit) - appending past an already-full
+  /// value (2 decimal digits) gets silently rejected by currency input
+  /// formatters, which otherwise makes typing look inert until the user
+  /// manually deletes characters first.
+  final bool selectAllOnFocus;
+
   const CustomFormField({
     super.key,
     required this.label,
@@ -45,67 +54,77 @@ class CustomFormField extends ConsumerWidget {
     this.minLines,
     this.onTap,
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
+    this.selectAllOnFocus = false,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  State<CustomFormField> createState() => _CustomFormFieldState();
+}
+
+class _CustomFormFieldState extends State<CustomFormField> {
+  TextEditingController? _controller;
+  FocusNode? _focusNode;
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
 
-    // Determine error state
-
     return TextFormField(
-      initialValue: initialValue,
+      initialValue: widget.selectAllOnFocus ? null : widget.initialValue,
       onChanged: (value) {
-        onChanged?.call(value);
+        widget.onChanged?.call(value);
       },
-      onTap: onTap,
-      controller: controller,
-      readOnly: readOnly,
-      inputFormatters: inputFormatters,
-      validator: validator,
-      keyboardType: keyboardType,
-      textCapitalization: textCapitalization,
-      autocorrect: autocorrect,
-      enableSuggestions: enableSuggestions,
-      maxLines: maxLines,
-      minLines: minLines ?? maxLines,
+      onTap: widget.onTap,
+      controller: widget.selectAllOnFocus ? _controller : widget.controller,
+      focusNode: widget.selectAllOnFocus ? _focusNode : null,
+      readOnly: widget.readOnly,
+      inputFormatters: widget.inputFormatters,
+      validator: widget.validator,
+      keyboardType: widget.keyboardType,
+      textCapitalization: widget.textCapitalization,
+      autocorrect: widget.autocorrect,
+      enableSuggestions: widget.enableSuggestions,
+      maxLines: widget.maxLines,
+      minLines: widget.minLines ?? widget.maxLines,
       decoration: InputDecoration(
-        labelText: label,
-        hintText: hintText,
-        helperText: helperText,
-        prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon,
-        errorText: errorText,
+        labelText: widget.label,
+        hintText: widget.hintText,
+        helperText: widget.helperText,
+        prefixIcon: widget.prefixIcon,
+        suffixIcon: widget.suffixIcon,
+        errorText: widget.errorText,
         errorStyle: TextStyle(
           color: colors.error,
           fontSize: 12,
           fontWeight: FontWeight.w500,
         ),
         labelStyle: TextStyle(
-          color: errorText != null ? colors.error : colors.onSurfaceVariant,
+          color: widget.errorText != null
+              ? colors.error
+              : colors.onSurfaceVariant,
         ),
         hintStyle: TextStyle(color: colors.onSurfaceVariant.withAlpha(150)),
         filled: true,
         fillColor: colors.surfaceContainerHighest.withAlpha(77),
         border: OutlineInputBorder(
-          borderRadius: borderRadius,
+          borderRadius: widget.borderRadius,
           borderSide: BorderSide(color: colors.outline.withAlpha(128)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: borderRadius,
+          borderRadius: widget.borderRadius,
           borderSide: BorderSide(color: colors.outline.withAlpha(128)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: borderRadius,
+          borderRadius: widget.borderRadius,
           borderSide: BorderSide(color: colors.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: borderRadius,
+          borderRadius: widget.borderRadius,
           borderSide: BorderSide(color: colors.error, width: 2),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: borderRadius,
+          borderRadius: widget.borderRadius,
           borderSide: BorderSide(color: colors.error, width: 2),
         ),
         contentPadding: const EdgeInsets.symmetric(
@@ -114,5 +133,32 @@ class CustomFormField extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _focusNode?.dispose();
+    if (widget.controller == null) {
+      _controller?.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.selectAllOnFocus) {
+      _controller =
+          widget.controller ?? TextEditingController(text: widget.initialValue);
+      _focusNode = FocusNode()
+        ..addListener(() {
+          if (_focusNode!.hasFocus) {
+            _controller!.selection = TextSelection(
+              baseOffset: 0,
+              extentOffset: _controller!.text.length,
+            );
+          }
+        });
+    }
   }
 }
