@@ -47,7 +47,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountTypeLabel => 'Account Type';
 
   @override
+  String get activeLabel => 'Active';
+
+  @override
   String get addAccount => 'Add Account';
+
+  @override
+  String get addRecurringTransaction => 'Add Recurring Transaction';
 
   @override
   String get allAccounts => 'All Accounts';
@@ -139,6 +145,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createCategory => 'Create Category';
 
   @override
+  String get createRecurringTransactionButton => 'Create Recurring Transaction';
+
+  @override
   String get createTransaction => 'Create Transaction';
 
   @override
@@ -167,11 +176,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String deleteAccountConfirmation(String accountName) {
-    return 'Are you sure you want to delete the account \"$accountName\"? This will also delete all associated transactions.';
+    return 'Are you sure you want to delete the account \"$accountName\"? This will also delete all associated transactions and recurring transactions.';
   }
 
   @override
   String get deleteAccountSuccess => 'Account deleted successfully';
+
+  @override
+  String get deleteAccountTitle => 'Delete Account';
 
   @override
   String get deleteAction => 'Delete';
@@ -183,6 +195,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteCategoryTitle => 'Delete Category';
+
+  @override
+  String deleteConfirmationQuestion(String entity) {
+    return 'Are you sure you want to delete \"$entity\"?';
+  }
+
+  @override
+  String get deleteRecurringTransactionDescription => 'This action cannot be undone. Transactions already generated from this rule will not be affected.';
+
+  @override
+  String get deleteRecurringTransactionTitle => 'Delete Recurring Transaction';
 
   @override
   String get deleteTransactionDescription => 'This action cannot be undone.';
@@ -203,7 +226,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editCategory => 'Edit Category';
 
   @override
+  String get editRecurringTransactionTitle => 'Edit Recurring Transaction';
+
+  @override
   String get editTransactionTitle => 'Edit Transaction';
+
+  @override
+  String get endDateLabel => 'End Date';
 
   @override
   String get english => 'English';
@@ -316,6 +345,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get frenchNative => 'Français';
 
   @override
+  String get frequencyDaily => 'Daily';
+
+  @override
+  String get frequencyLabel => 'Frequency';
+
+  @override
+  String get frequencyMonthly => 'Monthly';
+
+  @override
+  String get frequencyWeekly => 'Weekly';
+
+  @override
+  String get frequencyYearly => 'Yearly';
+
+  @override
   String get fromAccountLabel => 'From Account';
 
   @override
@@ -340,13 +384,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lime => 'Lime';
 
   @override
+  String get manageRecurringTransactions => 'Manage subscriptions and recurring bills';
+
+  @override
   String get monthlyInsights => 'Monthly Insights';
 
   @override
   String get more => 'More';
 
   @override
+  String get newRecurringTransactionTitle => 'New Recurring Transaction';
+
+  @override
   String get newTransactionTitle => 'New Transaction';
+
+  @override
+  String get nextOccurrenceLabel => 'Next';
 
   @override
   String get noAccountInfo => 'No account info';
@@ -358,7 +411,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noDescription => 'No description';
 
   @override
+  String get noEndDateLabel => 'No end date';
+
+  @override
   String get noExpensesFound => 'No expenses found';
+
+  @override
+  String get noRecurringTransactionsMessage => 'No recurring transactions yet';
 
   @override
   String noTransactionsOnDate(String date) {
@@ -372,54 +431,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get purple => 'Purple';
 
   @override
-  String get activeLabel => 'Active';
-
-  @override
-  String get addRecurringTransaction => 'Add Recurring Transaction';
-
-  @override
-  String get createRecurringTransactionButton => 'Create Recurring Transaction';
-
-  @override
-  String get deleteRecurringTransactionTitle => 'Delete Recurring Transaction';
-
-  @override
-  String get editRecurringTransactionTitle => 'Edit Recurring Transaction';
-
-  @override
-  String get endDateLabel => 'End Date';
-
-  @override
-  String get frequencyLabel => 'Frequency';
-
-  @override
-  String get frequencyDaily => 'Daily';
-
-  @override
-  String get frequencyMonthly => 'Monthly';
-
-  @override
-  String get frequencyWeekly => 'Weekly';
-
-  @override
-  String get frequencyYearly => 'Yearly';
-
-  @override
-  String get manageRecurringTransactions => 'Manage subscriptions and recurring bills';
-
-  @override
-  String get newRecurringTransactionTitle => 'New Recurring Transaction';
-
-  @override
-  String get nextOccurrenceLabel => 'Next';
-
-  @override
-  String get noEndDateLabel => 'No end date';
-
-  @override
-  String get noRecurringTransactionsMessage => 'No recurring transactions yet';
-
-  @override
   String get recurringTransactionDeletedSuccess => 'Recurring transaction deleted successfully';
 
   @override
@@ -430,12 +441,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recurringTransactions => 'Recurring Transactions';
-
-  @override
-  String get startDateLabel => 'Start Date';
-
-  @override
-  String get updateRecurringTransactionButton => 'Update Recurring Transaction';
 
   @override
   String get sameTransferAccountError => 'From and To accounts must be different';
@@ -471,6 +476,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get spanishNative => 'Español';
 
   @override
+  String get startDateLabel => 'Start Date';
+
+  @override
   String get system => 'System';
 
   @override
@@ -480,7 +488,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get theme => 'Theme';
 
   @override
+  String get thisAccount => 'this account';
+
+  @override
   String get thisCategory => 'this category';
+
+  @override
+  String get thisRecurringTransaction => 'this recurring transaction';
 
   @override
   String get thisTransaction => 'this transaction';
@@ -521,6 +535,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get transactionUpdatedSuccess => 'Transaction updated successfully!';
 
   @override
+  String transferSummary(String amount, String fromAccount, String toAccount) {
+    return 'This will move $amount from $fromAccount to $toAccount.';
+  }
+
+  @override
   String get transferType => 'Transfer';
 
   @override
@@ -528,6 +547,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get update => 'Update';
+
+  @override
+  String get updateRecurringTransactionButton => 'Update Recurring Transaction';
 
   @override
   String get updateTransactionButton => 'Update Transaction';

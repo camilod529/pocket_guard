@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pocket_guard/l10n/app_localizations.dart';
 
 class DeleteConfirmationModal extends StatelessWidget {
   final String title;
@@ -21,6 +22,26 @@ class DeleteConfirmationModal extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
+
+    // Split the localized question around the entity name (rather than
+    // hardcoding English word order/quote style - French uses « », not "")
+    // so the entity can still be bolded regardless of the translation.
+    final question = l10n.deleteConfirmationQuestion(entity);
+    final entityIndex = question.indexOf(entity);
+    final questionSpans = entityIndex == -1
+        ? [TextSpan(text: question)]
+        : [
+            TextSpan(text: question.substring(0, entityIndex)),
+            TextSpan(
+              text: entity,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: colors.onSurface,
+              ),
+            ),
+            TextSpan(text: question.substring(entityIndex + entity.length)),
+          ];
 
     return AlertDialog(
       icon: Icon(Icons.warning_rounded, color: colors.error, size: 48),
@@ -38,17 +59,7 @@ class DeleteConfirmationModal extends StatelessWidget {
               style: textTheme.bodyMedium?.copyWith(
                 color: colors.onSurfaceVariant,
               ),
-              children: [
-                const TextSpan(text: 'Are you sure you want to delete '),
-                TextSpan(
-                  text: '"$entity"',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: colors.onSurface,
-                  ),
-                ),
-                const TextSpan(text: '?'),
-              ],
+              children: questionSpans,
             ),
           ),
           if (description != null) ...[
@@ -69,7 +80,7 @@ class DeleteConfirmationModal extends StatelessWidget {
             context.pop(false);
             onCancel?.call();
           },
-          child: const Text('Cancel'),
+          child: Text(l10n.cancel),
         ),
         FilledButton(
           onPressed: () {
@@ -80,7 +91,7 @@ class DeleteConfirmationModal extends StatelessWidget {
             backgroundColor: colors.error,
             foregroundColor: colors.onError,
           ),
-          child: const Text('Delete'),
+          child: Text(l10n.deleteAction),
         ),
       ],
     );

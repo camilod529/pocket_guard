@@ -209,7 +209,10 @@ class RecurringTransactionView extends ConsumerWidget {
     await DeleteConfirmationModal.show(
       context: context,
       title: l10n.deleteRecurringTransactionTitle,
-      entity: rule.description,
+      entity: rule.description.isEmpty
+          ? l10n.thisRecurringTransaction
+          : rule.description,
+      description: l10n.deleteRecurringTransactionDescription,
       onConfirm: () async {
         try {
           await ref

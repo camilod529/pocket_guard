@@ -128,8 +128,14 @@ class AccountView extends ConsumerWidget {
       subtitle: Text(account.currency),
       trailing: PopupMenuButton<DropdownActionType>(
         icon: const Icon(Icons.more_vert),
-        onSelected: (value) =>
-            _onAccountAction(context, value, account.id, ref, localizations),
+        onSelected: (value) => _onAccountAction(
+          context,
+          value,
+          account.id,
+          account.name,
+          ref,
+          localizations,
+        ),
         itemBuilder: (context) => [
           PopupMenuItem(
             value: DropdownActionType.edit,
@@ -258,6 +264,7 @@ class AccountView extends ConsumerWidget {
     BuildContext context,
     DropdownActionType action,
     String accountId,
+    String accountName,
     WidgetRef ref,
     AppLocalizations localizations,
   ) {
@@ -267,7 +274,13 @@ class AccountView extends ConsumerWidget {
         context.push(Routes.accountFormPage(accountId));
         break;
       case DropdownActionType.delete:
-        _showDeleteConfirmation(context, accountId, ref, localizations);
+        _showDeleteConfirmation(
+          context,
+          accountId,
+          accountName,
+          ref,
+          localizations,
+        );
         break;
     }
   }
@@ -275,13 +288,18 @@ class AccountView extends ConsumerWidget {
   Future<void> _showDeleteConfirmation(
     BuildContext context,
     String accountId,
+    String accountName,
     WidgetRef ref,
     AppLocalizations localizations,
   ) async {
+    final entity = accountName.isEmpty
+        ? localizations.thisAccount
+        : accountName;
     await DeleteConfirmationModal.show(
       context: context,
-      title: localizations.deleteAccount,
-      entity: localizations.accountName,
+      title: localizations.deleteAccountTitle,
+      entity: entity,
+      description: localizations.deleteAccountConfirmation(entity),
       onConfirm: () async {
         try {
           await ref.read(accountsProvider.notifier).deleteAccount(accountId);

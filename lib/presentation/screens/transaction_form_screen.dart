@@ -1038,7 +1038,11 @@ class _TransferFormState extends ConsumerState<_TransferForm> {
                 SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    "This will move ${formState.amount.value} from $fromAccountName to $toAccountName.",
+                    l10n.transferSummary(
+                      NumberFormatting.formatNumber(formState.amount.value),
+                      fromAccountName,
+                      toAccountName,
+                    ),
                     style: TextStyle(fontSize: 13),
                   ),
                 ),

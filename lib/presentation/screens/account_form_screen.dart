@@ -285,11 +285,13 @@ class AccountFormScreen extends ConsumerWidget {
   ) async {
     await DeleteConfirmationModal.show(
       context: context,
-      title: l10n.deleteTransactionTitle,
+      title: l10n.deleteAccountTitle,
       entity: formState.name.value.isEmpty
-          ? l10n.thisTransaction
+          ? l10n.thisAccount
           : formState.name.value,
-      description: l10n.deleteTransactionDescription,
+      description: l10n.deleteAccountConfirmation(
+        formState.name.value.isEmpty ? l10n.thisAccount : formState.name.value,
+      ),
       onConfirm: () async {
         try {
           await onSubmit();

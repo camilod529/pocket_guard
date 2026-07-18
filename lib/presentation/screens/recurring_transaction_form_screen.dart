@@ -325,9 +325,9 @@ class RecurringTransactionFormScreen extends ConsumerWidget {
       context: context,
       title: l10n.deleteRecurringTransactionTitle,
       entity: formState.name.value.isEmpty
-          ? l10n.thisTransaction
+          ? l10n.thisRecurringTransaction
           : formState.name.value,
-      description: l10n.deleteTransactionDescription,
+      description: l10n.deleteRecurringTransactionDescription,
       onConfirm: () async {
         try {
           await ref

@@ -169,11 +169,23 @@ abstract class AppLocalizations {
   /// **'Account Type'**
   String get accountTypeLabel;
 
+  /// Label/switch for whether a recurring transaction rule is active
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get activeLabel;
+
   /// Add new account button
   ///
   /// In en, this message translates to:
   /// **'Add Account'**
   String get addAccount;
+
+  /// Tooltip for the button that creates a new recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Add Recurring Transaction'**
+  String get addRecurringTransaction;
 
   /// Option to show data from all accounts
   ///
@@ -349,6 +361,12 @@ abstract class AppLocalizations {
   /// **'Create Category'**
   String get createCategory;
 
+  /// Button to create a new recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Create Recurring Transaction'**
+  String get createRecurringTransactionButton;
+
   /// Button to create a new transaction
   ///
   /// In en, this message translates to:
@@ -403,10 +421,10 @@ abstract class AppLocalizations {
   /// **'Delete Account'**
   String get deleteAccount;
 
-  /// Delete account confirmation message with account name
+  /// Delete account confirmation message with account name, warning about cascading deletes
   ///
   /// In en, this message translates to:
-  /// **'Are you sure you want to delete the account \"{accountName}\"? This will also delete all associated transactions.'**
+  /// **'Are you sure you want to delete the account \"{accountName}\"? This will also delete all associated transactions and recurring transactions.'**
   String deleteAccountConfirmation(String accountName);
 
   /// Success message after account deletion
@@ -414,6 +432,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Account deleted successfully'**
   String get deleteAccountSuccess;
+
+  /// Title for delete account confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccountTitle;
 
   /// Delete button tooltip
   ///
@@ -432,6 +456,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete Category'**
   String get deleteCategoryTitle;
+
+  /// Generic delete confirmation question shown in the shared delete dialog, used for accounts/categories/transactions/recurring transactions
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete \"{entity}\"?'**
+  String deleteConfirmationQuestion(String entity);
+
+  /// Delete confirmation description for a recurring transaction rule
+  ///
+  /// In en, this message translates to:
+  /// **'This action cannot be undone. Transactions already generated from this rule will not be affected.'**
+  String get deleteRecurringTransactionDescription;
+
+  /// Delete confirmation dialog title for a recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Recurring Transaction'**
+  String get deleteRecurringTransactionTitle;
 
   /// Delete confirmation description
   ///
@@ -469,11 +511,23 @@ abstract class AppLocalizations {
   /// **'Edit Category'**
   String get editCategory;
 
+  /// AppBar title for editing an existing recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Recurring Transaction'**
+  String get editRecurringTransactionTitle;
+
   /// AppBar title for editing existing transaction
   ///
   /// In en, this message translates to:
   /// **'Edit Transaction'**
   String get editTransactionTitle;
+
+  /// Label for a recurring transaction's optional end date
+  ///
+  /// In en, this message translates to:
+  /// **'End Date'**
+  String get endDateLabel;
 
   /// Language name for English
   ///
@@ -655,6 +709,36 @@ abstract class AppLocalizations {
   /// **'Français'**
   String get frenchNative;
 
+  /// Recurrence frequency: daily
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get frequencyDaily;
+
+  /// Label for the recurrence frequency selector
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency'**
+  String get frequencyLabel;
+
+  /// Recurrence frequency: monthly
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get frequencyMonthly;
+
+  /// Recurrence frequency: weekly
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get frequencyWeekly;
+
+  /// Recurrence frequency: yearly
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get frequencyYearly;
+
   /// Label for 'from' account in transfer transaction form
   ///
   /// In en, this message translates to:
@@ -703,6 +787,12 @@ abstract class AppLocalizations {
   /// **'Lime'**
   String get lime;
 
+  /// Subtitle for the Recurring Transactions entry on the More screen
+  ///
+  /// In en, this message translates to:
+  /// **'Manage subscriptions and recurring bills'**
+  String get manageRecurringTransactions;
+
   /// Title for the monthly insights screen
   ///
   /// In en, this message translates to:
@@ -715,11 +805,23 @@ abstract class AppLocalizations {
   /// **'More'**
   String get more;
 
+  /// AppBar title for creating a new recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'New Recurring Transaction'**
+  String get newRecurringTransactionTitle;
+
   /// AppBar title for creating new transaction
   ///
   /// In en, this message translates to:
   /// **'New Transaction'**
   String get newTransactionTitle;
+
+  /// Prefix label before a recurring transaction's next due date
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get nextOccurrenceLabel;
 
   /// Shown when a transaction has no account associated
   ///
@@ -739,11 +841,23 @@ abstract class AppLocalizations {
   /// **'No description'**
   String get noDescription;
 
+  /// Label/toggle indicating a recurring transaction has no end date
+  ///
+  /// In en, this message translates to:
+  /// **'No end date'**
+  String get noEndDateLabel;
+
   /// Message when there are no expenses to display
   ///
   /// In en, this message translates to:
   /// **'No expenses found'**
   String get noExpensesFound;
+
+  /// Empty state message on the Recurring Transactions list screen
+  ///
+  /// In en, this message translates to:
+  /// **'No recurring transactions yet'**
+  String get noRecurringTransactionsMessage;
 
   /// Message when there are no transactions on the selected day
   ///
@@ -762,102 +876,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Purple'**
   String get purple;
-
-  /// Label/switch for whether a recurring transaction rule is active
-  ///
-  /// In en, this message translates to:
-  /// **'Active'**
-  String get activeLabel;
-
-  /// Tooltip for the button that creates a new recurring transaction
-  ///
-  /// In en, this message translates to:
-  /// **'Add Recurring Transaction'**
-  String get addRecurringTransaction;
-
-  /// Button to create a new recurring transaction
-  ///
-  /// In en, this message translates to:
-  /// **'Create Recurring Transaction'**
-  String get createRecurringTransactionButton;
-
-  /// Delete confirmation dialog title for a recurring transaction
-  ///
-  /// In en, this message translates to:
-  /// **'Delete Recurring Transaction'**
-  String get deleteRecurringTransactionTitle;
-
-  /// AppBar title for editing an existing recurring transaction
-  ///
-  /// In en, this message translates to:
-  /// **'Edit Recurring Transaction'**
-  String get editRecurringTransactionTitle;
-
-  /// Label for a recurring transaction's optional end date
-  ///
-  /// In en, this message translates to:
-  /// **'End Date'**
-  String get endDateLabel;
-
-  /// Label for the recurrence frequency selector
-  ///
-  /// In en, this message translates to:
-  /// **'Frequency'**
-  String get frequencyLabel;
-
-  /// Recurrence frequency: daily
-  ///
-  /// In en, this message translates to:
-  /// **'Daily'**
-  String get frequencyDaily;
-
-  /// Recurrence frequency: monthly
-  ///
-  /// In en, this message translates to:
-  /// **'Monthly'**
-  String get frequencyMonthly;
-
-  /// Recurrence frequency: weekly
-  ///
-  /// In en, this message translates to:
-  /// **'Weekly'**
-  String get frequencyWeekly;
-
-  /// Recurrence frequency: yearly
-  ///
-  /// In en, this message translates to:
-  /// **'Yearly'**
-  String get frequencyYearly;
-
-  /// Subtitle for the Recurring Transactions entry on the More screen
-  ///
-  /// In en, this message translates to:
-  /// **'Manage subscriptions and recurring bills'**
-  String get manageRecurringTransactions;
-
-  /// AppBar title for creating a new recurring transaction
-  ///
-  /// In en, this message translates to:
-  /// **'New Recurring Transaction'**
-  String get newRecurringTransactionTitle;
-
-  /// Prefix label before a recurring transaction's next due date
-  ///
-  /// In en, this message translates to:
-  /// **'Next'**
-  String get nextOccurrenceLabel;
-
-  /// Label/toggle indicating a recurring transaction has no end date
-  ///
-  /// In en, this message translates to:
-  /// **'No end date'**
-  String get noEndDateLabel;
-
-  /// Empty state message on the Recurring Transactions list screen
-  ///
-  /// In en, this message translates to:
-  /// **'No recurring transactions yet'**
-  String get noRecurringTransactionsMessage;
 
   /// Success message after deleting a recurring transaction
   ///
@@ -882,18 +900,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recurring Transactions'**
   String get recurringTransactions;
-
-  /// Label for a recurring transaction's start date
-  ///
-  /// In en, this message translates to:
-  /// **'Start Date'**
-  String get startDateLabel;
-
-  /// Button to update an existing recurring transaction
-  ///
-  /// In en, this message translates to:
-  /// **'Update Recurring Transaction'**
-  String get updateRecurringTransactionButton;
 
   /// Validation error when a transfer's from and to accounts are the same
   ///
@@ -961,6 +967,12 @@ abstract class AppLocalizations {
   /// **'Español'**
   String get spanishNative;
 
+  /// Label for a recurring transaction's start date
+  ///
+  /// In en, this message translates to:
+  /// **'Start Date'**
+  String get startDateLabel;
+
   /// Label indicating that a category is a system category
   ///
   /// In en, this message translates to:
@@ -982,8 +994,20 @@ abstract class AppLocalizations {
   /// Fallback entity name for delete confirmation
   ///
   /// In en, this message translates to:
+  /// **'this account'**
+  String get thisAccount;
+
+  /// Fallback entity name for delete confirmation
+  ///
+  /// In en, this message translates to:
   /// **'this category'**
   String get thisCategory;
+
+  /// Fallback entity name for delete confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'this recurring transaction'**
+  String get thisRecurringTransaction;
 
   /// Fallback entity name for delete confirmation
   ///
@@ -1057,6 +1081,12 @@ abstract class AppLocalizations {
   /// **'Transaction updated successfully!'**
   String get transactionUpdatedSuccess;
 
+  /// Info banner summarizing a transfer before it's saved
+  ///
+  /// In en, this message translates to:
+  /// **'This will move {amount} from {fromAccount} to {toAccount}.'**
+  String transferSummary(String amount, String fromAccount, String toAccount);
+
   /// Transfer transaction type
   ///
   /// In en, this message translates to:
@@ -1074,6 +1104,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update'**
   String get update;
+
+  /// Button to update an existing recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Update Recurring Transaction'**
+  String get updateRecurringTransactionButton;
 
   /// Button to update existing transaction
   ///

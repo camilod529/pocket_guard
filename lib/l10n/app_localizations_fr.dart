@@ -47,7 +47,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get accountTypeLabel => 'Type de compte';
 
   @override
+  String get activeLabel => 'Actif';
+
+  @override
   String get addAccount => 'Ajouter un compte';
+
+  @override
+  String get addRecurringTransaction => 'Ajouter une Transaction Récurrente';
 
   @override
   String get allAccounts => 'Tous les Comptes';
@@ -139,6 +145,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get createCategory => 'Créer une catégorie';
 
   @override
+  String get createRecurringTransactionButton => 'Créer une Transaction Récurrente';
+
+  @override
   String get createTransaction => 'Créer une transaction';
 
   @override
@@ -167,11 +176,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String deleteAccountConfirmation(String accountName) {
-    return 'Êtes-vous sûr de vouloir supprimer le compte « $accountName » ? Cette action est irréversible.';
+    return 'Êtes-vous sûr de vouloir supprimer le compte « $accountName » ? Cela supprimera également toutes les transactions et transactions récurrentes associées.';
   }
 
   @override
   String get deleteAccountSuccess => 'Compte supprimé avec succès';
+
+  @override
+  String get deleteAccountTitle => 'Supprimer le Compte';
 
   @override
   String get deleteAction => 'Supprimer';
@@ -183,6 +195,17 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get deleteCategoryTitle => 'Supprimer la catégorie';
+
+  @override
+  String deleteConfirmationQuestion(String entity) {
+    return 'Êtes-vous sûr de vouloir supprimer « $entity » ?';
+  }
+
+  @override
+  String get deleteRecurringTransactionDescription => 'Cette action est irréversible. Les transactions déjà générées par cette règle ne seront pas affectées.';
+
+  @override
+  String get deleteRecurringTransactionTitle => 'Supprimer la Transaction Récurrente';
 
   @override
   String get deleteTransactionDescription => 'Cette action est irréversible.';
@@ -203,7 +226,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get editCategory => 'Modifier la catégorie';
 
   @override
+  String get editRecurringTransactionTitle => 'Modifier la Transaction Récurrente';
+
+  @override
   String get editTransactionTitle => 'Modifier la transaction';
+
+  @override
+  String get endDateLabel => 'Date de Fin';
 
   @override
   String get english => 'Anglais';
@@ -316,6 +345,21 @@ class AppLocalizationsFr extends AppLocalizations {
   String get frenchNative => 'Français';
 
   @override
+  String get frequencyDaily => 'Quotidien';
+
+  @override
+  String get frequencyLabel => 'Fréquence';
+
+  @override
+  String get frequencyMonthly => 'Mensuel';
+
+  @override
+  String get frequencyWeekly => 'Hebdomadaire';
+
+  @override
+  String get frequencyYearly => 'Annuel';
+
+  @override
   String get fromAccountLabel => 'Compte source';
 
   @override
@@ -340,13 +384,22 @@ class AppLocalizationsFr extends AppLocalizations {
   String get lime => 'Citron vert';
 
   @override
+  String get manageRecurringTransactions => 'Gérer les abonnements et paiements récurrents';
+
+  @override
   String get monthlyInsights => 'Aperçus Mensuels';
 
   @override
   String get more => 'Plus';
 
   @override
+  String get newRecurringTransactionTitle => 'Nouvelle Transaction Récurrente';
+
+  @override
   String get newTransactionTitle => 'Nouvelle transaction';
+
+  @override
+  String get nextOccurrenceLabel => 'Prochaine';
 
   @override
   String get noAccountInfo => 'Aucune information de compte';
@@ -358,7 +411,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noDescription => 'Aucune description';
 
   @override
+  String get noEndDateLabel => 'Pas de date de fin';
+
+  @override
   String get noExpensesFound => 'Aucune dépense trouvée';
+
+  @override
+  String get noRecurringTransactionsMessage => 'Aucune transaction récurrente pour le moment';
 
   @override
   String noTransactionsOnDate(String date) {
@@ -372,54 +431,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get purple => 'Violet';
 
   @override
-  String get activeLabel => 'Actif';
-
-  @override
-  String get addRecurringTransaction => 'Ajouter une Transaction Récurrente';
-
-  @override
-  String get createRecurringTransactionButton => 'Créer une Transaction Récurrente';
-
-  @override
-  String get deleteRecurringTransactionTitle => 'Supprimer la Transaction Récurrente';
-
-  @override
-  String get editRecurringTransactionTitle => 'Modifier la Transaction Récurrente';
-
-  @override
-  String get endDateLabel => 'Date de Fin';
-
-  @override
-  String get frequencyLabel => 'Fréquence';
-
-  @override
-  String get frequencyDaily => 'Quotidien';
-
-  @override
-  String get frequencyMonthly => 'Mensuel';
-
-  @override
-  String get frequencyWeekly => 'Hebdomadaire';
-
-  @override
-  String get frequencyYearly => 'Annuel';
-
-  @override
-  String get manageRecurringTransactions => 'Gérer les abonnements et paiements récurrents';
-
-  @override
-  String get newRecurringTransactionTitle => 'Nouvelle Transaction Récurrente';
-
-  @override
-  String get nextOccurrenceLabel => 'Prochaine';
-
-  @override
-  String get noEndDateLabel => 'Pas de date de fin';
-
-  @override
-  String get noRecurringTransactionsMessage => 'Aucune transaction récurrente pour le moment';
-
-  @override
   String get recurringTransactionDeletedSuccess => 'Transaction récurrente supprimée avec succès';
 
   @override
@@ -430,12 +441,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get recurringTransactions => 'Transactions Récurrentes';
-
-  @override
-  String get startDateLabel => 'Date de Début';
-
-  @override
-  String get updateRecurringTransactionButton => 'Mettre à Jour la Transaction Récurrente';
 
   @override
   String get sameTransferAccountError => 'Les comptes source et destination doivent être différents';
@@ -471,6 +476,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get spanishNative => 'Español';
 
   @override
+  String get startDateLabel => 'Date de Début';
+
+  @override
   String get system => 'Système';
 
   @override
@@ -480,7 +488,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get theme => 'Thème';
 
   @override
+  String get thisAccount => 'ce compte';
+
+  @override
   String get thisCategory => 'cette catégorie';
+
+  @override
+  String get thisRecurringTransaction => 'cette transaction récurrente';
 
   @override
   String get thisTransaction => 'cette transaction';
@@ -521,6 +535,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get transactionUpdatedSuccess => 'Transaction mise à jour avec succès !';
 
   @override
+  String transferSummary(String amount, String fromAccount, String toAccount) {
+    return 'Ceci déplacera $amount de $fromAccount vers $toAccount.';
+  }
+
+  @override
   String get transferType => 'Virement';
 
   @override
@@ -528,6 +547,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get update => 'Mettre à jour';
+
+  @override
+  String get updateRecurringTransactionButton => 'Mettre à Jour la Transaction Récurrente';
 
   @override
   String get updateTransactionButton => 'Mettre à jour la transaction';
