@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_guard/domain/entities/category.dart';
 import 'package:pocket_guard/l10n/app_localizations.dart';
-import 'package:pocket_guard/presentation/widgets/shared/forms/common_drop_down.dart';
 
-/// Shared category dropdown used by both the transaction and recurring
+/// Shared category selector used by both the transaction and recurring
 /// transaction forms - unified from two near-identical private
 /// implementations. Both used to reach into their own feature's provider
 /// directly inside onChanged; this takes a callback instead so the widget
 /// itself has no dependency on either provider.
+///
+/// Keyed by category id (String) rather than CategoryEntity itself, for
+/// the same reason as AccountSelectorField: CategoryEntity doesn't
+/// override `==`/hashCode, which DropdownMenu relies on for selection
+/// matching across rebuilds.
 class CategorySelectorField extends StatelessWidget {
   final AsyncValue<List<CategoryEntity>> categoriesAsync;
   final AppLocalizations l10n;
@@ -32,72 +36,46 @@ class CategorySelectorField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return categoriesAsync.when(
-      data: (categories) => _buildCategoryDropdown(context, categories),
+      data: (categories) => _buildDropdown(context, categories),
       loading: () => _buildLoadingState(),
       error: (error, stack) => _buildErrorState(error),
     );
   }
 
-  Widget _buildCategoryDropdown(
-    BuildContext context,
-    List<CategoryEntity> categories,
-  ) {
+  Widget _buildDropdown(BuildContext context, List<CategoryEntity> categories) {
     final filteredCategories = categories
         .where((cat) => cat.type == type)
         .toList();
-    final validCategoryId =
-        filteredCategories.any((cat) => cat.id == categoryId)
-        ? categoryId
-        : null;
     final showError = categoryId == null && !isFormPure;
 
-    return IntrinsicHeight(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            l10n.categoryLabel,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            height: 72,
-            child: DropdownButtonFormField<String>(
-              key: ValueKey(filteredCategories.map((c) => c.id).join(',')),
-              initialValue: validCategoryId,
-              decoration: DropdownDecorationHelper.getDecoration(
-                hintText: l10n.selectCategoryHint,
-                prefixIcon: Icon(prefixIcon),
-              ),
-              isExpanded: true,
-              items: filteredCategories
-                  .map(
-                    (category) => DropdownMenuItem(
-                      value: category.id,
-                      child: Text(category.label),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (value) {
-                if (value != null) {
-                  onChanged(value);
-                }
-              },
-            ),
-          ),
-          if (showError)
-            Padding(
-              padding: const EdgeInsets.only(left: 12, top: 8),
-              child: Text(
-                l10n.selectCategoryError,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.error,
-                  fontSize: 12,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return DropdownMenu<String>(
+          width: constraints.maxWidth,
+          initialSelection: filteredCategories.any((c) => c.id == categoryId)
+              ? categoryId
+              : null,
+          label: Text(l10n.categoryLabel),
+          hintText: l10n.selectCategoryHint,
+          errorText: showError ? l10n.selectCategoryError : null,
+          leadingIcon: Icon(prefixIcon),
+          enableFilter: true,
+          requestFocusOnTap: true,
+          dropdownMenuEntries: filteredCategories
+              .map(
+                (category) => DropdownMenuEntry<String>(
+                  value: category.id,
+                  label: category.label,
                 ),
-              ),
-            ),
-        ],
-      ),
+              )
+              .toList(),
+          onSelected: (value) {
+            if (value != null) {
+              onChanged(value);
+            }
+          },
+        );
+      },
     );
   }
 

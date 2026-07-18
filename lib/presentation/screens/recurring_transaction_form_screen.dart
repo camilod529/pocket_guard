@@ -81,49 +81,57 @@ class RecurringTransactionFormScreen extends ConsumerWidget {
                   recurringTransactionId: recurringTransactionId,
                 ),
                 const SizedBox(height: 24),
-                Text(
-                  l10n.transactionTypeLabel,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                SegmentedButton<TransactionType>(
-                  showSelectedIcon: false,
-                  segments: [
-                    ButtonSegment(
-                      value: TransactionType.expense,
-                      label: Text(l10n.expenseType),
-                      icon: Icon(
-                        TransactionIcons.getIconByType(TransactionType.expense),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    return DropdownMenu<TransactionType>(
+                      width: constraints.maxWidth,
+                      initialSelection: formState.type,
+                      label: Text(l10n.transactionTypeLabel),
+                      selectOnly: true,
+                      leadingIcon: Icon(
+                        TransactionIcons.getIconByType(formState.type),
                       ),
-                    ),
-                    ButtonSegment(
-                      value: TransactionType.income,
-                      label: Text(l10n.incomeType),
-                      icon: Icon(
-                        TransactionIcons.getIconByType(TransactionType.income),
-                      ),
-                    ),
-                    ButtonSegment(
-                      value: TransactionType.transfer,
-                      label: Text(l10n.transferType),
-                      icon: Icon(
-                        TransactionIcons.getIconByType(
-                          TransactionType.transfer,
+                      dropdownMenuEntries: [
+                        DropdownMenuEntry(
+                          value: TransactionType.expense,
+                          label: l10n.expenseType,
+                          leadingIcon: Icon(
+                            TransactionIcons.getIconByType(
+                              TransactionType.expense,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
-                  selected: {formState.type},
-                  onSelectionChanged: (selection) => ref
-                      .read(
-                        recurringTransactionFormProvider(
-                          recurringTransactionId,
-                        ).notifier,
-                      )
-                      .typeChanged(selection.first),
+                        DropdownMenuEntry(
+                          value: TransactionType.income,
+                          label: l10n.incomeType,
+                          leadingIcon: Icon(
+                            TransactionIcons.getIconByType(
+                              TransactionType.income,
+                            ),
+                          ),
+                        ),
+                        DropdownMenuEntry(
+                          value: TransactionType.transfer,
+                          label: l10n.transferType,
+                          leadingIcon: Icon(
+                            TransactionIcons.getIconByType(
+                              TransactionType.transfer,
+                            ),
+                          ),
+                        ),
+                      ],
+                      onSelected: (type) {
+                        if (type == null) return;
+                        ref
+                            .read(
+                              recurringTransactionFormProvider(
+                                recurringTransactionId,
+                              ).notifier,
+                            )
+                            .typeChanged(type);
+                      },
+                    );
+                  },
                 ),
                 const SizedBox(height: 16),
                 if (formState.type == TransactionType.transfer)
@@ -171,42 +179,43 @@ class RecurringTransactionFormScreen extends ConsumerWidget {
                     ],
                   ),
                 const SizedBox(height: 24),
-                Text(
-                  l10n.frequencyLabel,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                SegmentedButton<RecurrenceFrequency>(
-                  showSelectedIcon: false,
-                  segments: [
-                    ButtonSegment(
-                      value: RecurrenceFrequency.daily,
-                      label: Text(l10n.frequencyDaily),
-                    ),
-                    ButtonSegment(
-                      value: RecurrenceFrequency.weekly,
-                      label: Text(l10n.frequencyWeekly),
-                    ),
-                    ButtonSegment(
-                      value: RecurrenceFrequency.monthly,
-                      label: Text(l10n.frequencyMonthly),
-                    ),
-                    ButtonSegment(
-                      value: RecurrenceFrequency.yearly,
-                      label: Text(l10n.frequencyYearly),
-                    ),
-                  ],
-                  selected: {formState.frequency},
-                  onSelectionChanged: (selection) => ref
-                      .read(
-                        recurringTransactionFormProvider(
-                          recurringTransactionId,
-                        ).notifier,
-                      )
-                      .frequencyChanged(selection.first),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    return DropdownMenu<RecurrenceFrequency>(
+                      width: constraints.maxWidth,
+                      initialSelection: formState.frequency,
+                      label: Text(l10n.frequencyLabel),
+                      selectOnly: true,
+                      dropdownMenuEntries: [
+                        DropdownMenuEntry(
+                          value: RecurrenceFrequency.daily,
+                          label: l10n.frequencyDaily,
+                        ),
+                        DropdownMenuEntry(
+                          value: RecurrenceFrequency.weekly,
+                          label: l10n.frequencyWeekly,
+                        ),
+                        DropdownMenuEntry(
+                          value: RecurrenceFrequency.monthly,
+                          label: l10n.frequencyMonthly,
+                        ),
+                        DropdownMenuEntry(
+                          value: RecurrenceFrequency.yearly,
+                          label: l10n.frequencyYearly,
+                        ),
+                      ],
+                      onSelected: (frequency) {
+                        if (frequency == null) return;
+                        ref
+                            .read(
+                              recurringTransactionFormProvider(
+                                recurringTransactionId,
+                              ).notifier,
+                            )
+                            .frequencyChanged(frequency);
+                      },
+                    );
+                  },
                 ),
                 const SizedBox(height: 24),
                 DateRow(

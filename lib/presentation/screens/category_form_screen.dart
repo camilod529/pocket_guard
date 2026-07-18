@@ -9,6 +9,7 @@ import 'package:pocket_guard/presentation/providers/category/category_form_provi
 import 'package:pocket_guard/presentation/widgets/shared/delete_confirmation_modal.dart';
 import 'package:pocket_guard/presentation/widgets/shared/forms/custom_form_field.dart';
 import 'package:pocket_guard/utils/constants/global_constants.dart';
+import 'package:pocket_guard/utils/shared/transaction_icons.dart';
 
 class CategoryFormScreen extends ConsumerWidget {
   final String categoryId;
@@ -82,24 +83,38 @@ class CategoryFormScreen extends ConsumerWidget {
                 .nameChanged(value),
           ),
           const SizedBox(height: 24),
-          SegmentedButton<TransactionType>(
-            segments: [
-              ButtonSegment(
-                value: TransactionType.income,
-                label: Text(localizations.income),
-              ),
-              ButtonSegment(
-                value: TransactionType.expense,
-                label: Text(localizations.expense),
-              ),
-            ],
-            selected: {state.type},
-            onSelectionChanged: (selection) {
-              if (selection.length == 1) {
-                ref
-                    .read(categoryFormProvider(categoryId).notifier)
-                    .typeChanged(selection.first);
-              }
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return DropdownMenu<TransactionType>(
+                width: constraints.maxWidth,
+                initialSelection: state.type,
+                label: Text(localizations.transactionTypeLabel),
+                selectOnly: true,
+                leadingIcon: Icon(TransactionIcons.getIconByType(state.type)),
+                dropdownMenuEntries: [
+                  DropdownMenuEntry(
+                    value: TransactionType.income,
+                    label: localizations.income,
+                    leadingIcon: Icon(
+                      TransactionIcons.getIconByType(TransactionType.income),
+                    ),
+                  ),
+                  DropdownMenuEntry(
+                    value: TransactionType.expense,
+                    label: localizations.expense,
+                    leadingIcon: Icon(
+                      TransactionIcons.getIconByType(TransactionType.expense),
+                    ),
+                  ),
+                ],
+                onSelected: (type) {
+                  if (type != null) {
+                    ref
+                        .read(categoryFormProvider(categoryId).notifier)
+                        .typeChanged(type);
+                  }
+                },
+              );
             },
           ),
           const Spacer(),

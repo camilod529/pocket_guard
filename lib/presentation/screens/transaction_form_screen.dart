@@ -199,22 +199,17 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen>
     TransactionFormState formState,
     AppLocalizations l10n,
   ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          l10n.transactionTypeLabel,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-        ),
-        const SizedBox(height: 12),
-        SegmentedButton<TransactionType>(
-          showSelectedIcon: false,
-          style: ButtonStyle(
-            textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 13)),
-          ),
-          segments: _buildTypeSegments(l10n),
-          selected: {formState.type},
-          onSelectionChanged: (Set<TransactionType> newSelection) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return DropdownMenu<TransactionType>(
+          width: constraints.maxWidth,
+          initialSelection: formState.type,
+          label: Text(l10n.transactionTypeLabel),
+          selectOnly: true,
+          leadingIcon: Icon(TransactionIcons.getIconByType(formState.type)),
+          dropdownMenuEntries: _buildTypeEntries(l10n),
+          onSelected: (type) {
+            if (type == null) return;
             ref
                 .read(
                   transactionFormProvider(
@@ -222,34 +217,38 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen>
                     selectedDate: selectedDate,
                   ).notifier,
                 )
-                .typeChanged(newSelection.first);
+                .typeChanged(type);
           },
-        ),
-      ],
+        );
+      },
     );
   }
 
-  ButtonSegment<TransactionType> _buildTypeSegment(
-    TransactionType type,
-    String label,
-  ) {
-    return ButtonSegment(
-      value: type,
-      label: SizedBox(
-        width: 70,
-        child: Text(label, overflow: TextOverflow.ellipsis, maxLines: 1),
-      ),
-      icon: Icon(TransactionIcons.getIconByType(type)),
-    );
-  }
-
-  List<ButtonSegment<TransactionType>> _buildTypeSegments(
+  List<DropdownMenuEntry<TransactionType>> _buildTypeEntries(
     AppLocalizations l10n,
   ) {
     return [
-      _buildTypeSegment(TransactionType.expense, l10n.expenseType),
-      _buildTypeSegment(TransactionType.income, l10n.incomeType),
-      _buildTypeSegment(TransactionType.transfer, l10n.transferType),
+      DropdownMenuEntry(
+        value: TransactionType.expense,
+        label: l10n.expenseType,
+        leadingIcon: Icon(
+          TransactionIcons.getIconByType(TransactionType.expense),
+        ),
+      ),
+      DropdownMenuEntry(
+        value: TransactionType.income,
+        label: l10n.incomeType,
+        leadingIcon: Icon(
+          TransactionIcons.getIconByType(TransactionType.income),
+        ),
+      ),
+      DropdownMenuEntry(
+        value: TransactionType.transfer,
+        label: l10n.transferType,
+        leadingIcon: Icon(
+          TransactionIcons.getIconByType(TransactionType.transfer),
+        ),
+      ),
     ];
   }
 

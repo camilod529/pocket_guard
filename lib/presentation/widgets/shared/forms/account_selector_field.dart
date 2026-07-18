@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_guard/domain/entities/account.dart';
 import 'package:pocket_guard/l10n/app_localizations.dart';
-import 'package:pocket_guard/presentation/widgets/shared/forms/common_drop_down.dart';
 
-/// Shared account dropdown used by both the transaction and recurring
+/// Shared account selector used by both the transaction and recurring
 /// transaction forms - unified from two near-identical private
 /// implementations that only differed in which concrete form state type
 /// they carried, even though both only ever read `isFormPure` off it.
+///
+/// Keyed by account id (String) rather than AccountEntity itself:
+/// DropdownMenu matches/highlights entries by `==` on its value type, and
+/// AccountEntity doesn't override `==`/hashCode (default identity
+/// equality), which would make selection matching fragile across rebuilds
+/// with freshly-fetched entity instances.
 class AccountSelectorField extends StatelessWidget {
   final AsyncValue<List<AccountEntity>> accountsAsync;
   final AppLocalizations l10n;
@@ -31,71 +36,46 @@ class AccountSelectorField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return accountsAsync.when(
-      data: (accounts) => _buildAccountDropdown(context, accounts),
+      data: (accounts) => _buildDropdown(context, accounts),
       loading: () => _buildLoadingState(),
       error: (error, stack) => _buildErrorState(error),
     );
   }
 
-  Widget _buildAccountDropdown(
-    BuildContext context,
-    List<AccountEntity> accounts,
-  ) {
-    final showError = accountId == null && !isFormPure;
-
+  Widget _buildDropdown(BuildContext context, List<AccountEntity> accounts) {
     final filteredAccounts = accounts.where((account) {
       return targetCurrency == null || account.currency == targetCurrency;
     }).toList();
+    final showError = accountId == null && !isFormPure;
 
-    return IntrinsicHeight(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            labelOverride ?? l10n.accountLabel(''),
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            height: 72,
-            child: DropdownButtonFormField<String>(
-              key: ValueKey(filteredAccounts.map((a) => a.id).join(',')),
-              initialValue: filteredAccounts.any((a) => a.id == accountId)
-                  ? accountId
-                  : null,
-              decoration: DropdownDecorationHelper.getDecoration(
-                hintText: l10n.selectAccountHint,
-                prefixIcon: const Icon(Icons.account_balance_wallet),
-              ),
-              isExpanded: true,
-              items: filteredAccounts
-                  .map(
-                    (account) => DropdownMenuItem(
-                      value: account.id,
-                      child: Text('${account.name} (${account.currency})'),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (value) {
-                if (value != null) {
-                  onChanged(value);
-                }
-              },
-            ),
-          ),
-          if (showError)
-            Padding(
-              padding: const EdgeInsets.only(left: 12, top: 8),
-              child: Text(
-                l10n.selectAccountError,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.error,
-                  fontSize: 12,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return DropdownMenu<String>(
+          width: constraints.maxWidth,
+          initialSelection: filteredAccounts.any((a) => a.id == accountId)
+              ? accountId
+              : null,
+          label: Text(labelOverride ?? l10n.accountLabel('')),
+          hintText: l10n.selectAccountHint,
+          errorText: showError ? l10n.selectAccountError : null,
+          leadingIcon: const Icon(Icons.account_balance_wallet),
+          enableFilter: true,
+          requestFocusOnTap: true,
+          dropdownMenuEntries: filteredAccounts
+              .map(
+                (account) => DropdownMenuEntry<String>(
+                  value: account.id,
+                  label: '${account.name} (${account.currency})',
                 ),
-              ),
-            ),
-        ],
-      ),
+              )
+              .toList(),
+          onSelected: (value) {
+            if (value != null) {
+              onChanged(value);
+            }
+          },
+        );
+      },
     );
   }
 

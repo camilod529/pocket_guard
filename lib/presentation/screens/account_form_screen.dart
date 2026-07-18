@@ -201,35 +201,37 @@ class AccountFormScreen extends ConsumerWidget {
                   ),
 
                   const SizedBox(height: 24),
-                  Text(
-                    localizations.accountTypeLabel,
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  const SizedBox(height: 8),
-                  SegmentedButton<AccountType>(
-                    segments: [
-                      ButtonSegment<AccountType>(
-                        value: AccountType.cash,
-                        label: Text(localizations.accountTypeCash),
-                        icon: const Icon(Icons.money),
-                      ),
-                      ButtonSegment<AccountType>(
-                        value: AccountType.asset,
-                        label: Text(localizations.accountTypeAsset),
-                        icon: const Icon(Icons.savings),
-                      ),
-                      ButtonSegment<AccountType>(
-                        value: AccountType.credit,
-                        label: Text(localizations.accountTypeCredit),
-                        icon: const Icon(Icons.credit_card),
-                      ),
-                    ],
-                    showSelectedIcon: false,
-                    selected: {formState.type},
-                    onSelectionChanged: (Set<AccountType> newSelection) {
-                      ref
-                          .read(accountFormProvider(accountId).notifier)
-                          .typeChanged(newSelection.first);
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      return DropdownMenu<AccountType>(
+                        width: constraints.maxWidth,
+                        initialSelection: formState.type,
+                        label: Text(localizations.accountTypeLabel),
+                        selectOnly: true,
+                        dropdownMenuEntries: [
+                          DropdownMenuEntry(
+                            value: AccountType.cash,
+                            label: localizations.accountTypeCash,
+                            leadingIcon: const Icon(Icons.money),
+                          ),
+                          DropdownMenuEntry(
+                            value: AccountType.asset,
+                            label: localizations.accountTypeAsset,
+                            leadingIcon: const Icon(Icons.savings),
+                          ),
+                          DropdownMenuEntry(
+                            value: AccountType.credit,
+                            label: localizations.accountTypeCredit,
+                            leadingIcon: const Icon(Icons.credit_card),
+                          ),
+                        ],
+                        onSelected: (type) {
+                          if (type == null) return;
+                          ref
+                              .read(accountFormProvider(accountId).notifier)
+                              .typeChanged(type);
+                        },
+                      );
                     },
                   ),
                   const Spacer(),

@@ -37,11 +37,61 @@ class AppTheme {
   ThemeData get lightTheme => _commonTheme(brightness: Brightness.light);
 
   ThemeData _commonTheme({Brightness brightness = Brightness.light}) {
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: appColors[selectedColorIndex],
+      brightness: brightness,
+    );
+
     return ThemeData(
-      colorSchemeSeed: appColors[selectedColorIndex],
+      colorScheme: colorScheme,
       useMaterial3: true,
       brightness: brightness,
       appBarTheme: const AppBarTheme(centerTitle: true),
+      dropdownMenuTheme: DropdownMenuThemeData(
+        inputDecorationTheme: _formFieldDecorationTheme(colorScheme),
+      ),
+    );
+  }
+
+  // Mirrors CustomFormField's per-instance InputDecoration recipe so every
+  // form field - text or dropdown - looks and themes identically. Needed
+  // because DropdownMenu resolves its decoration from
+  // DropdownMenuThemeData.inputDecorationTheme, not the standard
+  // ThemeData.inputDecorationTheme slot TextFormField uses.
+  InputDecorationThemeData _formFieldDecorationTheme(ColorScheme colors) {
+    final borderRadius = const BorderRadius.all(Radius.circular(12));
+
+    return InputDecorationThemeData(
+      filled: true,
+      fillColor: colors.surfaceContainerHighest.withAlpha(77),
+      border: OutlineInputBorder(
+        borderRadius: borderRadius,
+        borderSide: BorderSide(color: colors.outline.withAlpha(128)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: borderRadius,
+        borderSide: BorderSide(color: colors.outline.withAlpha(128)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: borderRadius,
+        borderSide: BorderSide(color: colors.primary, width: 2),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: borderRadius,
+        borderSide: BorderSide(color: colors.error, width: 2),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: borderRadius,
+        borderSide: BorderSide(color: colors.error, width: 2),
+      ),
+      labelStyle: TextStyle(color: colors.onSurfaceVariant),
+      hintStyle: TextStyle(color: colors.onSurfaceVariant.withAlpha(150)),
+      errorStyle: TextStyle(
+        color: colors.error,
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     );
   }
 
