@@ -763,6 +763,138 @@ abstract class AppLocalizations {
   /// **'Purple'**
   String get purple;
 
+  /// Label/switch for whether a recurring transaction rule is active
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get activeLabel;
+
+  /// Tooltip for the button that creates a new recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Add Recurring Transaction'**
+  String get addRecurringTransaction;
+
+  /// Button to create a new recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Create Recurring Transaction'**
+  String get createRecurringTransactionButton;
+
+  /// Delete confirmation dialog title for a recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Recurring Transaction'**
+  String get deleteRecurringTransactionTitle;
+
+  /// AppBar title for editing an existing recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Recurring Transaction'**
+  String get editRecurringTransactionTitle;
+
+  /// Label for a recurring transaction's optional end date
+  ///
+  /// In en, this message translates to:
+  /// **'End Date'**
+  String get endDateLabel;
+
+  /// Label for the recurrence frequency selector
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency'**
+  String get frequencyLabel;
+
+  /// Recurrence frequency: daily
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get frequencyDaily;
+
+  /// Recurrence frequency: monthly
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get frequencyMonthly;
+
+  /// Recurrence frequency: weekly
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get frequencyWeekly;
+
+  /// Recurrence frequency: yearly
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get frequencyYearly;
+
+  /// Subtitle for the Recurring Transactions entry on the More screen
+  ///
+  /// In en, this message translates to:
+  /// **'Manage subscriptions and recurring bills'**
+  String get manageRecurringTransactions;
+
+  /// AppBar title for creating a new recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'New Recurring Transaction'**
+  String get newRecurringTransactionTitle;
+
+  /// Prefix label before a recurring transaction's next due date
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get nextOccurrenceLabel;
+
+  /// Label/toggle indicating a recurring transaction has no end date
+  ///
+  /// In en, this message translates to:
+  /// **'No end date'**
+  String get noEndDateLabel;
+
+  /// Empty state message on the Recurring Transactions list screen
+  ///
+  /// In en, this message translates to:
+  /// **'No recurring transactions yet'**
+  String get noRecurringTransactionsMessage;
+
+  /// Success message after deleting a recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring transaction deleted successfully'**
+  String get recurringTransactionDeletedSuccess;
+
+  /// Hint text for the recurring transaction name field
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Netflix, Rent'**
+  String get recurringTransactionNameHint;
+
+  /// Label for the recurring transaction name field
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get recurringTransactionNameLabel;
+
+  /// Title for the Recurring Transactions list screen and its More-screen entry
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring Transactions'**
+  String get recurringTransactions;
+
+  /// Label for a recurring transaction's start date
+  ///
+  /// In en, this message translates to:
+  /// **'Start Date'**
+  String get startDateLabel;
+
+  /// Button to update an existing recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Update Recurring Transaction'**
+  String get updateRecurringTransactionButton;
+
   /// Validation error when a transfer's from and to accounts are the same
   ///
   /// In en, this message translates to:

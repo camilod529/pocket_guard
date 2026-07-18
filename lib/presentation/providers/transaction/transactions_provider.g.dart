@@ -131,7 +131,7 @@ final class TransactionsNotifierProvider
 }
 
 String _$transactionsNotifierHash() =>
-    r'0c1a7af5bf1caa780ecc27c1466781ea597b9627';
+    r'c43f8b501f63fb9598f30ef02c2aa1471ef40ecf';
 
 abstract class _$TransactionsNotifier
     extends $AsyncNotifier<List<TransactionEntity>> {

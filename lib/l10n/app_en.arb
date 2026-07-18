@@ -534,6 +534,94 @@
   "@purple": {
     "description": "Color option: Purple"
   },
+  "activeLabel": "Active",
+  "@activeLabel": {
+    "description": "Label/switch for whether a recurring transaction rule is active"
+  },
+  "addRecurringTransaction": "Add Recurring Transaction",
+  "@addRecurringTransaction": {
+    "description": "Tooltip for the button that creates a new recurring transaction"
+  },
+  "createRecurringTransactionButton": "Create Recurring Transaction",
+  "@createRecurringTransactionButton": {
+    "description": "Button to create a new recurring transaction"
+  },
+  "deleteRecurringTransactionTitle": "Delete Recurring Transaction",
+  "@deleteRecurringTransactionTitle": {
+    "description": "Delete confirmation dialog title for a recurring transaction"
+  },
+  "editRecurringTransactionTitle": "Edit Recurring Transaction",
+  "@editRecurringTransactionTitle": {
+    "description": "AppBar title for editing an existing recurring transaction"
+  },
+  "endDateLabel": "End Date",
+  "@endDateLabel": {
+    "description": "Label for a recurring transaction's optional end date"
+  },
+  "frequencyLabel": "Frequency",
+  "@frequencyLabel": {
+    "description": "Label for the recurrence frequency selector"
+  },
+  "frequencyDaily": "Daily",
+  "@frequencyDaily": {
+    "description": "Recurrence frequency: daily"
+  },
+  "frequencyMonthly": "Monthly",
+  "@frequencyMonthly": {
+    "description": "Recurrence frequency: monthly"
+  },
+  "frequencyWeekly": "Weekly",
+  "@frequencyWeekly": {
+    "description": "Recurrence frequency: weekly"
+  },
+  "frequencyYearly": "Yearly",
+  "@frequencyYearly": {
+    "description": "Recurrence frequency: yearly"
+  },
+  "manageRecurringTransactions": "Manage subscriptions and recurring bills",
+  "@manageRecurringTransactions": {
+    "description": "Subtitle for the Recurring Transactions entry on the More screen"
+  },
+  "newRecurringTransactionTitle": "New Recurring Transaction",
+  "@newRecurringTransactionTitle": {
+    "description": "AppBar title for creating a new recurring transaction"
+  },
+  "nextOccurrenceLabel": "Next",
+  "@nextOccurrenceLabel": {
+    "description": "Prefix label before a recurring transaction's next due date"
+  },
+  "noEndDateLabel": "No end date",
+  "@noEndDateLabel": {
+    "description": "Label/toggle indicating a recurring transaction has no end date"
+  },
+  "noRecurringTransactionsMessage": "No recurring transactions yet",
+  "@noRecurringTransactionsMessage": {
+    "description": "Empty state message on the Recurring Transactions list screen"
+  },
+  "recurringTransactionDeletedSuccess": "Recurring transaction deleted successfully",
+  "@recurringTransactionDeletedSuccess": {
+    "description": "Success message after deleting a recurring transaction"
+  },
+  "recurringTransactionNameHint": "e.g. Netflix, Rent",
+  "@recurringTransactionNameHint": {
+    "description": "Hint text for the recurring transaction name field"
+  },
+  "recurringTransactionNameLabel": "Name",
+  "@recurringTransactionNameLabel": {
+    "description": "Label for the recurring transaction name field"
+  },
+  "recurringTransactions": "Recurring Transactions",
+  "@recurringTransactions": {
+    "description": "Title for the Recurring Transactions list screen and its More-screen entry"
+  },
+  "startDateLabel": "Start Date",
+  "@startDateLabel": {
+    "description": "Label for a recurring transaction's start date"
+  },
+  "updateRecurringTransactionButton": "Update Recurring Transaction",
+  "@updateRecurringTransactionButton": {
+    "description": "Button to update an existing recurring transaction"
+  },
   "sameTransferAccountError": "From and To accounts must be different",
   "@sameTransferAccountError": {
     "description": "Validation error when a transfer's from and to accounts are the same"

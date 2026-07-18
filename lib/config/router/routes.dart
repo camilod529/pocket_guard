@@ -11,6 +11,9 @@ abstract class Routes {
   static const String accountForm = '/account/form/:id';
   static const String categoryForm = '/category/form/:id';
   static const String insights = '/insights';
+  static const String recurringTransactions = '/recurring-transactions';
+  static const String recurringTransactionForm =
+      '/recurring-transaction/form/:id';
 
   // Settings
   static const String themeSettings = '/settings/theme';
@@ -22,4 +25,6 @@ abstract class Routes {
       categoryForm.replaceAll(':id', id);
   static String transactionFormPage(String id) =>
       transactionForm.replaceAll(':id', id);
+  static String recurringTransactionFormPage(String id) =>
+      recurringTransactionForm.replaceAll(':id', id);
 }

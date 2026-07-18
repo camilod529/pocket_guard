@@ -21,14 +21,20 @@
 
 ---
 
-## Version 0.3.0: Insights & Refinement
+## Version 0.3.0: Insights & Refinement — complete
 
 Focus: Helping the user understand where their money goes.
 - [x] Visual Analytics:
     - [x] Pie charts for category spending.
     - [x] Line charts for "Net Worth" or "Balance over time."
 - [x] Search & Filters: Deep search for transactions by name, date range, or category.
-- [ ] Recurring Transactions: Allow users to set "Subscriptions" or monthly rent that auto-generates a transaction.
+- [x] Recurring Transactions: Allow users to set "Subscriptions" or monthly rent that auto-generates a transaction.
+    - New `RecurringTransactions` table (weekly/monthly/yearly frequency, optional end date, active/paused, supports transfers between accounts) with its own domain/data source/repository layer following the account feature's shape exactly, plus a full list + form screen under a new "Recurring Transactions" entry on the More screen.
+    - Generation is a catch-up model, not a scheduler: `RecurringTransactionScheduler` (pure date math, handles month-end clamping e.g. Jan 31 monthly → Feb 28/29, and backfills every missed occurrence up to a 24-per-run cap rather than silently skipping ahead) plus `RecurringTransactionCatchUpService` (shared core: given a "now", generates due transactions and advances each rule). Two triggers call the same service: a `keepAlive` Riverpod provider that runs once per app launch (guaranteed), and a new periodic `workmanager` background task (best-effort — Android's WorkManager is reasonably reliable, iOS's BGTaskScheduler is opportunistic and OS-controlled, so this is a supplement to the foreground trigger, not a replacement). This is the app's first background-execution infrastructure, laid down here so future notification work (e.g. "your rent was just charged") can hook into the same background task without re-architecting it.
+    - Bumped iOS deployment target 13.0 → 14.0 (`workmanager_apple` requires it); verified with real `flutter build ios --simulator` and `flutter build apk --debug` builds, not just `flutter analyze`, since native plugin code isn't caught by Dart analysis alone. No Android manifest changes were needed.
+    - iOS native wiring: `Info.plist` declares `UIBackgroundModes` (`fetch`, `processing`) and the task identifier under `BGTaskSchedulerPermittedIdentifiers`; `AppDelegate.swift` calls `WorkmanagerPlugin.registerPeriodicTask(withIdentifier:frequency:)` during `didFinishLaunchingWithOptions`, since BGTaskScheduler requires that registration to happen natively before the app finishes launching - the Dart-side `Workmanager().registerPeriodicTask()` call can't do it. Confirmed the built simulator app's `Info.plist` actually carries both keys post-build. All three identifiers (Info.plist, AppDelegate.swift, `recurringTransactionsTaskName`) are plain string literals that must be kept in sync by hand.
+    - Reused the transfer-CRUD fixes from earlier in this same version: the two account selectors have no mutual-exclusion filtering (just currency matching) with a "from ≠ to" validation error shown unconditionally, and `RecurringTransactionFormState.copyWith` uses the sentinel pattern for nullable fields from the start rather than repeating the `TransactionFormState.copyWith` bug.
+    - Tests: `recurring_transaction_scheduler_test.dart` (date math incl. month-end clamping, backfill cap, end-date deactivation), `recurring_transaction_catch_up_service_test.dart` (income/expense/transfer generation, idempotency, paused rules), `recurring_transaction_drift_data_source_impl_test.dart` (CRUD), `recurring_transaction_form_provider_integration_test.dart` (create/edit, same-account transfer rejection). No background-task test - OS scheduling isn't something `flutter test` can exercise; verified manually instead.
 - [x] Bug Fix (Priority): Full CRUD for transfers (the logic to revert old account balances and update new ones).
     - Balance revert/apply already used relative deltas, so it was correct for swapped/changed accounts; the actual gap was the UI blocking edits (`readonly` on the account fields) and a stale unverified TODO. Both fixed, with regression tests covering swap, amount-change, type-change, and delete-after-edit — see `test/infrastructure/data_sources/transaction_drift_data_source_impl_test.dart`.
     - Manual testing of the fix surfaced two more bugs, tracked below: the from/to dropdown deadlock, and a `copyWith` null-clearing bug (fixed same day).
@@ -77,8 +83,10 @@ To make the app stand out, consider these advanced Flutter-specific features:
 
 Not user-facing features, but worth tracking alongside the roadmap since v0.4.0+ keeps adding more balance-affecting logic (budgets, goals) on top of the same account/transaction core:
 
-- **No automated test suite.** As of v0.3.0 there's a single data-source test file (added for the transfer CRUD fix); everything else — account CRUD, category CRUD, form validation — is untested. Worth expanding coverage before v0.4.0's budget engine, since it reads the same transaction/category data.
+- **No automated test suite.** As of the end of v0.3.0 there are 9 test files (added for the transfer CRUD fix, its follow-up bugs, and Recurring Transactions), covering transaction/transfer/account/recurring-transaction balance logic and one screen; everything else — account CRUD, category CRUD, most other screens — is untested. Worth expanding coverage before v0.4.0's budget engine, since it reads the same transaction/category data.
 - **CI has no quality gate.** `.github/workflows/play_store_draft.yml` builds and uploads a Play Store draft on every push to `main` without running `flutter analyze` or `flutter test` first.
+- **Background execution (`workmanager`) has no automated coverage and can't get any** — OS-level scheduling isn't something `flutter test` can exercise. If notification work builds on this later, budget for manual on-device verification (Android: force-trigger via `adb shell cmd jobscheduler`; iOS: Xcode's simulate-background-fetch debug command) as part of that work too, not just this one.
+- **`Transactions.date` stores epoch milliseconds in a plain `IntColumn`, with manual `.millisecondsSinceEpoch`/`.fromMillisecondsSinceEpoch` conversion at every read/write site, instead of Drift's typed `dateTime()` column.** Noticed while designing Recurring Transactions' date columns (which use `dateTime()` directly, since Drift already supports it and it removes a unit/timezone-mixup bug class the manual approach is exposed to). Migrating `Transactions.date` to match would need a schema migration plus updating every existing read/write site — not urgent, but worth doing before the column count grows further.
 
 ---
 

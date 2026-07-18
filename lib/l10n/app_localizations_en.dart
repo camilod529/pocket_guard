@@ -372,6 +372,72 @@ class AppLocalizationsEn extends AppLocalizations {
   String get purple => 'Purple';
 
   @override
+  String get activeLabel => 'Active';
+
+  @override
+  String get addRecurringTransaction => 'Add Recurring Transaction';
+
+  @override
+  String get createRecurringTransactionButton => 'Create Recurring Transaction';
+
+  @override
+  String get deleteRecurringTransactionTitle => 'Delete Recurring Transaction';
+
+  @override
+  String get editRecurringTransactionTitle => 'Edit Recurring Transaction';
+
+  @override
+  String get endDateLabel => 'End Date';
+
+  @override
+  String get frequencyLabel => 'Frequency';
+
+  @override
+  String get frequencyDaily => 'Daily';
+
+  @override
+  String get frequencyMonthly => 'Monthly';
+
+  @override
+  String get frequencyWeekly => 'Weekly';
+
+  @override
+  String get frequencyYearly => 'Yearly';
+
+  @override
+  String get manageRecurringTransactions => 'Manage subscriptions and recurring bills';
+
+  @override
+  String get newRecurringTransactionTitle => 'New Recurring Transaction';
+
+  @override
+  String get nextOccurrenceLabel => 'Next';
+
+  @override
+  String get noEndDateLabel => 'No end date';
+
+  @override
+  String get noRecurringTransactionsMessage => 'No recurring transactions yet';
+
+  @override
+  String get recurringTransactionDeletedSuccess => 'Recurring transaction deleted successfully';
+
+  @override
+  String get recurringTransactionNameHint => 'e.g. Netflix, Rent';
+
+  @override
+  String get recurringTransactionNameLabel => 'Name';
+
+  @override
+  String get recurringTransactions => 'Recurring Transactions';
+
+  @override
+  String get startDateLabel => 'Start Date';
+
+  @override
+  String get updateRecurringTransactionButton => 'Update Recurring Transaction';
+
+  @override
   String get sameTransferAccountError => 'From and To accounts must be different';
 
   @override

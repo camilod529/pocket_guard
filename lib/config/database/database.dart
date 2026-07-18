@@ -3,6 +3,7 @@ import 'package:drift_flutter/drift_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pocket_guard/domain/entities/account.dart';
 import 'package:pocket_guard/domain/entities/category.dart';
+import 'package:pocket_guard/domain/entities/recurring_transaction.dart';
 import 'package:uuid/uuid.dart';
 
 part 'database.g.dart';
@@ -29,7 +30,9 @@ class Accounts extends Table {
   )(); // Default to cash
 }
 
-@DriftDatabase(tables: [Accounts, Categories, Transactions])
+@DriftDatabase(
+  tables: [Accounts, Categories, Transactions, RecurringTransactions],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
@@ -53,6 +56,9 @@ class AppDatabase extends _$AppDatabase {
           await m.addColumn(accounts, accounts.sortOrder);
           await m.addColumn(accounts, accounts.type);
         }
+        if (from < 5) {
+          await m.createTable(recurringTransactions);
+        }
       },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
@@ -63,7 +69,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 5;
 
   Future<double> getAccountBalance(String accountId) {
     return (select(accounts)..where((tbl) => tbl.id.equals(accountId)))
@@ -189,4 +195,34 @@ class Transactions extends Table {
     #id,
     onDelete: KeyAction.cascade,
   )();
+}
+
+@TableIndex(
+  name: 'recurring_transactions_index',
+  columns: {#isActive, #nextDueDate},
+)
+class RecurringTransactions extends Table {
+  TextColumn get id =>
+      text().clientDefault(() => _uuid.v4())(); // UUID v4 as text
+  TextColumn get accountId =>
+      text().references(Accounts, #id, onDelete: KeyAction.cascade)();
+  TextColumn get toAccountId => text().nullable().references(
+    Accounts,
+    #id,
+    onDelete: KeyAction.cascade,
+  )(); // set only for transfer rules
+  TextColumn get categoryId => text().references(Categories, #id)();
+  RealColumn get amount => real()();
+  TextColumn get description => text()();
+  IntColumn get frequency => intEnum<RecurrenceFrequency>().withDefault(
+    const Constant(1),
+  )(); // Default to monthly
+  DateTimeColumn get startDate => dateTime()();
+  DateTimeColumn get nextDueDate => dateTime()();
+  DateTimeColumn get lastGeneratedDate => dateTime().nullable()();
+  DateTimeColumn get endDate => dateTime().nullable()();
+  BoolColumn get isActive => boolean().withDefault(const Constant(true))();
+
+  @override
+  Set<Column> get primaryKey => {id};
 }
