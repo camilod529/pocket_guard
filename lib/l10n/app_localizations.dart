@@ -11,6 +11,25 @@ import 'app_localizations_fr.dart';
 
 // ignore_for_file: type=lint
 
+AppLocalizations lookupAppLocalizations(Locale locale) {
+  // Lookup logic when only language code is specified.
+  switch (locale.languageCode) {
+    case 'en':
+      return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
+    case 'fr':
+      return AppLocalizationsFr();
+  }
+
+  throw FlutterError(
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
+}
+
 /// Callers can lookup localized strings with an instance of AppLocalizations
 /// returned by `AppLocalizations.of(context)`.
 ///
@@ -63,15 +82,8 @@ import 'app_localizations_fr.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
-
-  final String localeName;
-
-  static AppLocalizations? of(BuildContext context) {
-    return Localizations.of<AppLocalizations>(context, AppLocalizations);
-  }
-
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -83,19 +95,25 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('es'),
-    Locale('fr')
+    Locale('fr'),
   ];
+
+  final String localeName;
+
+  AppLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   /// Label for account currency input
   ///
@@ -103,23 +121,17 @@ abstract class AppLocalizations {
   /// **'Currency'**
   String get accountCurrency;
 
-  /// Hint text for account currency in`put
+  /// Hint text for account currency input
   ///
   /// In en, this message translates to:
   /// **'USD, EUR, GBP'**
   String get accountCurrencyHint;
 
-  /// Success message after account deletion
+  /// Label for account filter selector
   ///
   /// In en, this message translates to:
-  /// **'Account deleted successfully'**
-  String get accountDeletedSuccessfully;
-
-  /// Label for account name in transaction list item
-  ///
-  /// In en, this message translates to:
-  /// **'Account: {name}'**
-  String accountLabel(String name);
+  /// **'Account'**
+  String get accountFilterLabel;
 
   /// Label for account name input
   ///
@@ -163,11 +175,23 @@ abstract class AppLocalizations {
   /// **'Account Type'**
   String get accountTypeLabel;
 
-  /// Add new account button
+  /// Label/switch for whether a recurring transaction rule is active
   ///
   /// In en, this message translates to:
-  /// **'Add Account'**
-  String get addAccount;
+  /// **'Active'**
+  String get activeLabel;
+
+  /// Tooltip for the button that creates a new recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Add Recurring Transaction'**
+  String get addRecurringTransaction;
+
+  /// Option to show data from all accounts
+  ///
+  /// In en, this message translates to:
+  /// **'All Accounts'**
+  String get allAccounts;
 
   /// Amount field hint text
   ///
@@ -181,11 +205,17 @@ abstract class AppLocalizations {
   /// **'Amount'**
   String get amountLabel;
 
-  /// The title of the application
+  /// Button to apply selected filters
   ///
   /// In en, this message translates to:
-  /// **'Money Manager'**
-  String get appTitle;
+  /// **'Apply Filters'**
+  String get applyFilters;
+
+  /// Title for the balance trend line chart
+  ///
+  /// In en, this message translates to:
+  /// **'Balance Trend'**
+  String get balanceTrend;
 
   /// Color option: Blue
   ///
@@ -199,12 +229,6 @@ abstract class AppLocalizations {
   /// **'Calendar'**
   String get calendar;
 
-  /// Tooltip for jumping back to the current day/month
-  ///
-  /// In en, this message translates to:
-  /// **'Go to today'**
-  String get calendarGoToToday;
-
   /// Tooltip for going to next month in the calendar
   ///
   /// In en, this message translates to:
@@ -216,6 +240,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Previous month'**
   String get calendarPreviousMonth;
+
+  /// Tooltip for jumping back to the current day/month
+  ///
+  /// In en, this message translates to:
+  /// **'Go to today'**
+  String get calendarToday;
 
   /// Cancel action/button
   ///
@@ -271,12 +301,6 @@ abstract class AppLocalizations {
   /// **'Category deleted successfully'**
   String get categoryDeletedSuccessfully;
 
-  /// Error message after failed category deletion
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to delete category: {error}'**
-  String categoryDeleteError(String error);
-
   /// Category selector label
   ///
   /// In en, this message translates to:
@@ -294,6 +318,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose your app color'**
   String get chooseYourAppColor;
+
+  /// Button to clear all filters
+  ///
+  /// In en, this message translates to:
+  /// **'Clear All'**
+  String get clearAll;
 
   /// Create action/button
   ///
@@ -313,6 +343,12 @@ abstract class AppLocalizations {
   /// **'Create Category'**
   String get createCategory;
 
+  /// Button to create a new recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Create Recurring Transaction'**
+  String get createRecurringTransactionButton;
+
   /// Button to create a new transaction
   ///
   /// In en, this message translates to:
@@ -324,6 +360,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create Transaction'**
   String get createTransactionButton;
+
+  /// Label for currency selector
+  ///
+  /// In en, this message translates to:
+  /// **'Currency'**
+  String get currencyLabel;
 
   /// Label indicating that a category is a custom category
   ///
@@ -355,23 +397,17 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get delete;
 
-  /// Delete account button
-  ///
-  /// In en, this message translates to:
-  /// **'Delete Account'**
-  String get deleteAccount;
-
-  /// Delete account confirmation message with account name
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to delete the account \"{accountName}\"? This will also delete all associated transactions.'**
-  String deleteAccountConfirmation(String accountName);
-
   /// Success message after account deletion
   ///
   /// In en, this message translates to:
   /// **'Account deleted successfully'**
   String get deleteAccountSuccess;
+
+  /// Title for delete account confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccountTitle;
 
   /// Delete button tooltip
   ///
@@ -379,17 +415,23 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get deleteAction;
 
-  /// Delete category confirmation message with category name
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to delete the category \"{categoryName}\"? This will also delete all associated transactions.'**
-  String deleteCategoryConfirmation(String categoryName);
-
   /// Title for delete category confirmation dialog
   ///
   /// In en, this message translates to:
   /// **'Delete Category'**
   String get deleteCategoryTitle;
+
+  /// Delete confirmation description for a recurring transaction rule
+  ///
+  /// In en, this message translates to:
+  /// **'This action cannot be undone. Transactions already generated from this rule will not be affected.'**
+  String get deleteRecurringTransactionDescription;
+
+  /// Delete confirmation dialog title for a recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Recurring Transaction'**
+  String get deleteRecurringTransactionTitle;
 
   /// Delete confirmation description
   ///
@@ -427,11 +469,23 @@ abstract class AppLocalizations {
   /// **'Edit Category'**
   String get editCategory;
 
+  /// AppBar title for editing an existing recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Recurring Transaction'**
+  String get editRecurringTransactionTitle;
+
   /// AppBar title for editing existing transaction
   ///
   /// In en, this message translates to:
   /// **'Edit Transaction'**
   String get editTransactionTitle;
+
+  /// Label for a recurring transaction's optional end date
+  ///
+  /// In en, this message translates to:
+  /// **'End Date'**
+  String get endDateLabel;
 
   /// Language name for English
   ///
@@ -445,71 +499,11 @@ abstract class AppLocalizations {
   /// **'English'**
   String get englishNative;
 
-  /// Generic data not found error
-  ///
-  /// In en, this message translates to:
-  /// **'The requested data was not found.'**
-  String get error_data_not_found;
-
-  /// Data not found error with the entity name
-  ///
-  /// In en, this message translates to:
-  /// **'The requested {entity} was not found.'**
-  String error_data_not_found_entity(String entity);
-
-  /// Shown when the database is closed or not available
-  ///
-  /// In en, this message translates to:
-  /// **'Database connection is not available. Please restart the app.'**
-  String get error_db_closed;
-
-  /// Generic database constraint violation message
-  ///
-  /// In en, this message translates to:
-  /// **'A database constraint was violated. This might be a duplicate entry or invalid reference.'**
-  String get error_db_constraint_violation;
-
   /// Generic database operation failure message
   ///
   /// In en, this message translates to:
   /// **'Database operation failed. Please try again.'**
   String get error_db_operation_failed;
-
-  /// Database operation failure message with the operation name
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to {operation}. Please try again.'**
-  String error_db_operation_failed_operation(String operation);
-
-  /// Foreign key violation without specifying the table
-  ///
-  /// In en, this message translates to:
-  /// **'Cannot complete operation because it references data that no longer exists.'**
-  String get error_foreign_key_violation;
-
-  /// Foreign key violation specifying the referenced table
-  ///
-  /// In en, this message translates to:
-  /// **'Cannot complete operation because it references a {table} that no longer exists.'**
-  String error_foreign_key_violation_table(String table);
-
-  /// Device storage is full
-  ///
-  /// In en, this message translates to:
-  /// **'Device storage is full. Please free up space and try again.'**
-  String get error_storage_full;
-
-  /// Unique constraint violation without specifying the field
-  ///
-  /// In en, this message translates to:
-  /// **'This record already exists.'**
-  String get error_unique_constraint_violation;
-
-  /// Unique constraint violation for a specific field
-  ///
-  /// In en, this message translates to:
-  /// **'A record with this {field} already exists.'**
-  String error_unique_constraint_violation_field(String field);
 
   /// Unknown or unexpected data-related error
   ///
@@ -535,41 +529,17 @@ abstract class AppLocalizations {
   /// **'Category name is too short'**
   String get errorCategoryNameTooShort;
 
-  /// Error shown when accounts fail to load
-  ///
-  /// In en, this message translates to:
-  /// **'Error loading accounts: {error}'**
-  String errorLoadingAccounts(String error);
-
-  /// Error shown when the calendar data fails to load
-  ///
-  /// In en, this message translates to:
-  /// **'Error loading calendar: {error}'**
-  String errorLoadingCalendar(String error);
-
-  /// Error shown when categories fail to load
-  ///
-  /// In en, this message translates to:
-  /// **'Error loading categories: {error}'**
-  String errorLoadingCategories(String error);
-
-  /// Error loading transaction data
-  ///
-  /// In en, this message translates to:
-  /// **'Error loading transaction: {error}'**
-  String errorLoadingTransaction(String error);
-
-  /// Error shown when transactions for the list fail to load
-  ///
-  /// In en, this message translates to:
-  /// **'Error loading transactions: {error}'**
-  String errorLoadingTransactions(String error);
-
   /// Expense transaction type
   ///
   /// In en, this message translates to:
   /// **'Expense'**
   String get expense;
+
+  /// Title for the expenses by category pie chart section
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses by Category'**
+  String get expensesByCategory;
 
   /// Expense transaction type
   ///
@@ -577,11 +547,11 @@ abstract class AppLocalizations {
   /// **'Expense'**
   String get expenseType;
 
-  /// Tooltip for FAB that creates a new transaction from the calendar view
+  /// Title for the transaction filter dialog
   ///
   /// In en, this message translates to:
-  /// **'Add transaction'**
-  String get fabAddTransactionTooltip;
+  /// **'Filter Transactions'**
+  String get filterTitle;
 
   /// Language name for French
   ///
@@ -595,6 +565,36 @@ abstract class AppLocalizations {
   /// **'Français'**
   String get frenchNative;
 
+  /// Recurrence frequency: daily
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get frequencyDaily;
+
+  /// Label for the recurrence frequency selector
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency'**
+  String get frequencyLabel;
+
+  /// Recurrence frequency: monthly
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get frequencyMonthly;
+
+  /// Recurrence frequency: weekly
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get frequencyWeekly;
+
+  /// Recurrence frequency: yearly
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get frequencyYearly;
+
   /// Label for 'from' account in transfer transaction form
   ///
   /// In en, this message translates to:
@@ -606,12 +606,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Go Back'**
   String get goBackAction;
-
-  /// A simple greeting message
-  ///
-  /// In en, this message translates to:
-  /// **'Hello World!'**
-  String get helloWorld;
 
   /// Income transaction type
   ///
@@ -643,11 +637,29 @@ abstract class AppLocalizations {
   /// **'Lime'**
   String get lime;
 
+  /// Subtitle for the Recurring Transactions entry on the More screen
+  ///
+  /// In en, this message translates to:
+  /// **'Manage subscriptions and recurring bills'**
+  String get manageRecurringTransactions;
+
+  /// Title for the monthly insights screen
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Insights'**
+  String get monthlyInsights;
+
   /// Label for the more options view
   ///
   /// In en, this message translates to:
   /// **'More'**
   String get more;
+
+  /// AppBar title for creating a new recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'New Recurring Transaction'**
+  String get newRecurringTransactionTitle;
 
   /// AppBar title for creating new transaction
   ///
@@ -655,11 +667,23 @@ abstract class AppLocalizations {
   /// **'New Transaction'**
   String get newTransactionTitle;
 
+  /// Prefix label before a recurring transaction's next due date
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get nextOccurrenceLabel;
+
   /// Shown when a transaction has no account associated
   ///
   /// In en, this message translates to:
   /// **'No account info'**
   String get noAccountInfo;
+
+  /// Message when there is no transaction data for the selected period
+  ///
+  /// In en, this message translates to:
+  /// **'No data for this period'**
+  String get noDataForPeriod;
 
   /// Shown when a transaction has no description
   ///
@@ -667,11 +691,23 @@ abstract class AppLocalizations {
   /// **'No description'**
   String get noDescription;
 
-  /// Message when there are no transactions on the selected day
+  /// Label/toggle indicating a recurring transaction has no end date
   ///
   /// In en, this message translates to:
-  /// **'No transactions on {date}'**
-  String noTransactionsOnDate(String date);
+  /// **'No end date'**
+  String get noEndDateLabel;
+
+  /// Message when there are no expenses to display
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses found'**
+  String get noExpensesFound;
+
+  /// Empty state message on the Recurring Transactions list screen
+  ///
+  /// In en, this message translates to:
+  /// **'No recurring transactions yet'**
+  String get noRecurringTransactionsMessage;
 
   /// Label for the primary color selection in theme settings
   ///
@@ -684,6 +720,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Purple'**
   String get purple;
+
+  /// Success message after deleting a recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring transaction deleted successfully'**
+  String get recurringTransactionDeletedSuccess;
+
+  /// Hint text for the recurring transaction name field
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Netflix, Rent'**
+  String get recurringTransactionNameHint;
+
+  /// Label for the recurring transaction name field
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get recurringTransactionNameLabel;
+
+  /// Title for the Recurring Transactions list screen and its More-screen entry
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring Transactions'**
+  String get recurringTransactions;
+
+  /// Validation error when a transfer's from and to accounts are the same
+  ///
+  /// In en, this message translates to:
+  /// **'From and To accounts must be different'**
+  String get sameTransferAccountError;
 
   /// Account validation error
   ///
@@ -745,6 +811,12 @@ abstract class AppLocalizations {
   /// **'Español'**
   String get spanishNative;
 
+  /// Label for a recurring transaction's start date
+  ///
+  /// In en, this message translates to:
+  /// **'Start Date'**
+  String get startDateLabel;
+
   /// Label indicating that a category is a system category
   ///
   /// In en, this message translates to:
@@ -766,8 +838,20 @@ abstract class AppLocalizations {
   /// Fallback entity name for delete confirmation
   ///
   /// In en, this message translates to:
+  /// **'this account'**
+  String get thisAccount;
+
+  /// Fallback entity name for delete confirmation
+  ///
+  /// In en, this message translates to:
   /// **'this category'**
   String get thisCategory;
+
+  /// Fallback entity name for delete confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'this recurring transaction'**
+  String get thisRecurringTransaction;
 
   /// Fallback entity name for delete confirmation
   ///
@@ -787,6 +871,18 @@ abstract class AppLocalizations {
   /// **'To Account'**
   String get toAccountLabel;
 
+  /// Label for total expense stat card
+  ///
+  /// In en, this message translates to:
+  /// **'Total Expense'**
+  String get totalExpense;
+
+  /// Label for total income stat card
+  ///
+  /// In en, this message translates to:
+  /// **'Total Income'**
+  String get totalIncome;
+
   /// Success message after creation
   ///
   /// In en, this message translates to:
@@ -798,12 +894,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Transaction deleted successfully'**
   String get transactionDeletedSuccess;
-
-  /// Error message after failed deletion
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to delete transaction: {error}'**
-  String transactionDeleteError(String error);
 
   /// Generic save error message
   ///
@@ -846,6 +936,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update'**
   String get update;
+
+  /// Button to update an existing recurring transaction
+  ///
+  /// In en, this message translates to:
+  /// **'Update Recurring Transaction'**
+  String get updateRecurringTransactionButton;
 
   /// Button to update existing transaction
   ///
@@ -900,10 +996,97 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Yellow'**
   String get yellow;
+
+  /// Label for account name in transaction list item
+  ///
+  /// In en, this message translates to:
+  /// **'Account: {name}'**
+  String accountLabel(String name);
+
+  /// Error message after failed category deletion
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete category: {error}'**
+  String categoryDeleteError(String error);
+
+  /// Delete account confirmation message with account name, warning about cascading deletes
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the account \"{accountName}\"? This will also delete all associated transactions and recurring transactions.'**
+  String deleteAccountConfirmation(String accountName);
+
+  /// Delete category confirmation message with category name
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the category \"{categoryName}\"? This will also delete all associated transactions.'**
+  String deleteCategoryConfirmation(String categoryName);
+
+  /// Generic delete confirmation question shown in the shared delete dialog, used for accounts/categories/transactions/recurring transactions
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete \"{entity}\"?'**
+  String deleteConfirmationQuestion(String entity);
+
+  /// Error shown when accounts fail to load
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading accounts: {error}'**
+  String errorLoadingAccounts(String error);
+
+  /// Error shown when the calendar data fails to load
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading calendar: {error}'**
+  String errorLoadingCalendar(String error);
+
+  /// Error shown when categories fail to load
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading categories: {error}'**
+  String errorLoadingCategories(String error);
+
+  /// Error loading transaction data
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading transaction: {error}'**
+  String errorLoadingTransaction(String error);
+
+  /// Error shown when transactions for the list fail to load
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading transactions: {error}'**
+  String errorLoadingTransactions(String error);
+
+  /// Message when there are no transactions on the selected day
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions on {date}'**
+  String noTransactionsOnDate(String date);
+
+  /// Error message after failed deletion
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete transaction: {error}'**
+  String transactionDeleteError(String error);
+
+  /// Info banner summarizing a transfer before it's saved
+  ///
+  /// In en, this message translates to:
+  /// **'This will move {amount} from {fromAccount} to {toAccount}.'**
+  String transferSummary(String amount, String fromAccount, String toAccount);
+
+  static AppLocalizations? of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+  }
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) =>
+      <String>['en', 'es', 'fr'].contains(locale.languageCode);
 
   @override
   Future<AppLocalizations> load(Locale locale) {
@@ -911,26 +1094,5 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'es', 'fr'].contains(locale.languageCode);
-
-  @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
-}
-
-AppLocalizations lookupAppLocalizations(Locale locale) {
-
-
-  // Lookup logic when only language code is specified.
-  switch (locale.languageCode) {
-    case 'en': return AppLocalizationsEn();
-    case 'es': return AppLocalizationsEs();
-    case 'fr': return AppLocalizationsFr();
-  }
-
-  throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
-  );
 }

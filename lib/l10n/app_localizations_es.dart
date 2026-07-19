@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -15,12 +16,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get accountCurrencyHint => 'USD, EUR, GBP';
 
   @override
-  String get accountDeletedSuccessfully => 'Cuenta eliminada con éxito';
-
-  @override
-  String accountLabel(String name) {
-    return 'Cuenta';
-  }
+  String get accountFilterLabel => 'Cuenta';
 
   @override
   String get accountName => 'Nombre de Cuenta';
@@ -44,7 +40,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get accountTypeLabel => 'Tipo de Cuenta';
 
   @override
-  String get addAccount => 'Agregar Cuenta';
+  String get activeLabel => 'Activo';
+
+  @override
+  String get addRecurringTransaction => 'Agregar Transacción Recurrente';
+
+  @override
+  String get allAccounts => 'Todas las Cuentas';
 
   @override
   String get amountHint => '0.00';
@@ -53,7 +55,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get amountLabel => 'Monto';
 
   @override
-  String get appTitle => 'Administrador de Dinero';
+  String get applyFilters => 'Aplicar Filtros';
+
+  @override
+  String get balanceTrend => 'Tendencia del Saldo';
 
   @override
   String get blue => 'Azul';
@@ -62,13 +67,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get calendar => 'Calendario';
 
   @override
-  String get calendarGoToToday => 'Ir a hoy';
-
-  @override
   String get calendarNextMonth => 'Mes siguiente';
 
   @override
   String get calendarPreviousMonth => 'Mes anterior';
+
+  @override
+  String get calendarToday => 'Ir a hoy';
 
   @override
   String get cancel => 'Cancelar';
@@ -98,11 +103,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get categoryDeletedSuccessfully => 'Categoría eliminada con éxito';
 
   @override
-  String categoryDeleteError(String error) {
-    return 'Error al eliminar la categoría: $error';
-  }
-
-  @override
   String get categoryLabel => 'Categoría';
 
   @override
@@ -110,6 +110,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get chooseYourAppColor => 'Elige el color de tu aplicación';
+
+  @override
+  String get clearAll => 'Borrar Todo';
 
   @override
   String get create => 'Crear';
@@ -121,10 +124,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get createCategory => 'Crear Categoría';
 
   @override
+  String get createRecurringTransactionButton => 'Crear Transacción Recurrente';
+
+  @override
   String get createTransaction => 'Crear Transacción';
 
   @override
   String get createTransactionButton => 'Crear Transacción';
+
+  @override
+  String get currencyLabel => 'Moneda';
 
   @override
   String get custom => 'Personalizado';
@@ -142,29 +151,28 @@ class AppLocalizationsEs extends AppLocalizations {
   String get delete => 'Eliminar';
 
   @override
-  String get deleteAccount => 'Eliminar Cuenta';
-
-  @override
-  String deleteAccountConfirmation(String accountName) {
-    return '¿Estás seguro de que deseas eliminar la cuenta \"$accountName\"? Esta acción no se puede deshacer.';
-  }
-
-  @override
   String get deleteAccountSuccess => 'Cuenta eliminada con éxito';
+
+  @override
+  String get deleteAccountTitle => 'Eliminar Cuenta';
 
   @override
   String get deleteAction => 'Eliminar';
 
   @override
-  String deleteCategoryConfirmation(String categoryName) {
-    return '¿Estás seguro de que deseas eliminar la categoría \"$categoryName\"? Esto también eliminará todas las transacciones asociadas.';
-  }
-
-  @override
   String get deleteCategoryTitle => 'Eliminar Categoría';
 
   @override
-  String get deleteTransactionDescription => 'Esta acción no se puede deshacer.';
+  String get deleteRecurringTransactionDescription =>
+      'Esta acción no se puede deshacer. Las transacciones ya generadas por esta regla no se verán afectadas.';
+
+  @override
+  String get deleteRecurringTransactionTitle =>
+      'Eliminar Transacción Recurrente';
+
+  @override
+  String get deleteTransactionDescription =>
+      'Esta acción no se puede deshacer.';
 
   @override
   String get deleteTransactionTitle => 'Eliminar Transacción';
@@ -182,7 +190,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get editCategory => 'Editar Categoría';
 
   @override
+  String get editRecurringTransactionTitle => 'Editar Transacción Recurrente';
+
+  @override
   String get editTransactionTitle => 'Editar Transacción';
+
+  @override
+  String get endDateLabel => 'Fecha de Finalización';
 
   @override
   String get english => 'Inglés';
@@ -191,91 +205,36 @@ class AppLocalizationsEs extends AppLocalizations {
   String get englishNative => 'English';
 
   @override
-  String get error_data_not_found => 'Los datos solicitados no fueron encontrados.';
+  String get error_db_operation_failed =>
+      'La operación en la base de datos falló. Inténtalo de nuevo.';
 
   @override
-  String error_data_not_found_entity(String entity) {
-    return 'La $entity solicitada no fue encontrada.';
-  }
+  String get error_unknown_data =>
+      'Algo salió mal con la operación de datos. Inténtalo de nuevo.';
 
   @override
-  String get error_db_closed => 'La conexión con la base de datos no está disponible. Por favor, reinicia la aplicación.';
+  String get errorCategoryNameEmpty =>
+      'El nombre de la categoría no puede estar vacío';
 
   @override
-  String get error_db_constraint_violation => 'Se violó una restricción de la base de datos. Puede ser una entrada duplicada o una referencia no válida.';
+  String get errorCategoryNameTooLong =>
+      'El nombre de la categoría es demasiado largo';
 
   @override
-  String get error_db_operation_failed => 'La operación en la base de datos falló. Inténtalo de nuevo.';
-
-  @override
-  String error_db_operation_failed_operation(String operation) {
-    return 'No se pudo $operation. Inténtalo de nuevo.';
-  }
-
-  @override
-  String get error_foreign_key_violation => 'No se puede completar la operación porque hace referencia a datos que ya no existen.';
-
-  @override
-  String error_foreign_key_violation_table(String table) {
-    return 'No se puede completar la operación porque hace referencia a una $table que ya no existe.';
-  }
-
-  @override
-  String get error_storage_full => 'El almacenamiento del dispositivo está lleno. Libera espacio e inténtalo de nuevo.';
-
-  @override
-  String get error_unique_constraint_violation => 'Este registro ya existe.';
-
-  @override
-  String error_unique_constraint_violation_field(String field) {
-    return 'Ya existe un registro con este $field.';
-  }
-
-  @override
-  String get error_unknown_data => 'Algo salió mal con la operación de datos. Inténtalo de nuevo.';
-
-  @override
-  String get errorCategoryNameEmpty => 'El nombre de la categoría no puede estar vacío';
-
-  @override
-  String get errorCategoryNameTooLong => 'El nombre de la categoría es demasiado largo';
-
-  @override
-  String get errorCategoryNameTooShort => 'El nombre de la categoría es demasiado corto';
-
-  @override
-  String errorLoadingAccounts(String error) {
-    return 'Error al cargar las cuentas: $error';
-  }
-
-  @override
-  String errorLoadingCalendar(String error) {
-    return 'Error al cargar el calendario: $error';
-  }
-
-  @override
-  String errorLoadingCategories(String error) {
-    return 'Error al cargar las categorías: $error';
-  }
-
-  @override
-  String errorLoadingTransaction(String error) {
-    return 'Error al cargar transacción: $error';
-  }
-
-  @override
-  String errorLoadingTransactions(String error) {
-    return 'Error al cargar las transacciones: $error';
-  }
+  String get errorCategoryNameTooShort =>
+      'El nombre de la categoría es demasiado corto';
 
   @override
   String get expense => 'Gasto';
 
   @override
+  String get expensesByCategory => 'Gastos por Categoría';
+
+  @override
   String get expenseType => 'Gasto';
 
   @override
-  String get fabAddTransactionTooltip => 'Agregar transacción';
+  String get filterTitle => 'Filtrar Transacciones';
 
   @override
   String get french => 'Francés';
@@ -284,13 +243,25 @@ class AppLocalizationsEs extends AppLocalizations {
   String get frenchNative => 'Français';
 
   @override
+  String get frequencyDaily => 'Diario';
+
+  @override
+  String get frequencyLabel => 'Frecuencia';
+
+  @override
+  String get frequencyMonthly => 'Mensual';
+
+  @override
+  String get frequencyWeekly => 'Semanal';
+
+  @override
+  String get frequencyYearly => 'Anual';
+
+  @override
   String get fromAccountLabel => 'Cuenta de Origen';
 
   @override
   String get goBackAction => 'Regresar';
-
-  @override
-  String get helloWorld => '¡Hola Mundo!';
 
   @override
   String get income => 'Ingreso';
@@ -308,27 +279,65 @@ class AppLocalizationsEs extends AppLocalizations {
   String get lime => 'Lima';
 
   @override
+  String get manageRecurringTransactions =>
+      'Administra suscripciones y pagos recurrentes';
+
+  @override
+  String get monthlyInsights => 'Perspectivas Mensuales';
+
+  @override
   String get more => 'Más';
+
+  @override
+  String get newRecurringTransactionTitle => 'Nueva Transacción Recurrente';
 
   @override
   String get newTransactionTitle => 'Nueva Transacción';
 
   @override
+  String get nextOccurrenceLabel => 'Próxima';
+
+  @override
   String get noAccountInfo => 'Sin información de cuenta';
+
+  @override
+  String get noDataForPeriod => 'No hay datos para este período';
 
   @override
   String get noDescription => 'Sin descripción';
 
   @override
-  String noTransactionsOnDate(String date) {
-    return 'Sin transacciones el $date';
-  }
+  String get noEndDateLabel => 'Sin fecha de finalización';
+
+  @override
+  String get noExpensesFound => 'No se encontraron gastos';
+
+  @override
+  String get noRecurringTransactionsMessage =>
+      'Aún no hay transacciones recurrentes';
 
   @override
   String get primaryColor => 'Color primario';
 
   @override
   String get purple => 'Púrpura';
+
+  @override
+  String get recurringTransactionDeletedSuccess =>
+      'Transacción recurrente eliminada correctamente';
+
+  @override
+  String get recurringTransactionNameHint => 'ej. Netflix, Alquiler';
+
+  @override
+  String get recurringTransactionNameLabel => 'Nombre';
+
+  @override
+  String get recurringTransactions => 'Transacciones Recurrentes';
+
+  @override
+  String get sameTransferAccountError =>
+      'Las cuentas de origen y destino deben ser diferentes';
 
   @override
   String get selectAccountError => 'Por favor seleccione una cuenta';
@@ -361,6 +370,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get spanishNative => 'Español';
 
   @override
+  String get startDateLabel => 'Fecha de Inicio';
+
+  @override
   String get system => 'Sistema';
 
   @override
@@ -370,7 +382,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get theme => 'Tema';
 
   @override
+  String get thisAccount => 'esta cuenta';
+
+  @override
   String get thisCategory => 'esta categoría';
+
+  @override
+  String get thisRecurringTransaction => 'esta transacción recurrente';
 
   @override
   String get thisTransaction => 'esta transacción';
@@ -382,15 +400,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get toAccountLabel => 'Cuenta de Destino';
 
   @override
+  String get totalExpense => 'Gastos Totales';
+
+  @override
+  String get totalIncome => 'Ingresos Totales';
+
+  @override
   String get transactionCreatedSuccess => '¡Transacción creada exitosamente!';
 
   @override
   String get transactionDeletedSuccess => 'Transacción eliminada exitosamente';
-
-  @override
-  String transactionDeleteError(String error) {
-    return 'Error al eliminar transacción: $error';
-  }
 
   @override
   String get transactionSaveError => 'Error al guardar transacción';
@@ -402,7 +421,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get transactionTypeLabel => 'Tipo de Transacción';
 
   @override
-  String get transactionUpdatedSuccess => '¡Transacción actualizada exitosamente!';
+  String get transactionUpdatedSuccess =>
+      '¡Transacción actualizada exitosamente!';
 
   @override
   String get transferType => 'Transferencia';
@@ -412,6 +432,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get update => 'Actualizar';
+
+  @override
+  String get updateRecurringTransactionButton =>
+      'Actualizar Transacción Recurrente';
 
   @override
   String get updateTransactionButton => 'Actualizar Transacción';
@@ -439,4 +463,69 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get yellow => 'Amarillo';
+
+  @override
+  String accountLabel(String name) {
+    return 'Cuenta';
+  }
+
+  @override
+  String categoryDeleteError(String error) {
+    return 'Error al eliminar la categoría: $error';
+  }
+
+  @override
+  String deleteAccountConfirmation(String accountName) {
+    return '¿Estás seguro de que deseas eliminar la cuenta \"$accountName\"? Esto también eliminará todas las transacciones y transacciones recurrentes asociadas.';
+  }
+
+  @override
+  String deleteCategoryConfirmation(String categoryName) {
+    return '¿Estás seguro de que deseas eliminar la categoría \"$categoryName\"? Esto también eliminará todas las transacciones asociadas.';
+  }
+
+  @override
+  String deleteConfirmationQuestion(String entity) {
+    return '¿Estás seguro de que deseas eliminar \"$entity\"?';
+  }
+
+  @override
+  String errorLoadingAccounts(String error) {
+    return 'Error al cargar las cuentas: $error';
+  }
+
+  @override
+  String errorLoadingCalendar(String error) {
+    return 'Error al cargar el calendario: $error';
+  }
+
+  @override
+  String errorLoadingCategories(String error) {
+    return 'Error al cargar las categorías: $error';
+  }
+
+  @override
+  String errorLoadingTransaction(String error) {
+    return 'Error al cargar transacción: $error';
+  }
+
+  @override
+  String errorLoadingTransactions(String error) {
+    return 'Error al cargar las transacciones: $error';
+  }
+
+  @override
+  String noTransactionsOnDate(String date) {
+    return 'Sin transacciones el $date';
+  }
+
+  @override
+  String transactionDeleteError(String error) {
+    return 'Error al eliminar transacción: $error';
+  }
+
+  @override
+  String transferSummary(String amount, String fromAccount, String toAccount) {
+    return 'Esto moverá $amount de $fromAccount a $toAccount.';
+  }
 }

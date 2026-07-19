@@ -50,7 +50,7 @@ final class TransactionFormProvider
   }
 }
 
-String _$transactionFormHash() => r'a66b1ecdebc7c7ff7163078e31b155f82c8cae5f';
+String _$transactionFormHash() => r'871c41f9a6228e12f38c60155c6d0a4884e3106f';
 
 final class TransactionFormFamily extends $Family
     with

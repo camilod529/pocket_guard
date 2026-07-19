@@ -6,6 +6,7 @@ import 'package:pocket_guard/domain/entities/account.dart';
 import 'package:pocket_guard/l10n/app_localizations.dart';
 import 'package:pocket_guard/presentation/providers/account/accounts_provider.dart';
 import 'package:pocket_guard/presentation/widgets/shared/delete_confirmation_modal.dart';
+import 'package:pocket_guard/presentation/widgets/shared/refreshable_placeholder.dart';
 import 'package:pocket_guard/utils/constants/global_constants.dart';
 import 'package:pocket_guard/utils/types/general_types.dart';
 
@@ -19,12 +20,17 @@ class AccountView extends ConsumerWidget {
 
     return Scaffold(
       appBar: _buildAppBar(context, localizations),
-      body: accountsAsync.when(
-        data: (accounts) =>
-            _buildAccountsList(context, accounts, ref, localizations),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) =>
-            _buildErrorState(context, error, ref, localizations),
+      body: RefreshIndicator(
+        onRefresh: () => ref.read(accountsProvider.notifier).refresh(),
+        child: accountsAsync.when(
+          data: (accounts) =>
+              _buildAccountsList(context, accounts, ref, localizations),
+          loading: () => const RefreshablePlaceholder(
+            child: CircularProgressIndicator(),
+          ),
+          error: (error, stack) =>
+              _buildErrorState(context, error, ref, localizations),
+        ),
       ),
     );
   }
@@ -42,7 +48,8 @@ class AccountView extends ConsumerWidget {
     final categories = AccountType.values;
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 80),
       itemCount: categories.length,
       itemBuilder: (context, catIndex) {
         final type = categories[catIndex];
@@ -128,8 +135,14 @@ class AccountView extends ConsumerWidget {
       subtitle: Text(account.currency),
       trailing: PopupMenuButton<DropdownActionType>(
         icon: const Icon(Icons.more_vert),
-        onSelected: (value) =>
-            _onAccountAction(context, value, account.id, ref, localizations),
+        onSelected: (value) => _onAccountAction(
+          context,
+          value,
+          account.id,
+          account.name,
+          ref,
+          localizations,
+        ),
         itemBuilder: (context) => [
           PopupMenuItem(
             value: DropdownActionType.edit,
@@ -188,7 +201,7 @@ class AccountView extends ConsumerWidget {
     WidgetRef ref,
     AppLocalizations localizations,
   ) {
-    return Center(
+    return RefreshablePlaceholder(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -222,7 +235,7 @@ class AccountView extends ConsumerWidget {
     WidgetRef ref,
     AppLocalizations localizations,
   ) {
-    return Center(
+    return RefreshablePlaceholder(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -258,6 +271,7 @@ class AccountView extends ConsumerWidget {
     BuildContext context,
     DropdownActionType action,
     String accountId,
+    String accountName,
     WidgetRef ref,
     AppLocalizations localizations,
   ) {
@@ -267,7 +281,13 @@ class AccountView extends ConsumerWidget {
         context.push(Routes.accountFormPage(accountId));
         break;
       case DropdownActionType.delete:
-        _showDeleteConfirmation(context, accountId, ref, localizations);
+        _showDeleteConfirmation(
+          context,
+          accountId,
+          accountName,
+          ref,
+          localizations,
+        );
         break;
     }
   }
@@ -275,13 +295,18 @@ class AccountView extends ConsumerWidget {
   Future<void> _showDeleteConfirmation(
     BuildContext context,
     String accountId,
+    String accountName,
     WidgetRef ref,
     AppLocalizations localizations,
   ) async {
+    final entity = accountName.isEmpty
+        ? localizations.thisAccount
+        : accountName;
     await DeleteConfirmationModal.show(
       context: context,
-      title: localizations.deleteAccount,
-      entity: localizations.accountName,
+      title: localizations.deleteAccountTitle,
+      entity: entity,
+      description: localizations.deleteAccountConfirmation(entity),
       onConfirm: () async {
         try {
           await ref.read(accountsProvider.notifier).deleteAccount(accountId);

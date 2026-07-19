@@ -16,6 +16,27 @@ class NumberFormatting {
     'COP': const Locale('es', 'CO'),
   };
 
+  /// Formats double to a compact version (e.g., $1.2M) without ISO codes
+  static String formatCompactCurrency(double value, String currency) {
+    final locale =
+        _currencyLocales[currency.toUpperCase()] ?? const Locale('en', 'US');
+
+    // 1. Get the symbol separately (e.g., "$")
+    final symbol = NumberFormat.simpleCurrency(
+      locale: locale.toString(),
+      name: currency.toUpperCase(),
+    ).currencySymbol;
+
+    // 2. Use compactCurrency but pass the symbol and an empty name
+    final compactFormat = NumberFormat.compactCurrency(
+      locale: locale.toString(),
+      symbol: symbol,
+      decimalDigits: value.abs() < 1000 ? 0 : 1,
+    );
+
+    return compactFormat.format(value).trim();
+  }
+
   /// Formats double to currency string with proper locale
   static String formatCurrency(
     double value,

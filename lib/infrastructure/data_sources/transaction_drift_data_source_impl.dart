@@ -1,12 +1,18 @@
 import 'package:drift/drift.dart';
+import 'package:pocket_guard/config/database/database.dart' as db;
 import 'package:pocket_guard/config/database/database.dart';
 import 'package:pocket_guard/domain/data_sources/transaction_data_source.dart';
 import 'package:pocket_guard/domain/entities/category.dart';
 import 'package:pocket_guard/domain/entities/transaction.dart';
+import 'package:pocket_guard/domain/entities/transaction_filter.dart';
 import 'package:pocket_guard/infrastructure/errors/data_exceptions.dart';
 import 'package:pocket_guard/infrastructure/errors/drift_exception_handler.dart';
 
 class TransactionDriftDataSourceImpl extends TransactionDataSource {
+  TransactionDriftDataSourceImpl({AppDatabase? database})
+    : database = database ?? db.database;
+
+  final AppDatabase database;
   final DriftExceptionHandler _exceptionHandler = DriftExceptionHandler();
 
   @override
@@ -156,25 +162,46 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
 
   @override
   Future<List<TransactionEntity>> getAllTransactions({
-    DateTime? startDate,
-    DateTime? endDate,
+    TransactionFilter? filter,
   }) async {
     try {
       final query = database.select(database.transactions);
 
-      if (startDate != null) {
-        query.where(
-          (tbl) =>
-              tbl.date.isBiggerOrEqualValue(startDate.millisecondsSinceEpoch),
-        );
+      if (filter != null) {
+        query.where((tbl) {
+          final predicates = <Expression<bool>>[];
+
+          if (filter.startDate != null) {
+            predicates.add(
+              tbl.date.isBiggerOrEqualValue(
+                filter.startDate!.millisecondsSinceEpoch,
+              ),
+            );
+          }
+          if (filter.endDate != null) {
+            predicates.add(
+              tbl.date.isSmallerOrEqualValue(
+                filter.endDate!.millisecondsSinceEpoch,
+              ),
+            );
+          }
+          if (filter.searchQuery != null && filter.searchQuery!.isNotEmpty) {
+            predicates.add(tbl.description.like('%${filter.searchQuery}%'));
+          }
+          if (filter.categoryIds != null && filter.categoryIds!.isNotEmpty) {
+            predicates.add(tbl.categoryId.isIn(filter.categoryIds!));
+          }
+
+          return predicates.isEmpty
+              ? const Constant(true)
+              : predicates.reduce((value, element) => value & element);
+        });
       }
 
-      if (endDate != null) {
-        query.where(
-          (tbl) =>
-              tbl.date.isSmallerOrEqualValue(endDate.millisecondsSinceEpoch),
-        );
-      }
+      // Always sort by date descending for better UX
+      query.orderBy([
+        (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc),
+      ]);
 
       final transactions = await query.get();
 
@@ -264,9 +291,6 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
     String id,
     TransactionEntity updatedTransaction,
   ) async {
-    // TODO: when updating a transaction that is a transfer,
-    // and the change is that the accounts swapped,
-    //need to handle both accounts, this has a bug
     try {
       final oldTransaction = await getTransactionById(id);
       if (oldTransaction == null) {
@@ -284,7 +308,13 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
                 )..where((tbl) => tbl.id.equals(updatedTransaction.categoryId)))
                 .getSingle();
 
-        // Update the transaction record
+        // Balance effects are relative deltas computed from oldTransaction /
+        // updatedTransaction directly (never re-read from the accounts row),
+        // so reversing the old effect and applying the new one is correct
+        // regardless of which fields changed - including account swaps on a
+        // transfer (from/to flipped) or the account/type changing entirely.
+        await _reverseTransactionEffect(oldTransaction, oldCategory.type);
+
         await (database.update(
           database.transactions,
         )..where((tbl) => tbl.id.equals(id))).write(
@@ -298,10 +328,6 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
           ),
         );
 
-        // Reverse old transaction effects
-        await _reverseTransactionEffect(oldTransaction, oldCategory.type);
-
-        // Apply new transaction effects
         await _applyTransactionEffect(updatedTransaction, newCategory.type);
       });
     } catch (e, stackTrace) {

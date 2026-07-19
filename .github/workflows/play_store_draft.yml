@@ -29,7 +29,16 @@ jobs:
       - name: Get Dependencies
         run: flutter pub get
 
-      # 2. Decode Keystore and Create key.properties
+      # 2. Quality gate - stop before touching signing secrets or building
+      # if analysis/tests fail. --no-fatal-infos so info-level lints (e.g.
+      # deprecation notices) don't block a release; only warnings/errors do.
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos
+
+      - name: Run tests
+        run: flutter test
+
+      # 4. Decode Keystore and Create key.properties
       - name: Prepare Signing Credentials
         run: |
           # 1. Decode the keystore into the android/app folder
@@ -42,11 +51,11 @@ jobs:
           echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
           echo "storeFile=upload-keystore.jks" >> android/key.properties
 
-      # 3. Build the App Bundle
+      # 5. Build the App Bundle
       - name: Build Android Release Bundle
         run: flutter build appbundle --release
 
-      # 4. Upload to Google Play Console as Draft
+      # 6. Upload to Google Play Console as Draft
       - name: Upload to Google Play
         uses: r0adkll/upload-google-play@v1
         with:

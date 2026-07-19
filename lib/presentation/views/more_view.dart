@@ -40,6 +40,14 @@ class MoreView extends ConsumerWidget {
                   route: Routes.languageSettings,
                   ref: ref,
                 ),
+                _buildSettingsCard(
+                  context,
+                  icon: Icons.autorenew,
+                  title: localizations.recurringTransactions,
+                  subtitle: localizations.manageRecurringTransactions,
+                  route: Routes.recurringTransactions,
+                  ref: ref,
+                ),
                 // _buildSettingsCard(
                 //   context,
                 //   icon: Icons.notifications_outlined,

@@ -1,5 +1,6 @@
 import 'package:pocket_guard/domain/data_sources/transaction_data_source.dart';
 import 'package:pocket_guard/domain/entities/transaction.dart';
+import 'package:pocket_guard/domain/entities/transaction_filter.dart';
 import 'package:pocket_guard/domain/repositories/transaction_repository.dart';
 import 'package:pocket_guard/domain/services/logger_service.dart';
 import 'package:pocket_guard/infrastructure/errors/data_exceptions.dart';
@@ -62,15 +63,11 @@ class TransactionRepositoryImpl extends TransactionRepository {
 
   @override
   Future<List<TransactionEntity>> getAllTransactions({
-    DateTime? startDate,
-    DateTime? endDate,
+    TransactionFilter? filter,
   }) async {
     _logger.info('Fetching all transactions');
     try {
-      final transactions = await _dataSource.getAllTransactions(
-        startDate: startDate,
-        endDate: endDate,
-      );
+      final transactions = await _dataSource.getAllTransactions(filter: filter);
       _logger.info('Fetched ${transactions.length} transactions successfully');
       return transactions;
     } on DataException catch (e, stackTrace) {

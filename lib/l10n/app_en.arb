@@ -8,9 +8,9 @@
   "@accountCurrencyHint": {
     "description": "Hint text for account currency input"
   },
-  "accountDeletedSuccessfully": "Account deleted successfully",
-  "@accountDeletedSuccessfully": {
-    "description": "Success message after account deletion"
+  "accountFilterLabel": "Account",
+  "@accountFilterLabel": {
+    "description": "Label for account filter selector"
   },
   "accountLabel": "Account: {name}",
   "@accountLabel": {
@@ -50,9 +50,17 @@
   "@accountTypeLabel": {
     "description": "Label for account type selector"
   },
-  "addAccount": "Add Account",
-  "@addAccount": {
-    "description": "Add new account button"
+  "activeLabel": "Active",
+  "@activeLabel": {
+    "description": "Label/switch for whether a recurring transaction rule is active"
+  },
+  "addRecurringTransaction": "Add Recurring Transaction",
+  "@addRecurringTransaction": {
+    "description": "Tooltip for the button that creates a new recurring transaction"
+  },
+  "allAccounts": "All Accounts",
+  "@allAccounts": {
+    "description": "Option to show data from all accounts"
   },
   "amountHint": "0.00",
   "@amountHint": {
@@ -62,9 +70,13 @@
   "@amountLabel": {
     "description": "Amount field label"
   },
-  "appTitle": "Money Manager",
-  "@appTitle": {
-    "description": "The title of the application"
+  "applyFilters": "Apply Filters",
+  "@applyFilters": {
+    "description": "Button to apply selected filters"
+  },
+  "balanceTrend": "Balance Trend",
+  "@balanceTrend": {
+    "description": "Title for the balance trend line chart"
   },
   "blue": "Blue",
   "@blue": {
@@ -74,10 +86,6 @@
   "@calendar": {
     "description": "Label for the calendar view"
   },
-  "calendarGoToToday": "Go to today",
-  "@calendarGoToToday": {
-    "description": "Tooltip for jumping back to the current day/month"
-  },
   "calendarNextMonth": "Next month",
   "@calendarNextMonth": {
     "description": "Tooltip for going to next month in the calendar"
@@ -85,6 +93,10 @@
   "calendarPreviousMonth": "Previous month",
   "@calendarPreviousMonth": {
     "description": "Tooltip for going to previous month in the calendar"
+  },
+  "calendarToday": "Go to today",
+  "@calendarToday": {
+    "description": "Tooltip for jumping back to the current day/month"
   },
   "cancel": "Cancel",
   "@cancel": {
@@ -144,6 +156,10 @@
   "@chooseYourAppColor": {
     "description": "Subtitle for the theme settings section"
   },
+  "clearAll": "Clear All",
+  "@clearAll": {
+    "description": "Button to clear all filters"
+  },
   "create": "Create",
   "@create": {
     "description": "Create action/button"
@@ -156,6 +172,10 @@
   "@createCategory": {
     "description": "Button to create a new category"
   },
+  "createRecurringTransactionButton": "Create Recurring Transaction",
+  "@createRecurringTransactionButton": {
+    "description": "Button to create a new recurring transaction"
+  },
   "createTransaction": "Create Transaction",
   "@createTransaction": {
     "description": "Button to create a new transaction"
@@ -163,6 +183,10 @@
   "createTransactionButton": "Create Transaction",
   "@createTransactionButton": {
     "description": "Button to create new transaction"
+  },
+  "currencyLabel": "Currency",
+  "@currencyLabel": {
+    "description": "Label for currency selector"
   },
   "custom": "Custom",
   "@custom": {
@@ -184,23 +208,23 @@
   "@delete": {
     "description": "Delete action/button"
   },
-  "deleteAccount": "Delete Account",
-  "@deleteAccount": {
-    "description": "Delete account button"
-  },
-  "deleteAccountConfirmation": "Are you sure you want to delete the account \"{accountName}\"? This will also delete all associated transactions.",
+  "deleteAccountConfirmation": "Are you sure you want to delete the account \"{accountName}\"? This will also delete all associated transactions and recurring transactions.",
   "@deleteAccountConfirmation": {
-    "description": "Delete account confirmation message with account name",
+    "description": "Delete account confirmation message with account name, warning about cascading deletes",
     "placeholders": {
       "accountName": {
         "type": "String",
-        "example": "Main account"
+        "example": "Checking"
       }
     }
   },
   "deleteAccountSuccess": "Account deleted successfully",
   "@deleteAccountSuccess": {
     "description": "Success message after account deletion"
+  },
+  "deleteAccountTitle": "Delete Account",
+  "@deleteAccountTitle": {
+    "description": "Title for delete account confirmation dialog"
   },
   "deleteAction": "Delete",
   "@deleteAction": {
@@ -219,6 +243,24 @@
   "deleteCategoryTitle": "Delete Category",
   "@deleteCategoryTitle": {
     "description": "Title for delete category confirmation dialog"
+  },
+  "deleteConfirmationQuestion": "Are you sure you want to delete \"{entity}\"?",
+  "@deleteConfirmationQuestion": {
+    "description": "Generic delete confirmation question shown in the shared delete dialog, used for accounts/categories/transactions/recurring transactions",
+    "placeholders": {
+      "entity": {
+        "type": "String",
+        "example": "Checking"
+      }
+    }
+  },
+  "deleteRecurringTransactionDescription": "This action cannot be undone. Transactions already generated from this rule will not be affected.",
+  "@deleteRecurringTransactionDescription": {
+    "description": "Delete confirmation description for a recurring transaction rule"
+  },
+  "deleteRecurringTransactionTitle": "Delete Recurring Transaction",
+  "@deleteRecurringTransactionTitle": {
+    "description": "Delete confirmation dialog title for a recurring transaction"
   },
   "deleteTransactionDescription": "This action cannot be undone.",
   "@deleteTransactionDescription": {
@@ -244,9 +286,17 @@
   "@editCategory": {
     "description": "AppBar title for editing existing category"
   },
+  "editRecurringTransactionTitle": "Edit Recurring Transaction",
+  "@editRecurringTransactionTitle": {
+    "description": "AppBar title for editing an existing recurring transaction"
+  },
   "editTransactionTitle": "Edit Transaction",
   "@editTransactionTitle": {
     "description": "AppBar title for editing existing transaction"
+  },
+  "endDateLabel": "End Date",
+  "@endDateLabel": {
+    "description": "Label for a recurring transaction's optional end date"
   },
   "english": "English",
   "@english": {
@@ -256,73 +306,9 @@
   "@englishNative": {
     "description": "Native language name for English"
   },
-  "error_data_not_found": "The requested data was not found.",
-  "@error_data_not_found": {
-    "description": "Generic data not found error"
-  },
-  "error_data_not_found_entity": "The requested {entity} was not found.",
-  "@error_data_not_found_entity": {
-    "description": "Data not found error with the entity name",
-    "placeholders": {
-      "entity": {
-        "type": "String",
-        "example": "transaction"
-      }
-    }
-  },
-  "error_db_closed": "Database connection is not available. Please restart the app.",
-  "@error_db_closed": {
-    "description": "Shown when the database is closed or not available"
-  },
-  "error_db_constraint_violation": "A database constraint was violated. This might be a duplicate entry or invalid reference.",
-  "@error_db_constraint_violation": {
-    "description": "Generic database constraint violation message"
-  },
   "error_db_operation_failed": "Database operation failed. Please try again.",
   "@error_db_operation_failed": {
     "description": "Generic database operation failure message"
-  },
-  "error_db_operation_failed_operation": "Failed to {operation}. Please try again.",
-  "@error_db_operation_failed_operation": {
-    "description": "Database operation failure message with the operation name",
-    "placeholders": {
-      "operation": {
-        "type": "String",
-        "example": "save transaction"
-      }
-    }
-  },
-  "error_foreign_key_violation": "Cannot complete operation because it references data that no longer exists.",
-  "@error_foreign_key_violation": {
-    "description": "Foreign key violation without specifying the table"
-  },
-  "error_foreign_key_violation_table": "Cannot complete operation because it references a {table} that no longer exists.",
-  "@error_foreign_key_violation_table": {
-    "description": "Foreign key violation specifying the referenced table",
-    "placeholders": {
-      "table": {
-        "type": "String",
-        "example": "category"
-      }
-    }
-  },
-  "error_storage_full": "Device storage is full. Please free up space and try again.",
-  "@error_storage_full": {
-    "description": "Device storage is full"
-  },
-  "error_unique_constraint_violation": "This record already exists.",
-  "@error_unique_constraint_violation": {
-    "description": "Unique constraint violation without specifying the field"
-  },
-  "error_unique_constraint_violation_field": "A record with this {field} already exists.",
-  "@error_unique_constraint_violation_field": {
-    "description": "Unique constraint violation for a specific field",
-    "placeholders": {
-      "field": {
-        "type": "String",
-        "example": "email"
-      }
-    }
   },
   "error_unknown_data": "Something went wrong with the data operation. Please try again.",
   "@error_unknown_data": {
@@ -394,13 +380,17 @@
   "@expense": {
     "description": "Expense transaction type"
   },
+  "expensesByCategory": "Expenses by Category",
+  "@expensesByCategory": {
+    "description": "Title for the expenses by category pie chart section"
+  },
   "expenseType": "Expense",
   "@expenseType": {
     "description": "Expense transaction type"
   },
-  "fabAddTransactionTooltip": "Add transaction",
-  "@fabAddTransactionTooltip": {
-    "description": "Tooltip for FAB that creates a new transaction from the calendar view"
+  "filterTitle": "Filter Transactions",
+  "@filterTitle": {
+    "description": "Title for the transaction filter dialog"
   },
   "french": "French",
   "@french": {
@@ -410,6 +400,26 @@
   "@frenchNative": {
     "description": "Native language name for French"
   },
+  "frequencyDaily": "Daily",
+  "@frequencyDaily": {
+    "description": "Recurrence frequency: daily"
+  },
+  "frequencyLabel": "Frequency",
+  "@frequencyLabel": {
+    "description": "Label for the recurrence frequency selector"
+  },
+  "frequencyMonthly": "Monthly",
+  "@frequencyMonthly": {
+    "description": "Recurrence frequency: monthly"
+  },
+  "frequencyWeekly": "Weekly",
+  "@frequencyWeekly": {
+    "description": "Recurrence frequency: weekly"
+  },
+  "frequencyYearly": "Yearly",
+  "@frequencyYearly": {
+    "description": "Recurrence frequency: yearly"
+  },
   "fromAccountLabel": "From Account",
   "@fromAccountLabel": {
     "description": "Label for 'from' account in transfer transaction form"
@@ -417,10 +427,6 @@
   "goBackAction": "Go Back",
   "@goBackAction": {
     "description": "Button to go back from error screen"
-  },
-  "helloWorld": "Hello World!",
-  "@helloWorld": {
-    "description": "A simple greeting message"
   },
   "income": "Income",
   "@income": {
@@ -442,21 +448,53 @@
   "@lime": {
     "description": "Color option: Lime"
   },
+  "manageRecurringTransactions": "Manage subscriptions and recurring bills",
+  "@manageRecurringTransactions": {
+    "description": "Subtitle for the Recurring Transactions entry on the More screen"
+  },
+  "monthlyInsights": "Monthly Insights",
+  "@monthlyInsights": {
+    "description": "Title for the monthly insights screen"
+  },
   "more": "More",
   "@more": {
     "description": "Label for the more options view"
+  },
+  "newRecurringTransactionTitle": "New Recurring Transaction",
+  "@newRecurringTransactionTitle": {
+    "description": "AppBar title for creating a new recurring transaction"
   },
   "newTransactionTitle": "New Transaction",
   "@newTransactionTitle": {
     "description": "AppBar title for creating new transaction"
   },
+  "nextOccurrenceLabel": "Next",
+  "@nextOccurrenceLabel": {
+    "description": "Prefix label before a recurring transaction's next due date"
+  },
   "noAccountInfo": "No account info",
   "@noAccountInfo": {
     "description": "Shown when a transaction has no account associated"
   },
+  "noDataForPeriod": "No data for this period",
+  "@noDataForPeriod": {
+    "description": "Message when there is no transaction data for the selected period"
+  },
   "noDescription": "No description",
   "@noDescription": {
     "description": "Shown when a transaction has no description"
+  },
+  "noEndDateLabel": "No end date",
+  "@noEndDateLabel": {
+    "description": "Label/toggle indicating a recurring transaction has no end date"
+  },
+  "noExpensesFound": "No expenses found",
+  "@noExpensesFound": {
+    "description": "Message when there are no expenses to display"
+  },
+  "noRecurringTransactionsMessage": "No recurring transactions yet",
+  "@noRecurringTransactionsMessage": {
+    "description": "Empty state message on the Recurring Transactions list screen"
   },
   "noTransactionsOnDate": "No transactions on {date}",
   "@noTransactionsOnDate": {
@@ -475,6 +513,26 @@
   "purple": "Purple",
   "@purple": {
     "description": "Color option: Purple"
+  },
+  "recurringTransactionDeletedSuccess": "Recurring transaction deleted successfully",
+  "@recurringTransactionDeletedSuccess": {
+    "description": "Success message after deleting a recurring transaction"
+  },
+  "recurringTransactionNameHint": "e.g. Netflix, Rent",
+  "@recurringTransactionNameHint": {
+    "description": "Hint text for the recurring transaction name field"
+  },
+  "recurringTransactionNameLabel": "Name",
+  "@recurringTransactionNameLabel": {
+    "description": "Label for the recurring transaction name field"
+  },
+  "recurringTransactions": "Recurring Transactions",
+  "@recurringTransactions": {
+    "description": "Title for the Recurring Transactions list screen and its More-screen entry"
+  },
+  "sameTransferAccountError": "From and To accounts must be different",
+  "@sameTransferAccountError": {
+    "description": "Validation error when a transfer's from and to accounts are the same"
   },
   "selectAccountError": "Please select an account",
   "@selectAccountError": {
@@ -516,6 +574,10 @@
   "@spanishNative": {
     "description": "Native language name for Spanish"
   },
+  "startDateLabel": "Start Date",
+  "@startDateLabel": {
+    "description": "Label for a recurring transaction's start date"
+  },
   "system": "System",
   "@system": {
     "description": "Label indicating that a category is a system category"
@@ -528,8 +590,16 @@
   "@theme": {
     "description": "Title for the theme settings section"
   },
+  "thisAccount": "this account",
+  "@thisAccount": {
+    "description": "Fallback entity name for delete confirmation"
+  },
   "thisCategory": "this category",
   "@thisCategory": {
+    "description": "Fallback entity name for delete confirmation"
+  },
+  "thisRecurringTransaction": "this recurring transaction",
+  "@thisRecurringTransaction": {
     "description": "Fallback entity name for delete confirmation"
   },
   "thisTransaction": "this transaction",
@@ -543,6 +613,14 @@
   "toAccountLabel": "To Account",
   "@toAccountLabel": {
     "description": "Label for 'to' account in transfer transaction form"
+  },
+  "totalExpense": "Total Expense",
+  "@totalExpense": {
+    "description": "Label for total expense stat card"
+  },
+  "totalIncome": "Total Income",
+  "@totalIncome": {
+    "description": "Label for total income stat card"
   },
   "transactionCreatedSuccess": "Transaction created successfully!",
   "@transactionCreatedSuccess": {
@@ -578,6 +656,24 @@
   "@transactionUpdatedSuccess": {
     "description": "Success message after update"
   },
+  "transferSummary": "This will move {amount} from {fromAccount} to {toAccount}.",
+  "@transferSummary": {
+    "description": "Info banner summarizing a transfer before it's saved",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "100.00"
+      },
+      "fromAccount": {
+        "type": "String",
+        "example": "Checking"
+      },
+      "toAccount": {
+        "type": "String",
+        "example": "Savings"
+      }
+    }
+  },
   "transferType": "Transfer",
   "@transferType": {
     "description": "Transfer transaction type"
@@ -589,6 +685,10 @@
   "update": "Update",
   "@update": {
     "description": "Update action/button"
+  },
+  "updateRecurringTransactionButton": "Update Recurring Transaction",
+  "@updateRecurringTransactionButton": {
+    "description": "Button to update an existing recurring transaction"
   },
   "updateTransactionButton": "Update Transaction",
   "@updateTransactionButton": {
