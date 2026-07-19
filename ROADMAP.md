@@ -53,9 +53,15 @@ Focus: Helping the user understand where their money goes.
 
 Focus: Discipline and future planning.
 
-- [ ] Budget Engine:
-  - [ ] Set monthly limits per category.
-  - [ ] Progress bars (Green → Yellow → Red) to show remaining funds.
+- [x] Budget Engine:
+  - [x] Set monthly limits per category.
+  - [x] Progress bars (Green → Yellow → Red) to show remaining funds.
+  - New `Budgets` table (category FK, monthly limit, currency, active flag) with full CRUD, following the same domain/infrastructure/presentation layering as Recurring Transactions. No per-month rows - a budget just exists or doesn't; "spent this month" is computed at read time from actual transactions filtered to the current calendar month (`budgetProgressProvider`), never materialized/stored.
+  - Budgets are explicitly currency-scoped, not currency-converting: a category can have transactions from accounts in different currencies (e.g. a "Dining" category used by both a USD and a EUR account), so a budget only sums spending from accounts matching its own currency rather than mixing them together. The uniqueness constraint is on `(category, currency)` together, not category alone, so the same category can have separate budgets in different currencies (e.g. Transportation in both USD and COP) - a gap found via manual testing after the first pass only constrained on category. Schema migration bumps `schemaVersion` 6 → 7 to correct the index on existing installs. The real fix (centralized currency list, live exchange rates, actual conversion) is deliberately deferred - see Technical Debt below.
+  - Submit failures say *why*: a duplicate `(category, currency)` pair is checked against the already-loaded budgets list before ever hitting the database, so the form shows a specific "you already have a budget for this category in this currency" message instead of a generic database-error toast, and doesn't depend on the DB exception being classified correctly on every platform.
+  - Bug Fix: `budgetProvider(id)` (single-item cache) and `budgetsProvider` (the list the budget view and form read from) never auto-synced - same cache-split shape as the pre-existing `accountProvider(id)`/`accountsProvider` bug from v0.3.0. Editing a budget updated the list correctly but left the single-item cache stale, so reopening the edit screen could show the old value. Fixed by explicitly refreshing/invalidating `budgetProvider(id)` after every edit/delete, mirroring the transaction save flow's existing fix for accounts.
+  - Bug Fix: a Riverpod `AsyncNotifier` gotcha - setting `state = AsyncValue.error(...)` directly inside a mutating method can leak as an uncaught error via Riverpod's internal Future/Completer plumbing rather than surfacing through the caller's own `try/catch`. `BudgetsNotifier`'s mutating methods now revert to the prior state and `rethrow` instead, letting callers catch a normal Dart exception.
+  - Tests: `budget_progress_calculator_test.dart` (threshold boundaries, zero-limit edge case), `budget_drift_data_source_impl_test.dart` (CRUD, the composite unique constraint, cross-currency budgets for the same category), `budget_form_provider_integration_test.dart` (create/edit, currency defaulting, duplicate-category-currency rejection, the cache-split regression), `budget_progress_provider_test.dart` (cross-currency transactions correctly excluded from spend totals).
 - [ ] Financial Goals: A "Savings Jar" feature where users can allocate money toward a specific goal (e.g., "New Car").
 - [ ] Planned Expenses: A "Wishlist" that tells the user if they can afford an item based on their current budget.
 
