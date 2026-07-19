@@ -54,6 +54,10 @@
   "@activeLabel": {
     "description": "Label/switch for whether a recurring transaction rule is active"
   },
+  "addBudget": "Add Budget",
+  "@addBudget": {
+    "description": "Tooltip for the button that creates a new budget"
+  },
   "addRecurringTransaction": "Add Recurring Transaction",
   "@addRecurringTransaction": {
     "description": "Tooltip for the button that creates a new recurring transaction"
@@ -81,6 +85,22 @@
   "blue": "Blue",
   "@blue": {
     "description": "Color option: Blue"
+  },
+  "budgetCurrencyNoAccountsHint": "Add an account first to set a budget currency",
+  "@budgetCurrencyNoAccountsHint": {
+    "description": "Hint shown under the budget currency selector when no accounts exist yet to pick a currency from"
+  },
+  "budgetDeletedSuccess": "Budget deleted successfully",
+  "@budgetDeletedSuccess": {
+    "description": "Success message after budget deletion"
+  },
+  "budgetDuplicateCategoryCurrencyError": "You already have a budget for this category in this currency",
+  "@budgetDuplicateCategoryCurrencyError": {
+    "description": "Error shown when submitting a budget for a category/currency pair that already has one"
+  },
+  "budgets": "Budgets",
+  "@budgets": {
+    "description": "Title for the Budgets list screen and its More-screen entry"
   },
   "calendar": "Calendar",
   "@calendar": {
@@ -168,6 +188,10 @@
   "@createAccount": {
     "description": "Button to create a new account"
   },
+  "createBudgetButton": "Create Budget",
+  "@createBudgetButton": {
+    "description": "Button to create a new budget"
+  },
   "createCategory": "Create Category",
   "@createCategory": {
     "description": "Button to create a new category"
@@ -230,6 +254,14 @@
   "@deleteAction": {
     "description": "Delete button tooltip"
   },
+  "deleteBudgetDescription": "This action cannot be undone.",
+  "@deleteBudgetDescription": {
+    "description": "Delete confirmation description for a budget"
+  },
+  "deleteBudgetTitle": "Delete Budget",
+  "@deleteBudgetTitle": {
+    "description": "Delete confirmation dialog title for a budget"
+  },
   "deleteCategoryConfirmation": "Are you sure you want to delete the category \"{categoryName}\"? This will also delete all associated transactions.",
   "@deleteCategoryConfirmation": {
     "description": "Delete category confirmation message with category name",
@@ -281,6 +313,10 @@
   "edit": "Edit",
   "@edit": {
     "description": "Edit action/button"
+  },
+  "editBudgetTitle": "Edit Budget",
+  "@editBudgetTitle": {
+    "description": "AppBar title for editing an existing budget"
   },
   "editCategory": "Edit Category",
   "@editCategory": {
@@ -448,6 +484,10 @@
   "@lime": {
     "description": "Color option: Lime"
   },
+  "manageBudgets": "Set monthly spending limits per category",
+  "@manageBudgets": {
+    "description": "Subtitle for the Budgets entry on the More screen"
+  },
   "manageRecurringTransactions": "Manage subscriptions and recurring bills",
   "@manageRecurringTransactions": {
     "description": "Subtitle for the Recurring Transactions entry on the More screen"
@@ -456,9 +496,21 @@
   "@monthlyInsights": {
     "description": "Title for the monthly insights screen"
   },
+  "monthlyLimitHint": "0.00",
+  "@monthlyLimitHint": {
+    "description": "Hint text for the budget monthly limit field"
+  },
+  "monthlyLimitLabel": "Monthly Limit",
+  "@monthlyLimitLabel": {
+    "description": "Label for the budget monthly limit field"
+  },
   "more": "More",
   "@more": {
     "description": "Label for the more options view"
+  },
+  "newBudgetTitle": "New Budget",
+  "@newBudgetTitle": {
+    "description": "AppBar title for creating a new budget"
   },
   "newRecurringTransactionTitle": "New Recurring Transaction",
   "@newRecurringTransactionTitle": {
@@ -475,6 +527,10 @@
   "noAccountInfo": "No account info",
   "@noAccountInfo": {
     "description": "Shown when a transaction has no account associated"
+  },
+  "noBudgetsMessage": "No budgets yet",
+  "@noBudgetsMessage": {
+    "description": "Empty state message on the Budgets list screen"
   },
   "noDataForPeriod": "No data for this period",
   "@noDataForPeriod": {
@@ -530,6 +586,10 @@
   "@recurringTransactions": {
     "description": "Title for the Recurring Transactions list screen and its More-screen entry"
   },
+  "remainingLabel": "Remaining",
+  "@remainingLabel": {
+    "description": "Label for a budget's remaining (unspent) amount this month"
+  },
   "sameTransferAccountError": "From and To accounts must be different",
   "@sameTransferAccountError": {
     "description": "Validation error when a transfer's from and to accounts are the same"
@@ -574,6 +634,10 @@
   "@spanishNative": {
     "description": "Native language name for Spanish"
   },
+  "spentLabel": "Spent",
+  "@spentLabel": {
+    "description": "Label for a budget's amount spent so far this month"
+  },
   "startDateLabel": "Start Date",
   "@startDateLabel": {
     "description": "Label for a recurring transaction's start date"
@@ -592,6 +656,10 @@
   },
   "thisAccount": "this account",
   "@thisAccount": {
+    "description": "Fallback entity name for delete confirmation"
+  },
+  "thisBudget": "this budget",
+  "@thisBudget": {
     "description": "Fallback entity name for delete confirmation"
   },
   "thisCategory": "this category",
@@ -685,6 +753,10 @@
   "update": "Update",
   "@update": {
     "description": "Update action/button"
+  },
+  "updateBudgetButton": "Update Budget",
+  "@updateBudgetButton": {
+    "description": "Button to update an existing budget"
   },
   "updateRecurringTransactionButton": "Update Recurring Transaction",
   "@updateRecurringTransactionButton": {

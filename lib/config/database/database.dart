@@ -31,7 +31,7 @@ class Accounts extends Table {
 }
 
 @DriftDatabase(
-  tables: [Accounts, Categories, Transactions, RecurringTransactions],
+  tables: [Accounts, Categories, Transactions, RecurringTransactions, Budgets],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
@@ -59,6 +59,24 @@ class AppDatabase extends _$AppDatabase {
         if (from < 5) {
           await m.createTable(recurringTransactions);
         }
+        if (from < 6) {
+          await m.createTable(budgets);
+        }
+        if (from < 7) {
+          // Budgets are currency-scoped (a budget only tracks spending in
+          // one currency), so the same category can have separate budgets
+          // in different currencies - the uniqueness constraint needs to
+          // be on (categoryId, currency) together, not categoryId alone.
+          // IF EXISTS/IF NOT EXISTS make this safe to run regardless of
+          // whether the old single-column index was actually created (the
+          // `from < 6` branch above never created it for upgrade paths -
+          // only onCreate's createAll() did, via @TableIndex).
+          await customStatement('DROP INDEX IF EXISTS budgets_category_unique');
+          await customStatement(
+            'CREATE UNIQUE INDEX IF NOT EXISTS '
+            'budgets_category_currency_unique ON budgets (category_id, currency)',
+          );
+        }
       },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
@@ -69,7 +87,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 7;
 
   Future<double> getAccountBalance(String accountId) {
     return (select(accounts)..where((tbl) => tbl.id.equals(accountId)))
@@ -132,6 +150,29 @@ class AppDatabase extends _$AppDatabase {
   }
 }
 
+@TableIndex(
+  name: 'budgets_category_currency_unique',
+  columns: {#categoryId, #currency},
+  unique: true,
+)
+class Budgets extends Table {
+  // No onDelete: deleting a budgeted category throws a foreign key
+  // violation, same as Transactions/RecurringTransactions today - a
+  // deliberate, consistent choice, not an oversight.
+  TextColumn get categoryId => text().references(Categories, #id)();
+  // Which account currency this budget is denominated in. Spending is only
+  // ever summed from transactions whose account currency matches - a budget
+  // can't mix currencies (see BudgetProgress computation).
+  TextColumn get currency => text()();
+  TextColumn get id =>
+      text().clientDefault(() => _uuid.v4())(); // UUID v4 as text
+  BoolColumn get isActive => boolean().withDefault(const Constant(true))();
+  RealColumn get monthlyLimit => real()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 class Categories extends Table {
   TextColumn get id =>
       text().clientDefault(() => _uuid.v4())(); // UUID v4 as text
@@ -173,6 +214,36 @@ class CategoryTypeConverter extends TypeConverter<TransactionType, String> {
 }
 
 @TableIndex(
+  name: 'recurring_transactions_index',
+  columns: {#isActive, #nextDueDate},
+)
+class RecurringTransactions extends Table {
+  TextColumn get accountId =>
+      text().references(Accounts, #id, onDelete: KeyAction.cascade)();
+  RealColumn get amount => real()();
+  TextColumn get categoryId => text().references(Categories, #id)();
+  TextColumn get description => text()();
+  DateTimeColumn get endDate => dateTime().nullable()();
+  IntColumn get frequency => intEnum<RecurrenceFrequency>().withDefault(
+    const Constant(1),
+  )(); // Default to monthly
+  TextColumn get id =>
+      text().clientDefault(() => _uuid.v4())(); // UUID v4 as text
+  BoolColumn get isActive => boolean().withDefault(const Constant(true))();
+  DateTimeColumn get lastGeneratedDate => dateTime().nullable()();
+  DateTimeColumn get nextDueDate => dateTime()();
+  @override
+  Set<Column> get primaryKey => {id};
+  DateTimeColumn get startDate => dateTime()();
+
+  TextColumn get toAccountId => text().nullable().references(
+    Accounts,
+    #id,
+    onDelete: KeyAction.cascade,
+  )(); // set only for transfer rules
+}
+
+@TableIndex(
   name: 'transactions_index',
   columns: {#accountId, #date, #categoryId},
 )
@@ -195,34 +266,4 @@ class Transactions extends Table {
     #id,
     onDelete: KeyAction.cascade,
   )();
-}
-
-@TableIndex(
-  name: 'recurring_transactions_index',
-  columns: {#isActive, #nextDueDate},
-)
-class RecurringTransactions extends Table {
-  TextColumn get id =>
-      text().clientDefault(() => _uuid.v4())(); // UUID v4 as text
-  TextColumn get accountId =>
-      text().references(Accounts, #id, onDelete: KeyAction.cascade)();
-  TextColumn get toAccountId => text().nullable().references(
-    Accounts,
-    #id,
-    onDelete: KeyAction.cascade,
-  )(); // set only for transfer rules
-  TextColumn get categoryId => text().references(Categories, #id)();
-  RealColumn get amount => real()();
-  TextColumn get description => text()();
-  IntColumn get frequency => intEnum<RecurrenceFrequency>().withDefault(
-    const Constant(1),
-  )(); // Default to monthly
-  DateTimeColumn get startDate => dateTime()();
-  DateTimeColumn get nextDueDate => dateTime()();
-  DateTimeColumn get lastGeneratedDate => dateTime().nullable()();
-  DateTimeColumn get endDate => dateTime().nullable()();
-  BoolColumn get isActive => boolean().withDefault(const Constant(true))();
-
-  @override
-  Set<Column> get primaryKey => {id};
 }
