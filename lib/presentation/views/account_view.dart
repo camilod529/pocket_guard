@@ -6,6 +6,7 @@ import 'package:pocket_guard/domain/entities/account.dart';
 import 'package:pocket_guard/l10n/app_localizations.dart';
 import 'package:pocket_guard/presentation/providers/account/accounts_provider.dart';
 import 'package:pocket_guard/presentation/widgets/shared/delete_confirmation_modal.dart';
+import 'package:pocket_guard/presentation/widgets/shared/refreshable_placeholder.dart';
 import 'package:pocket_guard/utils/constants/global_constants.dart';
 import 'package:pocket_guard/utils/types/general_types.dart';
 
@@ -19,12 +20,17 @@ class AccountView extends ConsumerWidget {
 
     return Scaffold(
       appBar: _buildAppBar(context, localizations),
-      body: accountsAsync.when(
-        data: (accounts) =>
-            _buildAccountsList(context, accounts, ref, localizations),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) =>
-            _buildErrorState(context, error, ref, localizations),
+      body: RefreshIndicator(
+        onRefresh: () => ref.read(accountsProvider.notifier).refresh(),
+        child: accountsAsync.when(
+          data: (accounts) =>
+              _buildAccountsList(context, accounts, ref, localizations),
+          loading: () => const RefreshablePlaceholder(
+            child: CircularProgressIndicator(),
+          ),
+          error: (error, stack) =>
+              _buildErrorState(context, error, ref, localizations),
+        ),
       ),
     );
   }
@@ -42,6 +48,7 @@ class AccountView extends ConsumerWidget {
     final categories = AccountType.values;
 
     return ListView.builder(
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 80),
       itemCount: categories.length,
       itemBuilder: (context, catIndex) {
@@ -194,7 +201,7 @@ class AccountView extends ConsumerWidget {
     WidgetRef ref,
     AppLocalizations localizations,
   ) {
-    return Center(
+    return RefreshablePlaceholder(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -228,7 +235,7 @@ class AccountView extends ConsumerWidget {
     WidgetRef ref,
     AppLocalizations localizations,
   ) {
-    return Center(
+    return RefreshablePlaceholder(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

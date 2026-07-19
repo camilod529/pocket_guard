@@ -14,6 +14,7 @@ import 'package:pocket_guard/presentation/providers/selected_date_range_provider
 import 'package:pocket_guard/presentation/providers/transaction/transaction_filter_provider.dart';
 import 'package:pocket_guard/presentation/providers/transaction/transactions_provider.dart';
 import 'package:pocket_guard/presentation/providers/transaction/ui_visibility_provider.dart';
+import 'package:pocket_guard/presentation/widgets/shared/refreshable_placeholder.dart';
 import 'package:pocket_guard/presentation/widgets/transactions/transaction_filter_sheet.dart';
 import 'package:pocket_guard/utils/shared/dates/calendar_date_formatter.dart';
 import 'package:pocket_guard/utils/shared/number_formatting.dart';
@@ -45,11 +46,18 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
           _buildMonthCalendar(transactionsAsync),
           const Divider(height: 1),
           Expanded(
-            child: _buildTransactionsList(
-              transactionsAsync,
-              categoriesAsync,
-              accountsAsync,
-              selectedDay,
+            child: RefreshIndicator(
+              onRefresh: () => Future.wait([
+                ref.read(transactionsProvider.notifier).refresh(),
+                ref.read(categoriesProvider.notifier).refresh(),
+                ref.read(accountsProvider.notifier).refresh(),
+              ]),
+              child: _buildTransactionsList(
+                transactionsAsync,
+                categoriesAsync,
+                accountsAsync,
+                selectedDay,
+              ),
             ),
           ),
         ],
@@ -460,7 +468,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
         }).toList()..sort((a, b) => b.date.compareTo(a.date));
 
         if (selectedDayTransactions.isEmpty) {
-          return Center(
+          return RefreshablePlaceholder(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -490,6 +498,7 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
                 final accountMap = {for (var acc in accounts) acc.id: acc};
 
                 return ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
                   // ADDED PADDING: 80px at bottom to clear the FAB
                   padding: const EdgeInsets.only(top: 8, bottom: 80),
                   itemCount: selectedDayTransactions.length,
@@ -506,21 +515,26 @@ class _CalendarViewState extends ConsumerState<CalendarView> {
                   },
                 );
               },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stack) => Center(
+              loading: () => const RefreshablePlaceholder(
+                child: CircularProgressIndicator(),
+              ),
+              error: (error, stack) => RefreshablePlaceholder(
                 child: Text(l10n.errorLoadingAccounts(error.toString())),
               ),
             );
           },
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stack) => Center(
+          loading: () =>
+              const RefreshablePlaceholder(child: CircularProgressIndicator()),
+          error: (error, stack) => RefreshablePlaceholder(
             child: Text(l10n.errorLoadingCategories(error.toString())),
           ),
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stack) =>
-          Center(child: Text(l10n.errorLoadingTransactions(error.toString()))),
+      loading: () =>
+          const RefreshablePlaceholder(child: CircularProgressIndicator()),
+      error: (error, stack) => RefreshablePlaceholder(
+        child: Text(l10n.errorLoadingTransactions(error.toString())),
+      ),
     );
   }
 
