@@ -18,12 +18,17 @@ dart run build_runner watch --delete-conflicting-outputs   # while iterating
 
 flutter gen-l10n                # regenerate lib/l10n/app_localizations*.dart after editing the .arb files
 
-flutter analyze                 # static analysis (flutter_lints + riverpod_lint)
+flutter analyze                 # static analysis (flutter_lints)
 flutter run                     # run on a connected device/simulator
 flutter build appbundle --release   # Android release build (used by CI)
-```
 
-There is currently no `test/` directory in this repo — no automated tests exist yet.
+flutter test                    # unit + widget tests under test/ (CI runs this)
+
+# End-to-end run of the real app on a device/simulator, with a screenshot per
+# step written to build/goal_screenshots/. Not run by CI. iOS needs CocoaPods.
+flutter drive --driver=test_driver/integration_test.dart \
+  --target=integration_test/savings_goals_test.dart -d <device-id>
+```
 
 ## Architecture
 
