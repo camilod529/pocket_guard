@@ -41,19 +41,23 @@ Strict layered/clean architecture under `lib/`:
 - **`presentation/`** — `providers/` (Riverpod, code-generated with `@riverpod`/`@Riverpod(keepAlive: ...)`, one subdirectory per feature), `screens/`, `views/`, `widgets/`, `helpers/`, `mixins/`.
 - **`config/`** — `database/database.dart` (Drift schema + migrations), `router/` (go_router config), `theme/`.
 
-Each feature (account, category, transaction, settings) is wired the same way, e.g. for transactions:
+Each feature (account, category, transaction, recurring transaction, budget, savings goal, wishlist, settings) is wired the same way, e.g. for transactions:
 `transaction_data_source` provider → `transaction_repository` provider (wraps the data source) → `TransactionsNotifier`/`TransactionForm` providers (business logic + state) → screens/widgets that watch those providers. When adding a feature, follow this same chain rather than calling Drift directly from presentation code.
 
 ### Database (Drift/SQLite)
 
-- Single global `AppDatabase` instance in `config/database/database.dart`, tables `Accounts`, `Categories`, `Transactions`.
-- `schemaVersion` is currently 4; every schema change needs a new `if (from < N)` branch inside `onUpgrade` in `MigrationStrategy` — never edit past migration branches, only append.
+- Single global `AppDatabase` instance in `config/database/database.dart`, tables `Accounts`, `Categories`, `Transactions`, `RecurringTransactions`, `Budgets`, `SavingsGoals`, `GoalContributions`, `WishlistItems`.
+- `schemaVersion` is currently 9; every schema change needs a new `if (from < N)` branch inside `onUpgrade` in `MigrationStrategy` — never edit past migration branches, only append.
 - `beforeOpen` sets `PRAGMA foreign_keys = ON`, WAL journal mode, and a busy timeout — preserve these when touching database setup.
 - Account balances are **not** derived/recomputed from the transaction list; they're maintained incrementally via relative SQL updates (`balance = balance + ?` / `- ?`) whenever a transaction is created, updated, or deleted. `TransactionDriftDataSourceImpl._applyTransactionEffect` / `_reverseTransactionEffect` apply/undo that delta based on transaction type (income/expense/transfer). Any change to transaction create/update/delete logic must keep apply and reverse symmetric, or account balances will drift from reality over time. `updateTransaction` runs reverse-old → write-new-row → apply-new inside a single `database.transaction()` for atomicity.
+- **Savings goal contributions also move account balances.** A contribution is signed (+ deposit takes money out of the account, − withdrawal puts it back), applied/undone by `SavingsGoalDriftDataSourceImpl._applyContributionEffect` / `_reverseContributionEffect` with the same symmetry rule and the same reverse → write → apply order, and every rule check runs inside the same `database.transaction()` as the write it guards. A goal's saved amount is always `SUM(amount)`, never stored. Contributions are deliberately *not* transactions, so saving doesn't count as spending in budgets or insights. Deleting a funded goal must refund it (`deleteGoal(refundAccountId:)`), never cascade.
+- Budgets, savings goals and wishlist items are currency-scoped: they only ever compare against accounts in their own currency, nothing is converted.
 
 ### Forms
 
 Form screens (`transaction_form_screen.dart`, `account_form_screen.dart`, `category_form_screen.dart`) are backed by per-form Riverpod providers (`transaction_form_provider.dart`, etc.) built on `formz`. Convention: a `GlobalConstants.createId` sentinel (`'create'`) is used as the form's `id` to distinguish "creating a new record" from "editing an existing one" — check against this constant rather than nullability when branching create-vs-edit logic.
+
+To open the transaction form with starting values (e.g. buying a wishlist item), push its route with a `TransactionPrefill` as `extra`; the form applies it through its normal change handlers and pops `true` when a transaction is actually saved.
 
 ### Error handling
 
