@@ -30,10 +30,16 @@ class TransactionRepositoryImpl extends TransactionRepository {
         error: e,
         stackTrace: stackTrace,
       );
+      rethrow;
     } catch (e, stackTrace) {
       _logger.error(
         'Unexpected error creating transaction',
         error: e,
+        stackTrace: stackTrace,
+      );
+      throw UnknownDataException(
+        message: 'Failed to create transaction: $e',
+        originalError: e,
         stackTrace: stackTrace,
       );
     }
@@ -52,10 +58,16 @@ class TransactionRepositoryImpl extends TransactionRepository {
         error: e,
         stackTrace: stackTrace,
       );
+      rethrow;
     } catch (e, stackTrace) {
       _logger.error(
         'Unexpected error deleting transaction',
         error: e,
+        stackTrace: stackTrace,
+      );
+      throw UnknownDataException(
+        message: 'Failed to delete transaction: $e',
+        originalError: e,
         stackTrace: stackTrace,
       );
     }

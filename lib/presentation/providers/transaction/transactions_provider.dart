@@ -32,50 +32,26 @@ class TransactionsNotifier extends _$TransactionsNotifier {
     return await repository.getAllTransactions(filter: filter);
   }
 
-  Future<void> createTransaction(TransactionEntity transaction) async {
-    if (!ref.mounted) return;
-    state = const AsyncLoading();
-    try {
-      final repository = ref.read(transactionRepositoryProvider);
-      await repository.createTransaction(transaction);
-
-      if (!ref.mounted) return;
-
-      // Refresh the current date range
-      ref.invalidateSelf();
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
-  }
+  Future<void> createTransaction(TransactionEntity transaction) =>
+      _mutate((repository) => repository.createTransaction(transaction));
 
   Future<void> deleteTransaction(String id) async {
-    if (!ref.mounted) return;
-    state = const AsyncLoading();
-    try {
-      final repository = ref.read(transactionRepositoryProvider);
-      final transaction = await repository.getTransactionById(id);
-      if (transaction == null) {
-        throw Exception('Transaction not found');
-      }
-      await repository.deleteTransaction(id);
-
-      if (!ref.mounted) return;
-
-      // Refresh the current date range
-      ref.invalidateSelf();
-
-      ref
-          .read(accountProvider(transaction.accountId).notifier)
-          .refreshAccount();
-      if (transaction.toAccountId != null) {
-        ref
-            .read(accountProvider(transaction.toAccountId!).notifier)
-            .refreshAccount();
-      }
-      ref.invalidate(accountsProvider);
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
+    final transaction = await ref
+        .read(transactionRepositoryProvider)
+        .getTransactionById(id);
+    if (transaction == null) {
+      throw Exception('Transaction not found');
     }
+    await _mutate((repository) => repository.deleteTransaction(id));
+    if (!ref.mounted) return;
+
+    ref.read(accountProvider(transaction.accountId).notifier).refreshAccount();
+    if (transaction.toAccountId != null) {
+      ref
+          .read(accountProvider(transaction.toAccountId!).notifier)
+          .refreshAccount();
+    }
+    ref.invalidate(accountsProvider);
   }
 
   Future<void> refresh() async {
@@ -89,22 +65,27 @@ class TransactionsNotifier extends _$TransactionsNotifier {
     return await repository.searchTransactions(query);
   }
 
-  Future<void> updateTransaction(
-    String id,
-    TransactionEntity transaction,
+  Future<void> updateTransaction(String id, TransactionEntity transaction) =>
+      _mutate((repository) => repository.updateTransaction(id, transaction));
+
+  /// Same error contract as BudgetsNotifier: on failure, revert to the
+  /// previous state and rethrow rather than setting `AsyncValue.error` -
+  /// that swallowed failures (the form reported an unsaved transaction as
+  /// saved) and replaced the calendar's list with an error screen. On
+  /// success, re-run build() for the current date range.
+  Future<void> _mutate(
+    Future<void> Function(TransactionRepository repository) action,
   ) async {
     if (!ref.mounted) return;
+    final previousState = state;
     state = const AsyncLoading();
     try {
-      final repository = ref.read(transactionRepositoryProvider);
-      await repository.updateTransaction(id, transaction);
-
+      await action(ref.read(transactionRepositoryProvider));
       if (!ref.mounted) return;
-
-      // Refresh the current date range
       ref.invalidateSelf();
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
+    } catch (e) {
+      if (ref.mounted) state = previousState;
+      rethrow;
     }
   }
 }

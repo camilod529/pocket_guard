@@ -7,9 +7,15 @@ class CatchUpSummary {
   final int generatedCount;
   final Set<String> touchedRuleIds;
 
+  /// Rules where writing an occurrence failed. Each was advanced only past
+  /// the occurrences that were actually written, so the next run retries
+  /// from the one that failed.
+  final Set<String> failedRuleIds;
+
   const CatchUpSummary({
     required this.generatedCount,
     required this.touchedRuleIds,
+    this.failedRuleIds = const {},
   });
 }
 
@@ -33,6 +39,7 @@ class RecurringTransactionCatchUpService {
 
     var generatedCount = 0;
     final touchedRuleIds = <String>{};
+    final failedRuleIds = <String>{};
 
     for (final rule in rules.where((r) => r.isActive)) {
       final result = RecurringTransactionScheduler.occurrencesDue(
@@ -47,37 +54,59 @@ class RecurringTransactionCatchUpService {
         continue;
       }
 
+      // The rule is advanced only past occurrences that were actually
+      // written. If one fails, it stays due: advancing past it would lose
+      // it for good, and not advancing at all would re-create the ones
+      // before it (duplicates) on the next run.
+      var written = 0;
+      Object? failure;
       for (final occurrenceDate in result.occurrenceDates) {
-        await _transactionRepository.createTransaction(
-          TransactionEntity(
-            id: 'unused',
-            accountId: rule.accountId,
-            toAccountId: rule.toAccountId,
-            categoryId: rule.categoryId,
-            amount: rule.amount,
-            description: rule.description,
-            date: occurrenceDate,
-          ),
-        );
-        generatedCount++;
+        try {
+          await _transactionRepository.createTransaction(
+            TransactionEntity(
+              id: 'unused',
+              accountId: rule.accountId,
+              toAccountId: rule.toAccountId,
+              categoryId: rule.categoryId,
+              amount: rule.amount,
+              description: rule.description,
+              date: occurrenceDate,
+            ),
+          );
+        } catch (e) {
+          failure = e;
+          break;
+        }
+        written++;
       }
+      generatedCount += written;
 
+      final lastWritten = written > 0
+          ? result.occurrenceDates[written - 1]
+          : rule.lastGeneratedDate;
       await _recurringTransactionRepository.updateRecurringTransaction(
         rule.id,
-        rule.copyWith(
-          nextDueDate: result.newNextDueDate,
-          lastGeneratedDate: result.occurrenceDates.isNotEmpty
-              ? result.occurrenceDates.last
-              : rule.lastGeneratedDate,
-          isActive: !result.ruleShouldDeactivate,
-        ),
+        failure == null
+            ? rule.copyWith(
+                nextDueDate: result.newNextDueDate,
+                lastGeneratedDate: lastWritten,
+                isActive: !result.ruleShouldDeactivate,
+              )
+            : rule.copyWith(
+                nextDueDate: result.occurrenceDates[written],
+                lastGeneratedDate: lastWritten,
+              ),
       );
       touchedRuleIds.add(rule.id);
+      // Keep going: one rule's failure (e.g. a deleted category) shouldn't
+      // stop every other rule from catching up.
+      if (failure != null) failedRuleIds.add(rule.id);
     }
 
     return CatchUpSummary(
       generatedCount: generatedCount,
       touchedRuleIds: touchedRuleIds,
+      failedRuleIds: failedRuleIds,
     );
   }
 }

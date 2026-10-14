@@ -37,6 +37,14 @@ Future<void> recurringTransactionCatchUp(Ref ref) async {
         'from ${summary.touchedRuleIds.length} rule(s)',
       );
     }
+    if (summary.failedRuleIds.isNotEmpty) {
+      // Already logged per occurrence by the repository; those rules stay
+      // due and are retried on the next run.
+      logger.warning(
+        'Could not generate occurrences for '
+        '${summary.failedRuleIds.length} rule(s); will retry next run',
+      );
+    }
   } catch (e, stackTrace) {
     // Must never block app render - log and move on.
     logger.error(

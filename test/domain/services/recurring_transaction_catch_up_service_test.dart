@@ -4,11 +4,28 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pocket_guard/config/database/database.dart';
 import 'package:pocket_guard/domain/entities/category.dart';
 import 'package:pocket_guard/domain/entities/recurring_transaction.dart';
+import 'package:pocket_guard/domain/entities/transaction.dart';
 import 'package:pocket_guard/domain/services/recurring_transaction_catch_up_service.dart';
 import 'package:pocket_guard/infrastructure/data_sources/recurring_transaction_drift_data_source_impl.dart';
 import 'package:pocket_guard/infrastructure/data_sources/transaction_drift_data_source_impl.dart';
 import 'package:pocket_guard/infrastructure/repositories/recurring_transaction_repository_impl.dart';
 import 'package:pocket_guard/infrastructure/repositories/transaction_repository_impl.dart';
+
+/// Fails the [failOnCall]-th createTransaction (1-based), succeeds
+/// otherwise - simulates e.g. a write failing partway through a backfill.
+class _FlakyTransactions extends TransactionDriftDataSourceImpl {
+  _FlakyTransactions(AppDatabase database, this.failOnCall)
+    : super(database: database);
+
+  final int failOnCall;
+  var _calls = 0;
+
+  @override
+  Future<void> createTransaction(TransactionEntity transaction) {
+    if (++_calls == failOnCall) return Future.error(StateError('disk full'));
+    return super.createTransaction(transaction);
+  }
+}
 
 void main() {
   late AppDatabase testDb;
@@ -17,7 +34,8 @@ void main() {
   const checkingId = 'checking';
   const savingsId = 'savings';
 
-  Future<double> balanceOf(String accountId) => testDb.getAccountBalance(accountId);
+  Future<double> balanceOf(String accountId) =>
+      testDb.getAccountBalance(accountId);
 
   setUp(() async {
     testDb = AppDatabase(NativeDatabase.memory());
@@ -67,9 +85,7 @@ void main() {
 
   Future<String> transferCategoryId() async {
     final categories = await testDb.select(testDb.categories).get();
-    return categories
-        .firstWhere((c) => c.type == TransactionType.transfer)
-        .id;
+    return categories.firstWhere((c) => c.type == TransactionType.transfer).id;
   }
 
   test('generates a due expense rule and advances its nextDueDate', () async {
@@ -92,13 +108,38 @@ void main() {
     expect(summary.generatedCount, 1);
     expect(await balanceOf(checkingId), 985);
 
-    final rule = (await recurringDataSource.getAllRecurringTransactions())
-        .single;
+    final rule =
+        (await recurringDataSource.getAllRecurringTransactions()).single;
     expect(rule.nextDueDate, DateTime(2026, 2, 1));
     expect(rule.lastGeneratedDate, DateTime(2026, 1, 1));
   });
 
-  test('backfills a 3-months-overdue rule as 3 separate transactions', () async {
+  test(
+    'backfills a 3-months-overdue rule as 3 separate transactions',
+    () async {
+      await recurringDataSource.createRecurringTransaction(
+        RecurringTransactionEntity(
+          id: 'unused',
+          accountId: checkingId,
+          categoryId: await expenseCategoryId(),
+          amount: 100,
+          description: 'Rent',
+          frequency: RecurrenceFrequency.monthly,
+          startDate: DateTime(2026, 1, 1),
+          nextDueDate: DateTime(2026, 1, 1),
+          isActive: true,
+        ),
+      );
+
+      final summary = await service.run(now: DateTime(2026, 3, 15));
+
+      expect(summary.generatedCount, 3);
+      expect(await balanceOf(checkingId), 700);
+    },
+  );
+
+  test('a failed write partway through a backfill neither loses nor '
+      'duplicates occurrences', () async {
     await recurringDataSource.createRecurringTransaction(
       RecurringTransactionEntity(
         id: 'unused',
@@ -112,11 +153,79 @@ void main() {
         isActive: true,
       ),
     );
+    RecurringTransactionCatchUpService serviceWith(
+      TransactionDriftDataSourceImpl transactions,
+    ) => RecurringTransactionCatchUpService(
+      recurringTransactionRepository: RecurringTransactionRepositoryImpl(
+        dataSource: recurringDataSource,
+      ),
+      transactionRepository: TransactionRepositoryImpl(
+        dataSource: transactions,
+      ),
+    );
 
-    final summary = await service.run(now: DateTime(2026, 3, 15));
+    // Jan, Feb and Mar are due; writing Feb fails.
+    final first = await serviceWith(
+      _FlakyTransactions(testDb, 2),
+    ).run(now: DateTime(2026, 3, 15));
 
-    expect(summary.generatedCount, 3);
+    expect(first.generatedCount, 1);
+    var rule = (await recurringDataSource.getAllRecurringTransactions()).single;
+    // Advanced past Jan only - Feb is still due.
+    expect(rule.nextDueDate, DateTime(2026, 2, 1));
+    expect(rule.lastGeneratedDate, DateTime(2026, 1, 1));
+
+    // The next run picks up exactly Feb and Mar.
+    final second = await serviceWith(
+      TransactionDriftDataSourceImpl(database: testDb),
+    ).run(now: DateTime(2026, 3, 15));
+
+    expect(second.generatedCount, 2);
+    final dates =
+        (await testDb.select(testDb.transactions).get())
+            .map((t) => t.date)
+            .toList()
+          ..sort();
+    expect(dates, [
+      DateTime(2026, 1, 1),
+      DateTime(2026, 2, 1),
+      DateTime(2026, 3, 1),
+    ]);
     expect(await balanceOf(checkingId), 700);
+    rule = (await recurringDataSource.getAllRecurringTransactions()).single;
+    expect(rule.nextDueDate, DateTime(2026, 4, 1));
+  });
+
+  test('one rule failing doesn\'t stop the others', () async {
+    final categoryId = await expenseCategoryId();
+    for (final description in ['Gym', 'Phone']) {
+      await recurringDataSource.createRecurringTransaction(
+        RecurringTransactionEntity(
+          id: 'unused',
+          accountId: checkingId,
+          categoryId: categoryId,
+          amount: 10,
+          description: description,
+          frequency: RecurrenceFrequency.monthly,
+          startDate: DateTime(2026, 1, 1),
+          nextDueDate: DateTime(2026, 1, 1),
+          isActive: true,
+        ),
+      );
+    }
+
+    final summary = await RecurringTransactionCatchUpService(
+      recurringTransactionRepository: RecurringTransactionRepositoryImpl(
+        dataSource: recurringDataSource,
+      ),
+      transactionRepository: TransactionRepositoryImpl(
+        dataSource: _FlakyTransactions(testDb, 1),
+      ),
+    ).run(now: DateTime(2026, 1, 1));
+
+    expect(summary.generatedCount, 1);
+    expect(summary.failedRuleIds, hasLength(1));
+    expect(await testDb.select(testDb.transactions).get(), hasLength(1));
   });
 
   test('generates a due transfer rule affecting both accounts', () async {
@@ -206,27 +315,30 @@ void main() {
     expect(await balanceOf(checkingId), 985);
   });
 
-  test('a rule whose endDate has passed generates its final occurrence and deactivates', () async {
-    await recurringDataSource.createRecurringTransaction(
-      RecurringTransactionEntity(
-        id: 'unused',
-        accountId: checkingId,
-        categoryId: await expenseCategoryId(),
-        amount: 15,
-        description: 'Trial subscription',
-        frequency: RecurrenceFrequency.monthly,
-        startDate: DateTime(2026, 1, 1),
-        nextDueDate: DateTime(2026, 1, 1),
-        endDate: DateTime(2026, 1, 1),
-        isActive: true,
-      ),
-    );
+  test(
+    'a rule whose endDate has passed generates its final occurrence and deactivates',
+    () async {
+      await recurringDataSource.createRecurringTransaction(
+        RecurringTransactionEntity(
+          id: 'unused',
+          accountId: checkingId,
+          categoryId: await expenseCategoryId(),
+          amount: 15,
+          description: 'Trial subscription',
+          frequency: RecurrenceFrequency.monthly,
+          startDate: DateTime(2026, 1, 1),
+          nextDueDate: DateTime(2026, 1, 1),
+          endDate: DateTime(2026, 1, 1),
+          isActive: true,
+        ),
+      );
 
-    final summary = await service.run(now: DateTime(2026, 6, 1));
+      final summary = await service.run(now: DateTime(2026, 6, 1));
 
-    expect(summary.generatedCount, 1);
-    final rule = (await recurringDataSource.getAllRecurringTransactions())
-        .single;
-    expect(rule.isActive, isFalse);
-  });
+      expect(summary.generatedCount, 1);
+      final rule =
+          (await recurringDataSource.getAllRecurringTransactions()).single;
+      expect(rule.isActive, isFalse);
+    },
+  );
 }
