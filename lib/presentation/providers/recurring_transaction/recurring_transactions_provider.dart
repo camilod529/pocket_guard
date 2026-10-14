@@ -18,6 +18,10 @@ RecurringTransactionRepository recurringTransactionRepository(Ref ref) {
   return RecurringTransactionRepositoryImpl(dataSource: dataSource);
 }
 
+// Same error contract as BudgetsNotifier: mutating methods revert to the
+// previous state and rethrow instead of setting `AsyncValue.error`, which
+// swallowed failures (the form reported an unsaved rule as saved) and
+// replaced the whole list with an error screen.
 @riverpod
 class RecurringTransactionsNotifier extends _$RecurringTransactionsNotifier {
   @override
@@ -26,60 +30,33 @@ class RecurringTransactionsNotifier extends _$RecurringTransactionsNotifier {
     return repository.getAllRecurringTransactions();
   }
 
-  Future<void> createRecurringTransaction(
-    RecurringTransactionEntity rule,
-  ) async {
-    if (!ref.mounted) return;
-    state = const AsyncLoading();
-    try {
-      final repository = ref.read(recurringTransactionRepositoryProvider);
-      await repository.createRecurringTransaction(rule);
-      if (!ref.mounted) return;
-      state = AsyncValue.data(await repository.getAllRecurringTransactions());
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
-  }
+  Future<void> createRecurringTransaction(RecurringTransactionEntity rule) =>
+      _mutate((repository) => repository.createRecurringTransaction(rule));
 
-  Future<void> deleteRecurringTransaction(String id) async {
-    if (!ref.mounted) return;
-    state = const AsyncLoading();
-    try {
-      final repository = ref.read(recurringTransactionRepositoryProvider);
-      await repository.deleteRecurringTransaction(id);
-      if (!ref.mounted) return;
-      state = AsyncValue.data(await repository.getAllRecurringTransactions());
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
-  }
+  Future<void> deleteRecurringTransaction(String id) =>
+      _mutate((repository) => repository.deleteRecurringTransaction(id));
 
-  Future<void> refresh() async {
-    if (!ref.mounted) return;
-    state = const AsyncLoading();
-    try {
-      final repository = ref.read(recurringTransactionRepositoryProvider);
-      final rules = await repository.getAllRecurringTransactions();
-      if (!ref.mounted) return;
-      state = AsyncValue.data(rules);
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
-  }
+  Future<void> refresh() => _mutate((_) async {});
 
   Future<void> updateRecurringTransaction(
     String id,
     RecurringTransactionEntity rule,
+  ) => _mutate((repository) => repository.updateRecurringTransaction(id, rule));
+
+  Future<void> _mutate(
+    Future<void> Function(RecurringTransactionRepository repository) action,
   ) async {
     if (!ref.mounted) return;
+    final previousState = state;
     state = const AsyncLoading();
     try {
       final repository = ref.read(recurringTransactionRepositoryProvider);
-      await repository.updateRecurringTransaction(id, rule);
+      await action(repository);
       if (!ref.mounted) return;
       state = AsyncValue.data(await repository.getAllRecurringTransactions());
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
+    } catch (e) {
+      if (ref.mounted) state = previousState;
+      rethrow;
     }
   }
 }
