@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -17,6 +16,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountFilterLabel => 'Account';
+
+  @override
+  String accountLabel(String name) {
+    return 'Account: $name';
+  }
 
   @override
   String get accountName => 'Account Name';
@@ -43,7 +47,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activeLabel => 'Active';
 
   @override
+  String get addBudget => 'Add Budget';
+
+  @override
+  String get addGoal => 'Add Goal';
+
+  @override
   String get addRecurringTransaction => 'Add Recurring Transaction';
+
+  @override
+  String get addWishlistItem => 'Add Item';
 
   @override
   String get allAccounts => 'All Accounts';
@@ -58,10 +71,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get applyFilters => 'Apply Filters';
 
   @override
+  String get archivedGoalsSection => 'Archived';
+
+  @override
   String get balanceTrend => 'Balance Trend';
 
   @override
   String get blue => 'Blue';
+
+  @override
+  String get budgetCurrencyNoAccountsHint => 'Add an account first to set a budget currency';
+
+  @override
+  String get budgetDeletedSuccess => 'Budget deleted successfully';
+
+  @override
+  String get budgetDuplicateCategoryCurrencyError => 'You already have a budget for this category in this currency';
+
+  @override
+  String get budgets => 'Budgets';
+
+  @override
+  String get buyWishlistItem => 'Buy';
 
   @override
   String get calendar => 'Calendar';
@@ -103,6 +134,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryDeletedSuccessfully => 'Category deleted successfully';
 
   @override
+  String categoryDeleteError(String error) {
+    return 'Failed to delete category: $error';
+  }
+
+  @override
   String get categoryLabel => 'Category';
 
   @override
@@ -115,13 +151,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clearAll => 'Clear All';
 
   @override
+  String get contributionAmountLabel => 'Amount';
+
+  @override
+  String get contributionFromAccountLabel => 'From account';
+
+  @override
+  String get contributionNoteLabel => 'Note (optional)';
+
+  @override
+  String get contributionToAccountLabel => 'To account';
+
+  @override
   String get create => 'Create';
 
   @override
   String get createAccount => 'Create Account';
 
   @override
+  String get createBudgetButton => 'Create Budget';
+
+  @override
   String get createCategory => 'Create Category';
+
+  @override
+  String get createGoalButton => 'Create Goal';
 
   @override
   String get createRecurringTransactionButton => 'Create Recurring Transaction';
@@ -131,6 +185,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createTransactionButton => 'Create Transaction';
+
+  @override
+  String get createWishlistItemButton => 'Add to Wishlist';
 
   @override
   String get currencyLabel => 'Currency';
@@ -151,6 +208,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete => 'Delete';
 
   @override
+  String deleteAccountConfirmation(String accountName) {
+    return 'Are you sure you want to delete the account \"$accountName\"? This will also delete all associated transactions and recurring transactions.';
+  }
+
+  @override
   String get deleteAccountSuccess => 'Account deleted successfully';
 
   @override
@@ -160,11 +222,46 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteAction => 'Delete';
 
   @override
+  String get deleteBudgetDescription => 'This action cannot be undone.';
+
+  @override
+  String get deleteBudgetTitle => 'Delete Budget';
+
+  @override
+  String deleteCategoryConfirmation(String categoryName) {
+    return 'Are you sure you want to delete the category \"$categoryName\"? This will also delete all associated transactions.';
+  }
+
+  @override
   String get deleteCategoryTitle => 'Delete Category';
 
   @override
-  String get deleteRecurringTransactionDescription =>
-      'This action cannot be undone. Transactions already generated from this rule will not be affected.';
+  String deleteConfirmationQuestion(String entity) {
+    return 'Are you sure you want to delete \"$entity\"?';
+  }
+
+  @override
+  String get deleteContributionDescription => 'The money goes back to the account it came from.';
+
+  @override
+  String get deleteContributionTitle => 'Delete Movement';
+
+  @override
+  String get deletedAccountLabel => 'Deleted account';
+
+  @override
+  String get deleteGoalDescription => 'The goal and its history will be deleted.';
+
+  @override
+  String deleteGoalRefundPrompt(String amount) {
+    return 'This goal holds $amount. Choose the account that gets it back.';
+  }
+
+  @override
+  String get deleteGoalTitle => 'Delete Goal';
+
+  @override
+  String get deleteRecurringTransactionDescription => 'This action cannot be undone. Transactions already generated from this rule will not be affected.';
 
   @override
   String get deleteRecurringTransactionTitle => 'Delete Recurring Transaction';
@@ -176,6 +273,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteTransactionTitle => 'Delete Transaction';
 
   @override
+  String get deleteWishlistItemTitle => 'Delete Item';
+
+  @override
+  String get depositToGoal => 'Add Money';
+
+  @override
   String get descriptionHint => 'Enter transaction description';
 
   @override
@@ -185,13 +288,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get edit => 'Edit';
 
   @override
+  String get editBudgetTitle => 'Edit Budget';
+
+  @override
   String get editCategory => 'Edit Category';
+
+  @override
+  String get editGoalTitle => 'Edit Goal';
 
   @override
   String get editRecurringTransactionTitle => 'Edit Recurring Transaction';
 
   @override
   String get editTransactionTitle => 'Edit Transaction';
+
+  @override
+  String get editWishlistItemTitle => 'Edit Item';
 
   @override
   String get endDateLabel => 'End Date';
@@ -203,12 +315,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get englishNative => 'English';
 
   @override
-  String get error_db_operation_failed =>
-      'Database operation failed. Please try again.';
+  String get error_db_operation_failed => 'Database operation failed. Please try again.';
 
   @override
-  String get error_unknown_data =>
-      'Something went wrong with the data operation. Please try again.';
+  String get error_unknown_data => 'Something went wrong with the data operation. Please try again.';
 
   @override
   String get errorCategoryNameEmpty => 'Category name cannot be empty';
@@ -218,6 +328,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorCategoryNameTooShort => 'Category name is too short';
+
+  @override
+  String errorLoadingAccounts(String error) {
+    return 'Error loading accounts: $error';
+  }
+
+  @override
+  String errorLoadingCalendar(String error) {
+    return 'Error loading calendar: $error';
+  }
+
+  @override
+  String errorLoadingCategories(String error) {
+    return 'Error loading categories: $error';
+  }
+
+  @override
+  String errorLoadingTransaction(String error) {
+    return 'Error loading transaction: $error';
+  }
+
+  @override
+  String errorLoadingTransactions(String error) {
+    return 'Error loading transactions: $error';
+  }
 
   @override
   String get expense => 'Expense';
@@ -256,6 +391,85 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fromAccountLabel => 'From Account';
 
   @override
+  String get goalAmountError => 'Amount must be greater than 0';
+
+  @override
+  String get goalArchivedLabel => 'Archived';
+
+  @override
+  String get goalArchivedSubtitle => 'Hide it from the active goals';
+
+  @override
+  String get goalCompleted => 'Goal reached!';
+
+  @override
+  String get goalCurrencyLockedHint => 'Locked: the goal already has money';
+
+  @override
+  String get goalCurrencyNoAccountsHint => 'Add an account first to set the goal\'s currency';
+
+  @override
+  String get goalDeletedSuccess => 'Goal deleted';
+
+  @override
+  String get goalDepositSuccess => 'Money added to the goal';
+
+  @override
+  String get goalErrorAccountMissing => 'This movement\'s account was deleted, so it can\'t be changed';
+
+  @override
+  String get goalErrorCurrencyLocked => 'You can\'t change the currency of a goal that already has money';
+
+  @override
+  String get goalErrorCurrencyMismatch => 'The account\'s currency doesn\'t match the goal\'s';
+
+  @override
+  String get goalErrorInsufficientAccountBalance => 'The account doesn\'t have enough money';
+
+  @override
+  String get goalErrorInsufficientGoalBalance => 'The goal doesn\'t have that much saved';
+
+  @override
+  String get goalErrorRefundAccountRequired => 'Choose an account to receive the saved money';
+
+  @override
+  String get goalHistory => 'History';
+
+  @override
+  String goalMonthlyNeeded(String amount, String date) {
+    return 'Save $amount/month to reach it by $date';
+  }
+
+  @override
+  String get goalNameHint => 'e.g. New car';
+
+  @override
+  String get goalNameLabel => 'Goal name';
+
+  @override
+  String get goalNameRequired => 'Enter a name';
+
+  @override
+  String get goalOverdue => 'Target date passed';
+
+  @override
+  String get goals => 'Savings Goals';
+
+  @override
+  String goalSavedOf(String saved, String target) {
+    return '$saved of $target';
+  }
+
+  @override
+  String get goalTargetAmountLabel => 'Target amount';
+
+  @override
+  String get goalTargetDateLabel => 'Target date (optional)';
+
+  @override
+  String get goalWithdrawSuccess => 'Money withdrawn from the goal';
+
+  @override
   String get goBackAction => 'Go Back';
 
   @override
@@ -274,14 +488,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lime => 'Lime';
 
   @override
-  String get manageRecurringTransactions =>
-      'Manage subscriptions and recurring bills';
+  String get manageBudgets => 'Set monthly spending limits per category';
+
+  @override
+  String get manageGoals => 'Save money toward something you want';
+
+  @override
+  String get manageRecurringTransactions => 'Manage subscriptions and recurring bills';
+
+  @override
+  String get manageWishlist => 'See whether you can afford what you want';
 
   @override
   String get monthlyInsights => 'Monthly Insights';
 
   @override
+  String get monthlyLimitHint => '0.00';
+
+  @override
+  String get monthlyLimitLabel => 'Monthly Limit';
+
+  @override
   String get more => 'More';
+
+  @override
+  String get newBudgetTitle => 'New Budget';
+
+  @override
+  String get newGoalTitle => 'New Goal';
 
   @override
   String get newRecurringTransactionTitle => 'New Recurring Transaction';
@@ -290,10 +524,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get newTransactionTitle => 'New Transaction';
 
   @override
+  String get newWishlistItemTitle => 'New Item';
+
+  @override
   String get nextOccurrenceLabel => 'Next';
 
   @override
   String get noAccountInfo => 'No account info';
+
+  @override
+  String get noBudgetsMessage => 'No budgets yet';
+
+  @override
+  String get noContributionsMessage => 'No money added yet';
 
   @override
   String get noDataForPeriod => 'No data for this period';
@@ -308,7 +551,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noExpensesFound => 'No expenses found';
 
   @override
+  String get noGoalsMessage => 'No savings goals yet';
+
+  @override
   String get noRecurringTransactionsMessage => 'No recurring transactions yet';
+
+  @override
+  String noTransactionsOnDate(String date) {
+    return 'No transactions on $date';
+  }
+
+  @override
+  String get noWishlistItemsMessage => 'Your wishlist is empty';
 
   @override
   String get primaryColor => 'Primary Color';
@@ -317,8 +571,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get purple => 'Purple';
 
   @override
-  String get recurringTransactionDeletedSuccess =>
-      'Recurring transaction deleted successfully';
+  String get recurringTransactionDeletedSuccess => 'Recurring transaction deleted successfully';
 
   @override
   String get recurringTransactionNameHint => 'e.g. Netflix, Rent';
@@ -330,8 +583,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recurringTransactions => 'Recurring Transactions';
 
   @override
-  String get sameTransferAccountError =>
-      'From and To accounts must be different';
+  String get remainingLabel => 'Remaining';
+
+  @override
+  String get sameTransferAccountError => 'From and To accounts must be different';
 
   @override
   String get selectAccountError => 'Please select an account';
@@ -364,6 +619,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get spanishNative => 'Español';
 
   @override
+  String get spentLabel => 'Spent';
+
+  @override
   String get startDateLabel => 'Start Date';
 
   @override
@@ -379,13 +637,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thisAccount => 'this account';
 
   @override
+  String get thisBudget => 'this budget';
+
+  @override
   String get thisCategory => 'this category';
+
+  @override
+  String get thisContribution => 'this movement';
+
+  @override
+  String get thisGoal => 'this goal';
 
   @override
   String get thisRecurringTransaction => 'this recurring transaction';
 
   @override
   String get thisTransaction => 'this transaction';
+
+  @override
+  String get thisWishlistItem => 'this item';
 
   @override
   String get timeLabel => 'Time';
@@ -406,6 +676,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get transactionDeletedSuccess => 'Transaction deleted successfully';
 
   @override
+  String transactionDeleteError(String error) {
+    return 'Failed to delete transaction: $error';
+  }
+
+  @override
   String get transactionSaveError => 'Failed to save transaction';
 
   @override
@@ -418,6 +693,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get transactionUpdatedSuccess => 'Transaction updated successfully!';
 
   @override
+  String transferSummary(String amount, String fromAccount, String toAccount) {
+    return 'This will move $amount from $fromAccount to $toAccount.';
+  }
+
+  @override
   String get transferType => 'Transfer';
 
   @override
@@ -427,10 +707,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get update => 'Update';
 
   @override
+  String get updateBudgetButton => 'Update Budget';
+
+  @override
+  String get updateGoalButton => 'Update Goal';
+
+  @override
   String get updateRecurringTransactionButton => 'Update Recurring Transaction';
 
   @override
   String get updateTransactionButton => 'Update Transaction';
+
+  @override
+  String get updateWishlistItemButton => 'Update Item';
 
   @override
   String get weekdayFri => 'Fri';
@@ -454,70 +743,78 @@ class AppLocalizationsEn extends AppLocalizations {
   String get weekdayWed => 'Wed';
 
   @override
+  String get wishlist => 'Wishlist';
+
+  @override
+  String get wishlistAffordable => 'You can afford it';
+
+  @override
+  String get wishlistCategoryLabel => 'Category (optional)';
+
+  @override
+  String wishlistCoveredByGoal(String goal) {
+    return 'Covered by your \"$goal\" savings';
+  }
+
+  @override
+  String get wishlistCurrencyNoAccountsHint => 'Add an account first to set the currency';
+
+  @override
+  String get wishlistDeletedSuccess => 'Item deleted';
+
+  @override
+  String get wishlistGoalLabel => 'Pay with savings goal (optional)';
+
+  @override
+  String wishlistInsufficientFunds(String amount) {
+    return 'You\'re missing $amount';
+  }
+
+  @override
+  String get wishlistItemNameHint => 'e.g. Headphones';
+
+  @override
+  String get wishlistItemNameLabel => 'What do you want?';
+
+  @override
+  String get wishlistNone => 'None';
+
+  @override
+  String wishlistOverBudget(String amount) {
+    return '$amount over this month\'s budget';
+  }
+
+  @override
+  String get wishlistPriceLabel => 'Price';
+
+  @override
+  String wishlistPurchasedOn(String date) {
+    return 'Bought on $date';
+  }
+
+  @override
+  String get wishlistPurchasedSection => 'Bought';
+
+  @override
+  String get wishlistPurchasedSuccess => 'Marked as bought';
+
+  @override
+  String get wishlistUseGoalConfirm => 'Use Savings';
+
+  @override
+  String wishlistUseGoalPrompt(String amount, String goal) {
+    return 'Move $amount from \"$goal\" into this account to pay for it:';
+  }
+
+  @override
+  String get wishlistUseGoalSkip => 'Don\'t Use';
+
+  @override
+  String get wishlistUseGoalTitle => 'Use Your Savings?';
+
+  @override
+  String get withdrawFromGoal => 'Withdraw';
+
+  @override
   String get yellow => 'Yellow';
-
-  @override
-  String accountLabel(String name) {
-    return 'Account: $name';
-  }
-
-  @override
-  String categoryDeleteError(String error) {
-    return 'Failed to delete category: $error';
-  }
-
-  @override
-  String deleteAccountConfirmation(String accountName) {
-    return 'Are you sure you want to delete the account \"$accountName\"? This will also delete all associated transactions and recurring transactions.';
-  }
-
-  @override
-  String deleteCategoryConfirmation(String categoryName) {
-    return 'Are you sure you want to delete the category \"$categoryName\"? This will also delete all associated transactions.';
-  }
-
-  @override
-  String deleteConfirmationQuestion(String entity) {
-    return 'Are you sure you want to delete \"$entity\"?';
-  }
-
-  @override
-  String errorLoadingAccounts(String error) {
-    return 'Error loading accounts: $error';
-  }
-
-  @override
-  String errorLoadingCalendar(String error) {
-    return 'Error loading calendar: $error';
-  }
-
-  @override
-  String errorLoadingCategories(String error) {
-    return 'Error loading categories: $error';
-  }
-
-  @override
-  String errorLoadingTransaction(String error) {
-    return 'Error loading transaction: $error';
-  }
-
-  @override
-  String errorLoadingTransactions(String error) {
-    return 'Error loading transactions: $error';
-  }
-
-  @override
-  String noTransactionsOnDate(String date) {
-    return 'No transactions on $date';
-  }
-
-  @override
-  String transactionDeleteError(String error) {
-    return 'Failed to delete transaction: $error';
-  }
-
-  @override
-  String transferSummary(String amount, String fromAccount, String toAccount) {
-    return 'This will move $amount from $fromAccount to $toAccount.';
-  }
 }

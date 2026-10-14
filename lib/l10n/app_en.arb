@@ -54,9 +54,21 @@
   "@activeLabel": {
     "description": "Label/switch for whether a recurring transaction rule is active"
   },
+  "addBudget": "Add Budget",
+  "@addBudget": {
+    "description": "Tooltip for the button that creates a new budget"
+  },
+  "addGoal": "Add Goal",
+  "@addGoal": {
+    "description": "Savings goals: addGoal"
+  },
   "addRecurringTransaction": "Add Recurring Transaction",
   "@addRecurringTransaction": {
     "description": "Tooltip for the button that creates a new recurring transaction"
+  },
+  "addWishlistItem": "Add Item",
+  "@addWishlistItem": {
+    "description": "Wishlist: addWishlistItem"
   },
   "allAccounts": "All Accounts",
   "@allAccounts": {
@@ -74,6 +86,10 @@
   "@applyFilters": {
     "description": "Button to apply selected filters"
   },
+  "archivedGoalsSection": "Archived",
+  "@archivedGoalsSection": {
+    "description": "Savings goals: archivedGoalsSection"
+  },
   "balanceTrend": "Balance Trend",
   "@balanceTrend": {
     "description": "Title for the balance trend line chart"
@@ -81,6 +97,26 @@
   "blue": "Blue",
   "@blue": {
     "description": "Color option: Blue"
+  },
+  "budgetCurrencyNoAccountsHint": "Add an account first to set a budget currency",
+  "@budgetCurrencyNoAccountsHint": {
+    "description": "Hint shown under the budget currency selector when no accounts exist yet to pick a currency from"
+  },
+  "budgetDeletedSuccess": "Budget deleted successfully",
+  "@budgetDeletedSuccess": {
+    "description": "Success message after budget deletion"
+  },
+  "budgetDuplicateCategoryCurrencyError": "You already have a budget for this category in this currency",
+  "@budgetDuplicateCategoryCurrencyError": {
+    "description": "Error shown when submitting a budget for a category/currency pair that already has one"
+  },
+  "budgets": "Budgets",
+  "@budgets": {
+    "description": "Title for the Budgets list screen and its More-screen entry"
+  },
+  "buyWishlistItem": "Buy",
+  "@buyWishlistItem": {
+    "description": "Wishlist: buyWishlistItem"
   },
   "calendar": "Calendar",
   "@calendar": {
@@ -160,6 +196,22 @@
   "@clearAll": {
     "description": "Button to clear all filters"
   },
+  "contributionAmountLabel": "Amount",
+  "@contributionAmountLabel": {
+    "description": "Savings goals: contributionAmountLabel"
+  },
+  "contributionFromAccountLabel": "From account",
+  "@contributionFromAccountLabel": {
+    "description": "Savings goals: contributionFromAccountLabel"
+  },
+  "contributionNoteLabel": "Note (optional)",
+  "@contributionNoteLabel": {
+    "description": "Savings goals: contributionNoteLabel"
+  },
+  "contributionToAccountLabel": "To account",
+  "@contributionToAccountLabel": {
+    "description": "Savings goals: contributionToAccountLabel"
+  },
   "create": "Create",
   "@create": {
     "description": "Create action/button"
@@ -168,9 +220,17 @@
   "@createAccount": {
     "description": "Button to create a new account"
   },
+  "createBudgetButton": "Create Budget",
+  "@createBudgetButton": {
+    "description": "Button to create a new budget"
+  },
   "createCategory": "Create Category",
   "@createCategory": {
     "description": "Button to create a new category"
+  },
+  "createGoalButton": "Create Goal",
+  "@createGoalButton": {
+    "description": "Savings goals: createGoalButton"
   },
   "createRecurringTransactionButton": "Create Recurring Transaction",
   "@createRecurringTransactionButton": {
@@ -183,6 +243,10 @@
   "createTransactionButton": "Create Transaction",
   "@createTransactionButton": {
     "description": "Button to create new transaction"
+  },
+  "createWishlistItemButton": "Add to Wishlist",
+  "@createWishlistItemButton": {
+    "description": "Wishlist: createWishlistItemButton"
   },
   "currencyLabel": "Currency",
   "@currencyLabel": {
@@ -230,6 +294,14 @@
   "@deleteAction": {
     "description": "Delete button tooltip"
   },
+  "deleteBudgetDescription": "This action cannot be undone.",
+  "@deleteBudgetDescription": {
+    "description": "Delete confirmation description for a budget"
+  },
+  "deleteBudgetTitle": "Delete Budget",
+  "@deleteBudgetTitle": {
+    "description": "Delete confirmation dialog title for a budget"
+  },
   "deleteCategoryConfirmation": "Are you sure you want to delete the category \"{categoryName}\"? This will also delete all associated transactions.",
   "@deleteCategoryConfirmation": {
     "description": "Delete category confirmation message with category name",
@@ -254,6 +326,36 @@
       }
     }
   },
+  "deleteContributionDescription": "The money goes back to the account it came from.",
+  "@deleteContributionDescription": {
+    "description": "Savings goals: deleteContributionDescription"
+  },
+  "deleteContributionTitle": "Delete Movement",
+  "@deleteContributionTitle": {
+    "description": "Savings goals: deleteContributionTitle"
+  },
+  "deletedAccountLabel": "Deleted account",
+  "@deletedAccountLabel": {
+    "description": "Savings goals: deletedAccountLabel"
+  },
+  "deleteGoalDescription": "The goal and its history will be deleted.",
+  "@deleteGoalDescription": {
+    "description": "Savings goals: deleteGoalDescription"
+  },
+  "deleteGoalRefundPrompt": "This goal holds {amount}. Choose the account that gets it back.",
+  "@deleteGoalRefundPrompt": {
+    "description": "Savings goals: deleteGoalRefundPrompt",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "$250.00"
+      }
+    }
+  },
+  "deleteGoalTitle": "Delete Goal",
+  "@deleteGoalTitle": {
+    "description": "Savings goals: deleteGoalTitle"
+  },
   "deleteRecurringTransactionDescription": "This action cannot be undone. Transactions already generated from this rule will not be affected.",
   "@deleteRecurringTransactionDescription": {
     "description": "Delete confirmation description for a recurring transaction rule"
@@ -270,6 +372,14 @@
   "@deleteTransactionTitle": {
     "description": "Delete confirmation dialog title"
   },
+  "deleteWishlistItemTitle": "Delete Item",
+  "@deleteWishlistItemTitle": {
+    "description": "Wishlist: deleteWishlistItemTitle"
+  },
+  "depositToGoal": "Add Money",
+  "@depositToGoal": {
+    "description": "Savings goals: depositToGoal"
+  },
   "descriptionHint": "Enter transaction description",
   "@descriptionHint": {
     "description": "Description field hint text"
@@ -282,9 +392,17 @@
   "@edit": {
     "description": "Edit action/button"
   },
+  "editBudgetTitle": "Edit Budget",
+  "@editBudgetTitle": {
+    "description": "AppBar title for editing an existing budget"
+  },
   "editCategory": "Edit Category",
   "@editCategory": {
     "description": "AppBar title for editing existing category"
+  },
+  "editGoalTitle": "Edit Goal",
+  "@editGoalTitle": {
+    "description": "Savings goals: editGoalTitle"
   },
   "editRecurringTransactionTitle": "Edit Recurring Transaction",
   "@editRecurringTransactionTitle": {
@@ -293,6 +411,10 @@
   "editTransactionTitle": "Edit Transaction",
   "@editTransactionTitle": {
     "description": "AppBar title for editing existing transaction"
+  },
+  "editWishlistItemTitle": "Edit Item",
+  "@editWishlistItemTitle": {
+    "description": "Wishlist: editWishlistItemTitle"
   },
   "endDateLabel": "End Date",
   "@endDateLabel": {
@@ -424,6 +546,126 @@
   "@fromAccountLabel": {
     "description": "Label for 'from' account in transfer transaction form"
   },
+  "goalAmountError": "Amount must be greater than 0",
+  "@goalAmountError": {
+    "description": "Savings goals: goalAmountError"
+  },
+  "goalArchivedLabel": "Archived",
+  "@goalArchivedLabel": {
+    "description": "Savings goals: goalArchivedLabel"
+  },
+  "goalArchivedSubtitle": "Hide it from the active goals",
+  "@goalArchivedSubtitle": {
+    "description": "Savings goals: goalArchivedSubtitle"
+  },
+  "goalCompleted": "Goal reached!",
+  "@goalCompleted": {
+    "description": "Savings goals: goalCompleted"
+  },
+  "goalCurrencyLockedHint": "Locked: the goal already has money",
+  "@goalCurrencyLockedHint": {
+    "description": "Savings goals: goalCurrencyLockedHint"
+  },
+  "goalCurrencyNoAccountsHint": "Add an account first to set the goal's currency",
+  "@goalCurrencyNoAccountsHint": {
+    "description": "Savings goals: goalCurrencyNoAccountsHint"
+  },
+  "goalDeletedSuccess": "Goal deleted",
+  "@goalDeletedSuccess": {
+    "description": "Savings goals: goalDeletedSuccess"
+  },
+  "goalDepositSuccess": "Money added to the goal",
+  "@goalDepositSuccess": {
+    "description": "Savings goals: goalDepositSuccess"
+  },
+  "goalErrorAccountMissing": "This movement's account was deleted, so it can't be changed",
+  "@goalErrorAccountMissing": {
+    "description": "Savings goals: goalErrorAccountMissing"
+  },
+  "goalErrorCurrencyLocked": "You can't change the currency of a goal that already has money",
+  "@goalErrorCurrencyLocked": {
+    "description": "Savings goals: goalErrorCurrencyLocked"
+  },
+  "goalErrorCurrencyMismatch": "The account's currency doesn't match the goal's",
+  "@goalErrorCurrencyMismatch": {
+    "description": "Savings goals: goalErrorCurrencyMismatch"
+  },
+  "goalErrorInsufficientAccountBalance": "The account doesn't have enough money",
+  "@goalErrorInsufficientAccountBalance": {
+    "description": "Savings goals: goalErrorInsufficientAccountBalance"
+  },
+  "goalErrorInsufficientGoalBalance": "The goal doesn't have that much saved",
+  "@goalErrorInsufficientGoalBalance": {
+    "description": "Savings goals: goalErrorInsufficientGoalBalance"
+  },
+  "goalErrorRefundAccountRequired": "Choose an account to receive the saved money",
+  "@goalErrorRefundAccountRequired": {
+    "description": "Savings goals: goalErrorRefundAccountRequired"
+  },
+  "goalHistory": "History",
+  "@goalHistory": {
+    "description": "Savings goals: goalHistory"
+  },
+  "goalMonthlyNeeded": "Save {amount}/month to reach it by {date}",
+  "@goalMonthlyNeeded": {
+    "description": "Savings goals: goalMonthlyNeeded",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "$200.00"
+      },
+      "date": {
+        "type": "String",
+        "example": "Sep 15, 2026"
+      }
+    }
+  },
+  "goalNameHint": "e.g. New car",
+  "@goalNameHint": {
+    "description": "Savings goals: goalNameHint"
+  },
+  "goalNameLabel": "Goal name",
+  "@goalNameLabel": {
+    "description": "Savings goals: goalNameLabel"
+  },
+  "goalNameRequired": "Enter a name",
+  "@goalNameRequired": {
+    "description": "Savings goals: goalNameRequired"
+  },
+  "goalOverdue": "Target date passed",
+  "@goalOverdue": {
+    "description": "Savings goals: goalOverdue"
+  },
+  "goals": "Savings Goals",
+  "@goals": {
+    "description": "Savings goals: goals"
+  },
+  "goalSavedOf": "{saved} of {target}",
+  "@goalSavedOf": {
+    "description": "Savings goals: goalSavedOf",
+    "placeholders": {
+      "saved": {
+        "type": "String",
+        "example": "$250.00"
+      },
+      "target": {
+        "type": "String",
+        "example": "$1,000.00"
+      }
+    }
+  },
+  "goalTargetAmountLabel": "Target amount",
+  "@goalTargetAmountLabel": {
+    "description": "Savings goals: goalTargetAmountLabel"
+  },
+  "goalTargetDateLabel": "Target date (optional)",
+  "@goalTargetDateLabel": {
+    "description": "Savings goals: goalTargetDateLabel"
+  },
+  "goalWithdrawSuccess": "Money withdrawn from the goal",
+  "@goalWithdrawSuccess": {
+    "description": "Savings goals: goalWithdrawSuccess"
+  },
   "goBackAction": "Go Back",
   "@goBackAction": {
     "description": "Button to go back from error screen"
@@ -448,17 +690,45 @@
   "@lime": {
     "description": "Color option: Lime"
   },
+  "manageBudgets": "Set monthly spending limits per category",
+  "@manageBudgets": {
+    "description": "Subtitle for the Budgets entry on the More screen"
+  },
+  "manageGoals": "Save money toward something you want",
+  "@manageGoals": {
+    "description": "Savings goals: manageGoals"
+  },
   "manageRecurringTransactions": "Manage subscriptions and recurring bills",
   "@manageRecurringTransactions": {
     "description": "Subtitle for the Recurring Transactions entry on the More screen"
+  },
+  "manageWishlist": "See whether you can afford what you want",
+  "@manageWishlist": {
+    "description": "Wishlist: manageWishlist"
   },
   "monthlyInsights": "Monthly Insights",
   "@monthlyInsights": {
     "description": "Title for the monthly insights screen"
   },
+  "monthlyLimitHint": "0.00",
+  "@monthlyLimitHint": {
+    "description": "Hint text for the budget monthly limit field"
+  },
+  "monthlyLimitLabel": "Monthly Limit",
+  "@monthlyLimitLabel": {
+    "description": "Label for the budget monthly limit field"
+  },
   "more": "More",
   "@more": {
     "description": "Label for the more options view"
+  },
+  "newBudgetTitle": "New Budget",
+  "@newBudgetTitle": {
+    "description": "AppBar title for creating a new budget"
+  },
+  "newGoalTitle": "New Goal",
+  "@newGoalTitle": {
+    "description": "Savings goals: newGoalTitle"
   },
   "newRecurringTransactionTitle": "New Recurring Transaction",
   "@newRecurringTransactionTitle": {
@@ -468,6 +738,10 @@
   "@newTransactionTitle": {
     "description": "AppBar title for creating new transaction"
   },
+  "newWishlistItemTitle": "New Item",
+  "@newWishlistItemTitle": {
+    "description": "Wishlist: newWishlistItemTitle"
+  },
   "nextOccurrenceLabel": "Next",
   "@nextOccurrenceLabel": {
     "description": "Prefix label before a recurring transaction's next due date"
@@ -475,6 +749,14 @@
   "noAccountInfo": "No account info",
   "@noAccountInfo": {
     "description": "Shown when a transaction has no account associated"
+  },
+  "noBudgetsMessage": "No budgets yet",
+  "@noBudgetsMessage": {
+    "description": "Empty state message on the Budgets list screen"
+  },
+  "noContributionsMessage": "No money added yet",
+  "@noContributionsMessage": {
+    "description": "Savings goals: noContributionsMessage"
   },
   "noDataForPeriod": "No data for this period",
   "@noDataForPeriod": {
@@ -492,6 +774,10 @@
   "@noExpensesFound": {
     "description": "Message when there are no expenses to display"
   },
+  "noGoalsMessage": "No savings goals yet",
+  "@noGoalsMessage": {
+    "description": "Savings goals: noGoalsMessage"
+  },
   "noRecurringTransactionsMessage": "No recurring transactions yet",
   "@noRecurringTransactionsMessage": {
     "description": "Empty state message on the Recurring Transactions list screen"
@@ -505,6 +791,10 @@
         "example": "Jan 5"
       }
     }
+  },
+  "noWishlistItemsMessage": "Your wishlist is empty",
+  "@noWishlistItemsMessage": {
+    "description": "Wishlist: noWishlistItemsMessage"
   },
   "primaryColor": "Primary Color",
   "@primaryColor": {
@@ -529,6 +819,10 @@
   "recurringTransactions": "Recurring Transactions",
   "@recurringTransactions": {
     "description": "Title for the Recurring Transactions list screen and its More-screen entry"
+  },
+  "remainingLabel": "Remaining",
+  "@remainingLabel": {
+    "description": "Label for a budget's remaining (unspent) amount this month"
   },
   "sameTransferAccountError": "From and To accounts must be different",
   "@sameTransferAccountError": {
@@ -574,6 +868,10 @@
   "@spanishNative": {
     "description": "Native language name for Spanish"
   },
+  "spentLabel": "Spent",
+  "@spentLabel": {
+    "description": "Label for a budget's amount spent so far this month"
+  },
   "startDateLabel": "Start Date",
   "@startDateLabel": {
     "description": "Label for a recurring transaction's start date"
@@ -594,9 +892,21 @@
   "@thisAccount": {
     "description": "Fallback entity name for delete confirmation"
   },
+  "thisBudget": "this budget",
+  "@thisBudget": {
+    "description": "Fallback entity name for delete confirmation"
+  },
   "thisCategory": "this category",
   "@thisCategory": {
     "description": "Fallback entity name for delete confirmation"
+  },
+  "thisContribution": "this movement",
+  "@thisContribution": {
+    "description": "Savings goals: thisContribution"
+  },
+  "thisGoal": "this goal",
+  "@thisGoal": {
+    "description": "Savings goals: thisGoal"
   },
   "thisRecurringTransaction": "this recurring transaction",
   "@thisRecurringTransaction": {
@@ -605,6 +915,10 @@
   "thisTransaction": "this transaction",
   "@thisTransaction": {
     "description": "Fallback entity name for delete confirmation"
+  },
+  "thisWishlistItem": "this item",
+  "@thisWishlistItem": {
+    "description": "Wishlist: thisWishlistItem"
   },
   "timeLabel": "Time",
   "@timeLabel": {
@@ -686,6 +1000,14 @@
   "@update": {
     "description": "Update action/button"
   },
+  "updateBudgetButton": "Update Budget",
+  "@updateBudgetButton": {
+    "description": "Button to update an existing budget"
+  },
+  "updateGoalButton": "Update Goal",
+  "@updateGoalButton": {
+    "description": "Savings goals: updateGoalButton"
+  },
   "updateRecurringTransactionButton": "Update Recurring Transaction",
   "@updateRecurringTransactionButton": {
     "description": "Button to update an existing recurring transaction"
@@ -693,6 +1015,10 @@
   "updateTransactionButton": "Update Transaction",
   "@updateTransactionButton": {
     "description": "Button to update existing transaction"
+  },
+  "updateWishlistItemButton": "Update Item",
+  "@updateWishlistItemButton": {
+    "description": "Wishlist: updateWishlistItemButton"
   },
   "weekdayFri": "Fri",
   "@weekdayFri": {
@@ -721,6 +1047,124 @@
   "weekdayWed": "Wed",
   "@weekdayWed": {
     "description": "Short label for Wednesday in calendar header"
+  },
+  "wishlist": "Wishlist",
+  "@wishlist": {
+    "description": "Wishlist: wishlist"
+  },
+  "wishlistAffordable": "You can afford it",
+  "@wishlistAffordable": {
+    "description": "Wishlist: wishlistAffordable"
+  },
+  "wishlistCategoryLabel": "Category (optional)",
+  "@wishlistCategoryLabel": {
+    "description": "Wishlist: wishlistCategoryLabel"
+  },
+  "wishlistCoveredByGoal": "Covered by your \"{goal}\" savings",
+  "@wishlistCoveredByGoal": {
+    "description": "Wishlist: wishlistCoveredByGoal",
+    "placeholders": {
+      "goal": {
+        "type": "String",
+        "example": "New Car"
+      }
+    }
+  },
+  "wishlistCurrencyNoAccountsHint": "Add an account first to set the currency",
+  "@wishlistCurrencyNoAccountsHint": {
+    "description": "Wishlist: wishlistCurrencyNoAccountsHint"
+  },
+  "wishlistDeletedSuccess": "Item deleted",
+  "@wishlistDeletedSuccess": {
+    "description": "Wishlist: wishlistDeletedSuccess"
+  },
+  "wishlistGoalLabel": "Pay with savings goal (optional)",
+  "@wishlistGoalLabel": {
+    "description": "Wishlist: wishlistGoalLabel"
+  },
+  "wishlistInsufficientFunds": "You're missing {amount}",
+  "@wishlistInsufficientFunds": {
+    "description": "Wishlist: wishlistInsufficientFunds",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "$150.00"
+      }
+    }
+  },
+  "wishlistItemNameHint": "e.g. Headphones",
+  "@wishlistItemNameHint": {
+    "description": "Wishlist: wishlistItemNameHint"
+  },
+  "wishlistItemNameLabel": "What do you want?",
+  "@wishlistItemNameLabel": {
+    "description": "Wishlist: wishlistItemNameLabel"
+  },
+  "wishlistNone": "None",
+  "@wishlistNone": {
+    "description": "Wishlist: wishlistNone"
+  },
+  "wishlistOverBudget": "{amount} over this month's budget",
+  "@wishlistOverBudget": {
+    "description": "Wishlist: wishlistOverBudget",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "$150.00"
+      }
+    }
+  },
+  "wishlistPriceLabel": "Price",
+  "@wishlistPriceLabel": {
+    "description": "Wishlist: wishlistPriceLabel"
+  },
+  "wishlistPurchasedOn": "Bought on {date}",
+  "@wishlistPurchasedOn": {
+    "description": "Wishlist: wishlistPurchasedOn",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "Oct 14, 2026"
+      }
+    }
+  },
+  "wishlistPurchasedSection": "Bought",
+  "@wishlistPurchasedSection": {
+    "description": "Wishlist: wishlistPurchasedSection"
+  },
+  "wishlistPurchasedSuccess": "Marked as bought",
+  "@wishlistPurchasedSuccess": {
+    "description": "Wishlist: wishlistPurchasedSuccess"
+  },
+  "wishlistUseGoalConfirm": "Use Savings",
+  "@wishlistUseGoalConfirm": {
+    "description": "Wishlist: wishlistUseGoalConfirm"
+  },
+  "wishlistUseGoalPrompt": "Move {amount} from \"{goal}\" into this account to pay for it:",
+  "@wishlistUseGoalPrompt": {
+    "description": "Wishlist: wishlistUseGoalPrompt",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "$150.00"
+      },
+      "goal": {
+        "type": "String",
+        "example": "New Car"
+      }
+    }
+  },
+  "wishlistUseGoalSkip": "Don't Use",
+  "@wishlistUseGoalSkip": {
+    "description": "Wishlist: wishlistUseGoalSkip"
+  },
+  "wishlistUseGoalTitle": "Use Your Savings?",
+  "@wishlistUseGoalTitle": {
+    "description": "Wishlist: wishlistUseGoalTitle"
+  },
+  "withdrawFromGoal": "Withdraw",
+  "@withdrawFromGoal": {
+    "description": "Savings goals: withdrawFromGoal"
   },
   "yellow": "Yellow",
   "@yellow": {

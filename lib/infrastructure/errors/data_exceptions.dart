@@ -69,3 +69,34 @@ class UnknownDataException extends DataException {
   UnknownDataException({String? message, super.originalError, super.stackTrace})
     : super(message: message ?? 'An unexpected data error occurred');
 }
+
+enum SavingsGoalError {
+  /// The account's currency doesn't match the goal's.
+  currencyMismatch,
+
+  /// Deposit is larger than the source account's balance.
+  insufficientAccountBalance,
+
+  /// Withdrawal (or an edit/delete) would leave the jar below zero.
+  insufficientGoalBalance,
+
+  /// The contribution's account was deleted, so its balance effect can't be
+  /// reversed.
+  accountMissing,
+
+  /// Deleting a goal that still holds money needs an account to refund to.
+  refundAccountRequired,
+
+  zeroAmount,
+
+  /// Changing a goal's currency once it has contributions.
+  currencyLocked,
+}
+
+/// A savings goal rule was broken - nothing was written. [reason] says which.
+class SavingsGoalValidationException extends DataException {
+  final SavingsGoalError reason;
+
+  SavingsGoalValidationException(this.reason)
+    : super(message: 'Savings goal validation failed: ${reason.name}');
+}
