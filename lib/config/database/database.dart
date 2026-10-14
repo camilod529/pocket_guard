@@ -39,6 +39,7 @@ class Accounts extends Table {
     Budgets,
     SavingsGoals,
     GoalContributions,
+    WishlistItems,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -90,6 +91,9 @@ class AppDatabase extends _$AppDatabase {
           await m.createTable(goalContributions);
           await m.createIndex(goalContributionsGoalIndex);
         }
+        if (from < 9) {
+          await m.createTable(wishlistItems);
+        }
       },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
@@ -100,7 +104,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   Future<double> getAccountBalance(String accountId) {
     return (select(accounts)..where((tbl) => tbl.id.equals(accountId)))
@@ -325,4 +329,33 @@ class Transactions extends Table {
     #id,
     onDelete: KeyAction.cascade,
   )();
+}
+
+class WishlistItems extends Table {
+  // Optional: which expense category buying it would fall under, so
+  // affordability can check that category's budget. setNull so deleting
+  // the category just drops the link instead of blocking the delete.
+  TextColumn get categoryId => text().nullable().references(
+    Categories,
+    #id,
+    onDelete: KeyAction.setNull,
+  )();
+  DateTimeColumn get createdAt => dateTime().clientDefault(DateTime.now)();
+  TextColumn get currency => text()();
+  // Optional: a savings jar set aside for this item - its saved amount
+  // counts toward affording it, and buying can draw from it.
+  TextColumn get goalId => text().nullable().references(
+    SavingsGoals,
+    #id,
+    onDelete: KeyAction.setNull,
+  )();
+  TextColumn get id =>
+      text().clientDefault(() => _uuid.v4())(); // UUID v4 as text
+  TextColumn get name => text()();
+  RealColumn get price => real()();
+  // Set once the purchase transaction is saved; null while still wanted.
+  DateTimeColumn get purchasedAt => dateTime().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {id};
 }

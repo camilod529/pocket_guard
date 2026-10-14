@@ -8,6 +8,7 @@ import 'package:pocket_guard/presentation/mixins/date_time_selection_mixin.dart'
 import 'package:pocket_guard/presentation/providers/account/accounts_provider.dart';
 import 'package:pocket_guard/presentation/providers/category/categories_provider.dart';
 import 'package:pocket_guard/presentation/providers/transaction/transaction_form_provider.dart';
+import 'package:pocket_guard/presentation/providers/transaction/transaction_prefill.dart';
 import 'package:pocket_guard/presentation/providers/transaction/transactions_provider.dart';
 import 'package:pocket_guard/presentation/widgets/shared/delete_confirmation_modal.dart';
 import 'package:pocket_guard/presentation/widgets/transactions/income_expense_form.dart';
@@ -20,10 +21,14 @@ class TransactionFormScreen extends ConsumerStatefulWidget {
   final String transactionId;
   final DateTime? selectedDate;
 
+  /// Starting values for a new transaction (e.g. buying a wishlist item).
+  final TransactionPrefill? prefill;
+
   const TransactionFormScreen({
     super.key,
     required this.transactionId,
     this.selectedDate,
+    this.prefill,
   });
 
   @override
@@ -35,6 +40,12 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen>
     with DateTimeSelectionMixin {
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
+
+  // The amount/description fields read their initialValue on first build,
+  // so a prefill must land in the form state before the form is shown -
+  // until then, keep showing the loading scaffold.
+  late bool _isPrefillApplied = widget.prefill == null;
+  bool _isPrefillScheduled = false;
 
   @override
   DateTime? get selectedDate => widget.selectedDate;
@@ -54,17 +65,49 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen>
     final accountsAsync = ref.watch(accountsProvider);
 
     return formStateAsync.when(
-      data: (formState) => _buildFormScaffold(
-        context,
-        formState,
-        l10n,
-        categoriesAsync,
-        accountsAsync,
-      ),
+      data: (formState) {
+        if (!_isPrefillApplied) {
+          _schedulePrefill();
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        return _buildFormScaffold(
+          context,
+          formState,
+          l10n,
+          categoriesAsync,
+          accountsAsync,
+        );
+      },
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (error, stack) => _buildErrorScaffold(context, l10n, error),
     );
+  }
+
+  void _schedulePrefill() {
+    if (_isPrefillScheduled) return;
+    _isPrefillScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final prefill = widget.prefill!;
+      final notifier = ref.read(
+        transactionFormProvider(
+          transactionId,
+          selectedDate: selectedDate,
+        ).notifier,
+      );
+      notifier.amountChanged(prefill.amount);
+      if (prefill.categoryId != null) {
+        notifier.categoryChanged(prefill.categoryId);
+      }
+      if (prefill.accountId != null) notifier.accountChanged(prefill.accountId);
+      if (prefill.description != null) {
+        notifier.descriptionChanged(prefill.description!);
+      }
+      setState(() => _isPrefillApplied = true);
+    });
   }
 
   @override
@@ -303,7 +346,9 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen>
           ? l10n.transactionCreatedSuccess
           : l10n.transactionUpdatedSuccess;
       _showSuccessSnackbar(context, message);
-      context.pop();
+      // true tells whoever pushed the form (e.g. the wishlist purchase
+      // flow) that a transaction was actually saved.
+      context.pop(true);
     } else {
       _showErrorSnackbar(context, l10n.transactionSaveError);
     }

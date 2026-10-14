@@ -24,6 +24,7 @@
     "addBudget": "Ajouter un Budget",
     "addGoal": "Ajouter un Objectif",
     "addRecurringTransaction": "Ajouter une Transaction Récurrente",
+    "addWishlistItem": "Ajouter un Article",
     "allAccounts": "Tous les Comptes",
     "amountHint": "0,00",
     "amountLabel": "Somme",
@@ -35,6 +36,7 @@
     "budgetDeletedSuccess": "Budget supprimé avec succès",
     "budgetDuplicateCategoryCurrencyError": "Vous avez déjà un budget pour cette catégorie dans cette devise",
     "budgets": "Budgets",
+    "buyWishlistItem": "Acheter",
     "calendar": "Calendrier",
     "calendarNextMonth": "Mois suivant",
     "calendarPreviousMonth": "Mois dernier",
@@ -65,6 +67,7 @@
     "createRecurringTransactionButton": "Créer une Transaction Récurrente",
     "createTransaction": "Créer une transaction",
     "createTransactionButton": "Créer la transaction",
+    "createWishlistItemButton": "Ajouter à la Liste",
     "currencyLabel": "Devise",
     "custom": "Personnalisé",
     "cyan": "Cyan",
@@ -116,6 +119,7 @@
     "deleteRecurringTransactionTitle": "Supprimer la Transaction Récurrente",
     "deleteTransactionDescription": "Cette action est irréversible.",
     "deleteTransactionTitle": "Supprimer la transaction",
+    "deleteWishlistItemTitle": "Supprimer l'Article",
     "depositToGoal": "Ajouter de l'Argent",
     "descriptionHint": "Entrez la description de la transaction",
     "descriptionLabel": "Description",
@@ -125,6 +129,7 @@
     "editGoalTitle": "Modifier l'Objectif",
     "editRecurringTransactionTitle": "Modifier la Transaction Récurrente",
     "editTransactionTitle": "Modifier la transaction",
+    "editWishlistItemTitle": "Modifier l'Article",
     "endDateLabel": "Date de Fin",
     "english": "Anglais",
     "englishNative": "English",
@@ -244,6 +249,7 @@
     "manageBudgets": "Définissez des limites de dépenses mensuelles par catégorie",
     "manageGoals": "Épargnez pour quelque chose que vous voulez",
     "manageRecurringTransactions": "Gérer les abonnements et paiements récurrents",
+    "manageWishlist": "Voyez si vous pouvez vous offrir ce que vous voulez",
     "monthlyInsights": "Aperçus Mensuels",
     "monthlyLimitHint": "0,00",
     "monthlyLimitLabel": "Limite Mensuelle",
@@ -252,6 +258,7 @@
     "newGoalTitle": "Nouvel Objectif",
     "newRecurringTransactionTitle": "Nouvelle Transaction Récurrente",
     "newTransactionTitle": "Nouvelle transaction",
+    "newWishlistItemTitle": "Nouvel Article",
     "nextOccurrenceLabel": "Prochaine",
     "noAccountInfo": "Aucune information de compte",
     "noBudgetsMessage": "Aucun budget pour le moment",
@@ -272,6 +279,7 @@
             }
         }
     },
+    "noWishlistItemsMessage": "Votre liste d'envies est vide",
     "primaryColor": "Couleur primaire",
     "purple": "Violet",
     "recurringTransactionDeletedSuccess": "Transaction récurrente supprimée avec succès",
@@ -302,6 +310,7 @@
     "thisGoal": "cet objectif",
     "thisRecurringTransaction": "cette transaction récurrente",
     "thisTransaction": "cette transaction",
+    "thisWishlistItem": "cet article",
     "timeLabel": "Heure",
     "toAccountLabel": "Compte de destination",
     "totalExpense": "Dépenses Totales",
@@ -321,6 +330,7 @@
     "updateGoalButton": "Mettre à jour l'Objectif",
     "updateRecurringTransactionButton": "Mettre à Jour la Transaction Récurrente",
     "updateTransactionButton": "Mettre à jour la transaction",
+    "updateWishlistItemButton": "Mettre à jour l'Article",
     "weekdayFri": "Ven",
     "weekdayMon": "Lun",
     "weekdaySat": "Sam",
@@ -328,6 +338,70 @@
     "weekdayThu": "Jeu",
     "weekdayTue": "Mar",
     "weekdayWed": "Mer",
+    "wishlist": "Liste d'Envies",
+    "wishlistAffordable": "Vous pouvez vous l'offrir",
+    "wishlistCategoryLabel": "Catégorie (facultatif)",
+    "wishlistCoveredByGoal": "Couvert par votre épargne « {goal} »",
+    "@wishlistCoveredByGoal": {
+        "placeholders": {
+            "goal": {
+                "type": "String",
+                "example": "New Car"
+            }
+        }
+    },
+    "wishlistCurrencyNoAccountsHint": "Ajoutez d'abord un compte pour définir la devise",
+    "wishlistDeletedSuccess": "Article supprimé",
+    "wishlistGoalLabel": "Payer avec un objectif d'épargne (facultatif)",
+    "wishlistInsufficientFunds": "Il vous manque {amount}",
+    "@wishlistInsufficientFunds": {
+        "placeholders": {
+            "amount": {
+                "type": "String",
+                "example": "$150.00"
+            }
+        }
+    },
+    "wishlistItemNameHint": "ex. Casque audio",
+    "wishlistItemNameLabel": "Que voulez-vous ?",
+    "wishlistNone": "Aucun",
+    "wishlistOverBudget": "{amount} au-dessus du budget du mois",
+    "@wishlistOverBudget": {
+        "placeholders": {
+            "amount": {
+                "type": "String",
+                "example": "$150.00"
+            }
+        }
+    },
+    "wishlistPriceLabel": "Prix",
+    "wishlistPurchasedOn": "Acheté le {date}",
+    "@wishlistPurchasedOn": {
+        "placeholders": {
+            "date": {
+                "type": "String",
+                "example": "Oct 14, 2026"
+            }
+        }
+    },
+    "wishlistPurchasedSection": "Achetés",
+    "wishlistPurchasedSuccess": "Marqué comme acheté",
+    "wishlistUseGoalConfirm": "Utiliser l'Épargne",
+    "wishlistUseGoalPrompt": "Déplacez {amount} de « {goal} » vers ce compte pour le payer :",
+    "@wishlistUseGoalPrompt": {
+        "placeholders": {
+            "amount": {
+                "type": "String",
+                "example": "$150.00"
+            },
+            "goal": {
+                "type": "String",
+                "example": "New Car"
+            }
+        }
+    },
+    "wishlistUseGoalSkip": "Ne pas Utiliser",
+    "wishlistUseGoalTitle": "Utiliser votre Épargne ?",
     "withdrawFromGoal": "Retirer",
     "yellow": "Jaune"
 }

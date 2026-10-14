@@ -8,8 +8,10 @@ import 'package:pocket_guard/main.dart' as app;
 
 /// Walks the real app on a device through the Savings Goals feature,
 /// screenshotting each step. Run with:
-///   flutter drive --driver=test_driver/integration_test.dart \
-///     --target=integration_test/savings_goals_test.dart -d <device>
+/// ```
+/// flutter drive --driver=test_driver/integration_test.dart \
+///   --target=integration_test/savings_goals_test.dart -d <device>
+/// ```
 /// Uses the app's real on-device database: it seeds (or resets) an
 /// "e2e-checking" account to 1000 USD and leaves it behind - run it on a
 /// simulator, not a phone with real data.
@@ -176,7 +178,8 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(FilledButton, l10n.delete));
     await tester.pumpAndSettle();
-    expect(find.text(l10n.noGoalsMessage), findsOneWidget);
+    // Only this test's goal - others (e.g. wishlist_test's) may exist.
+    expect(find.text('Used Car'), findsNothing);
     expect(await balance(), 1000);
     await shot('goal_deleted_refunded');
 

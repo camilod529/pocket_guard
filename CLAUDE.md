@@ -24,10 +24,12 @@ flutter build appbundle --release   # Android release build (used by CI)
 
 flutter test                    # unit + widget tests under test/ (CI runs this)
 
-# End-to-end run of the real app on a device/simulator, with a screenshot per
-# step written to build/goal_screenshots/. Not run by CI. iOS needs CocoaPods.
+# End-to-end runs of the real app on a simulator (they write to the app's
+# real database), with a screenshot per step in build/goal_screenshots/.
+# Not run by CI. iOS needs CocoaPods. Targets: savings_goals_test.dart,
+# wishlist_test.dart.
 flutter drive --driver=test_driver/integration_test.dart \
-  --target=integration_test/savings_goals_test.dart -d <device-id>
+  --target=integration_test/<name>_test.dart -d <device-id>
 ```
 
 ## Architecture

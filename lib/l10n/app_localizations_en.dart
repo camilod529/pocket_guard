@@ -56,6 +56,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addRecurringTransaction => 'Add Recurring Transaction';
 
   @override
+  String get addWishlistItem => 'Add Item';
+
+  @override
   String get allAccounts => 'All Accounts';
 
   @override
@@ -87,6 +90,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get budgets => 'Budgets';
+
+  @override
+  String get buyWishlistItem => 'Buy';
 
   @override
   String get calendar => 'Calendar';
@@ -181,6 +187,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createTransactionButton => 'Create Transaction';
 
   @override
+  String get createWishlistItemButton => 'Add to Wishlist';
+
+  @override
   String get currencyLabel => 'Currency';
 
   @override
@@ -264,6 +273,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteTransactionTitle => 'Delete Transaction';
 
   @override
+  String get deleteWishlistItemTitle => 'Delete Item';
+
+  @override
   String get depositToGoal => 'Add Money';
 
   @override
@@ -289,6 +301,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get editTransactionTitle => 'Edit Transaction';
+
+  @override
+  String get editWishlistItemTitle => 'Edit Item';
 
   @override
   String get endDateLabel => 'End Date';
@@ -482,6 +497,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get manageRecurringTransactions => 'Manage subscriptions and recurring bills';
 
   @override
+  String get manageWishlist => 'See whether you can afford what you want';
+
+  @override
   String get monthlyInsights => 'Monthly Insights';
 
   @override
@@ -504,6 +522,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get newTransactionTitle => 'New Transaction';
+
+  @override
+  String get newWishlistItemTitle => 'New Item';
 
   @override
   String get nextOccurrenceLabel => 'Next';
@@ -539,6 +560,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String noTransactionsOnDate(String date) {
     return 'No transactions on $date';
   }
+
+  @override
+  String get noWishlistItemsMessage => 'Your wishlist is empty';
 
   @override
   String get primaryColor => 'Primary Color';
@@ -631,6 +655,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thisTransaction => 'this transaction';
 
   @override
+  String get thisWishlistItem => 'this item';
+
+  @override
   String get timeLabel => 'Time';
 
   @override
@@ -692,6 +719,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get updateTransactionButton => 'Update Transaction';
 
   @override
+  String get updateWishlistItemButton => 'Update Item';
+
+  @override
   String get weekdayFri => 'Fri';
 
   @override
@@ -711,6 +741,76 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weekdayWed => 'Wed';
+
+  @override
+  String get wishlist => 'Wishlist';
+
+  @override
+  String get wishlistAffordable => 'You can afford it';
+
+  @override
+  String get wishlistCategoryLabel => 'Category (optional)';
+
+  @override
+  String wishlistCoveredByGoal(String goal) {
+    return 'Covered by your \"$goal\" savings';
+  }
+
+  @override
+  String get wishlistCurrencyNoAccountsHint => 'Add an account first to set the currency';
+
+  @override
+  String get wishlistDeletedSuccess => 'Item deleted';
+
+  @override
+  String get wishlistGoalLabel => 'Pay with savings goal (optional)';
+
+  @override
+  String wishlistInsufficientFunds(String amount) {
+    return 'You\'re missing $amount';
+  }
+
+  @override
+  String get wishlistItemNameHint => 'e.g. Headphones';
+
+  @override
+  String get wishlistItemNameLabel => 'What do you want?';
+
+  @override
+  String get wishlistNone => 'None';
+
+  @override
+  String wishlistOverBudget(String amount) {
+    return '$amount over this month\'s budget';
+  }
+
+  @override
+  String get wishlistPriceLabel => 'Price';
+
+  @override
+  String wishlistPurchasedOn(String date) {
+    return 'Bought on $date';
+  }
+
+  @override
+  String get wishlistPurchasedSection => 'Bought';
+
+  @override
+  String get wishlistPurchasedSuccess => 'Marked as bought';
+
+  @override
+  String get wishlistUseGoalConfirm => 'Use Savings';
+
+  @override
+  String wishlistUseGoalPrompt(String amount, String goal) {
+    return 'Move $amount from \"$goal\" into this account to pay for it:';
+  }
+
+  @override
+  String get wishlistUseGoalSkip => 'Don\'t Use';
+
+  @override
+  String get wishlistUseGoalTitle => 'Use Your Savings?';
 
   @override
   String get withdrawFromGoal => 'Withdraw';

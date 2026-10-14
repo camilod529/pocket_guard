@@ -19,6 +19,8 @@ abstract class Routes {
   static const String goals = '/goals';
   static const String goalDetail = '/goal/:id';
   static const String savingsGoalForm = '/goal/form/:id';
+  static const String wishlist = '/wishlist';
+  static const String wishlistForm = '/wishlist/form/:id';
 
   // Settings
   static const String themeSettings = '/settings/theme';
@@ -37,4 +39,6 @@ abstract class Routes {
   static String goalDetailPage(String id) => goalDetail.replaceAll(':id', id);
   static String savingsGoalFormPage(String id) =>
       savingsGoalForm.replaceAll(':id', id);
+  static String wishlistFormPage(String id) =>
+      wishlistForm.replaceAll(':id', id);
 }

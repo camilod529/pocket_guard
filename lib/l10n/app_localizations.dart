@@ -187,6 +187,12 @@ abstract class AppLocalizations {
   /// **'Add Recurring Transaction'**
   String get addRecurringTransaction;
 
+  /// Wishlist: addWishlistItem
+  ///
+  /// In en, this message translates to:
+  /// **'Add Item'**
+  String get addWishlistItem;
+
   /// Option to show data from all accounts
   ///
   /// In en, this message translates to:
@@ -252,6 +258,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Budgets'**
   String get budgets;
+
+  /// Wishlist: buyWishlistItem
+  ///
+  /// In en, this message translates to:
+  /// **'Buy'**
+  String get buyWishlistItem;
 
   /// Label for the calendar view
   ///
@@ -433,6 +445,12 @@ abstract class AppLocalizations {
   /// **'Create Transaction'**
   String get createTransactionButton;
 
+  /// Wishlist: createWishlistItemButton
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Wishlist'**
+  String get createWishlistItemButton;
+
   /// Label for currency selector
   ///
   /// In en, this message translates to:
@@ -583,6 +601,12 @@ abstract class AppLocalizations {
   /// **'Delete Transaction'**
   String get deleteTransactionTitle;
 
+  /// Wishlist: deleteWishlistItemTitle
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Item'**
+  String get deleteWishlistItemTitle;
+
   /// Savings goals: depositToGoal
   ///
   /// In en, this message translates to:
@@ -636,6 +660,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Edit Transaction'**
   String get editTransactionTitle;
+
+  /// Wishlist: editWishlistItemTitle
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Item'**
+  String get editWishlistItemTitle;
 
   /// Label for a recurring transaction's optional end date
   ///
@@ -991,6 +1021,12 @@ abstract class AppLocalizations {
   /// **'Manage subscriptions and recurring bills'**
   String get manageRecurringTransactions;
 
+  /// Wishlist: manageWishlist
+  ///
+  /// In en, this message translates to:
+  /// **'See whether you can afford what you want'**
+  String get manageWishlist;
+
   /// Title for the monthly insights screen
   ///
   /// In en, this message translates to:
@@ -1038,6 +1074,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'New Transaction'**
   String get newTransactionTitle;
+
+  /// Wishlist: newWishlistItemTitle
+  ///
+  /// In en, this message translates to:
+  /// **'New Item'**
+  String get newWishlistItemTitle;
 
   /// Prefix label before a recurring transaction's next due date
   ///
@@ -1104,6 +1146,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No transactions on {date}'**
   String noTransactionsOnDate(String date);
+
+  /// Wishlist: noWishlistItemsMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Your wishlist is empty'**
+  String get noWishlistItemsMessage;
 
   /// Label for the primary color selection in theme settings
   ///
@@ -1285,6 +1333,12 @@ abstract class AppLocalizations {
   /// **'this transaction'**
   String get thisTransaction;
 
+  /// Wishlist: thisWishlistItem
+  ///
+  /// In en, this message translates to:
+  /// **'this item'**
+  String get thisWishlistItem;
+
   /// Time field label
   ///
   /// In en, this message translates to:
@@ -1399,6 +1453,12 @@ abstract class AppLocalizations {
   /// **'Update Transaction'**
   String get updateTransactionButton;
 
+  /// Wishlist: updateWishlistItemButton
+  ///
+  /// In en, this message translates to:
+  /// **'Update Item'**
+  String get updateWishlistItemButton;
+
   /// Short label for Friday in calendar header
   ///
   /// In en, this message translates to:
@@ -1440,6 +1500,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Wed'**
   String get weekdayWed;
+
+  /// Wishlist: wishlist
+  ///
+  /// In en, this message translates to:
+  /// **'Wishlist'**
+  String get wishlist;
+
+  /// Wishlist: wishlistAffordable
+  ///
+  /// In en, this message translates to:
+  /// **'You can afford it'**
+  String get wishlistAffordable;
+
+  /// Wishlist: wishlistCategoryLabel
+  ///
+  /// In en, this message translates to:
+  /// **'Category (optional)'**
+  String get wishlistCategoryLabel;
+
+  /// Wishlist: wishlistCoveredByGoal
+  ///
+  /// In en, this message translates to:
+  /// **'Covered by your \"{goal}\" savings'**
+  String wishlistCoveredByGoal(String goal);
+
+  /// Wishlist: wishlistCurrencyNoAccountsHint
+  ///
+  /// In en, this message translates to:
+  /// **'Add an account first to set the currency'**
+  String get wishlistCurrencyNoAccountsHint;
+
+  /// Wishlist: wishlistDeletedSuccess
+  ///
+  /// In en, this message translates to:
+  /// **'Item deleted'**
+  String get wishlistDeletedSuccess;
+
+  /// Wishlist: wishlistGoalLabel
+  ///
+  /// In en, this message translates to:
+  /// **'Pay with savings goal (optional)'**
+  String get wishlistGoalLabel;
+
+  /// Wishlist: wishlistInsufficientFunds
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re missing {amount}'**
+  String wishlistInsufficientFunds(String amount);
+
+  /// Wishlist: wishlistItemNameHint
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Headphones'**
+  String get wishlistItemNameHint;
+
+  /// Wishlist: wishlistItemNameLabel
+  ///
+  /// In en, this message translates to:
+  /// **'What do you want?'**
+  String get wishlistItemNameLabel;
+
+  /// Wishlist: wishlistNone
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get wishlistNone;
+
+  /// Wishlist: wishlistOverBudget
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} over this month\'s budget'**
+  String wishlistOverBudget(String amount);
+
+  /// Wishlist: wishlistPriceLabel
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get wishlistPriceLabel;
+
+  /// Wishlist: wishlistPurchasedOn
+  ///
+  /// In en, this message translates to:
+  /// **'Bought on {date}'**
+  String wishlistPurchasedOn(String date);
+
+  /// Wishlist: wishlistPurchasedSection
+  ///
+  /// In en, this message translates to:
+  /// **'Bought'**
+  String get wishlistPurchasedSection;
+
+  /// Wishlist: wishlistPurchasedSuccess
+  ///
+  /// In en, this message translates to:
+  /// **'Marked as bought'**
+  String get wishlistPurchasedSuccess;
+
+  /// Wishlist: wishlistUseGoalConfirm
+  ///
+  /// In en, this message translates to:
+  /// **'Use Savings'**
+  String get wishlistUseGoalConfirm;
+
+  /// Wishlist: wishlistUseGoalPrompt
+  ///
+  /// In en, this message translates to:
+  /// **'Move {amount} from \"{goal}\" into this account to pay for it:'**
+  String wishlistUseGoalPrompt(String amount, String goal);
+
+  /// Wishlist: wishlistUseGoalSkip
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t Use'**
+  String get wishlistUseGoalSkip;
+
+  /// Wishlist: wishlistUseGoalTitle
+  ///
+  /// In en, this message translates to:
+  /// **'Use Your Savings?'**
+  String get wishlistUseGoalTitle;
 
   /// Savings goals: withdrawFromGoal
   ///

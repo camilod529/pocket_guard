@@ -66,6 +66,10 @@
   "@addRecurringTransaction": {
     "description": "Tooltip for the button that creates a new recurring transaction"
   },
+  "addWishlistItem": "Add Item",
+  "@addWishlistItem": {
+    "description": "Wishlist: addWishlistItem"
+  },
   "allAccounts": "All Accounts",
   "@allAccounts": {
     "description": "Option to show data from all accounts"
@@ -109,6 +113,10 @@
   "budgets": "Budgets",
   "@budgets": {
     "description": "Title for the Budgets list screen and its More-screen entry"
+  },
+  "buyWishlistItem": "Buy",
+  "@buyWishlistItem": {
+    "description": "Wishlist: buyWishlistItem"
   },
   "calendar": "Calendar",
   "@calendar": {
@@ -236,6 +244,10 @@
   "@createTransactionButton": {
     "description": "Button to create new transaction"
   },
+  "createWishlistItemButton": "Add to Wishlist",
+  "@createWishlistItemButton": {
+    "description": "Wishlist: createWishlistItemButton"
+  },
   "currencyLabel": "Currency",
   "@currencyLabel": {
     "description": "Label for currency selector"
@@ -360,6 +372,10 @@
   "@deleteTransactionTitle": {
     "description": "Delete confirmation dialog title"
   },
+  "deleteWishlistItemTitle": "Delete Item",
+  "@deleteWishlistItemTitle": {
+    "description": "Wishlist: deleteWishlistItemTitle"
+  },
   "depositToGoal": "Add Money",
   "@depositToGoal": {
     "description": "Savings goals: depositToGoal"
@@ -395,6 +411,10 @@
   "editTransactionTitle": "Edit Transaction",
   "@editTransactionTitle": {
     "description": "AppBar title for editing existing transaction"
+  },
+  "editWishlistItemTitle": "Edit Item",
+  "@editWishlistItemTitle": {
+    "description": "Wishlist: editWishlistItemTitle"
   },
   "endDateLabel": "End Date",
   "@endDateLabel": {
@@ -682,6 +702,10 @@
   "@manageRecurringTransactions": {
     "description": "Subtitle for the Recurring Transactions entry on the More screen"
   },
+  "manageWishlist": "See whether you can afford what you want",
+  "@manageWishlist": {
+    "description": "Wishlist: manageWishlist"
+  },
   "monthlyInsights": "Monthly Insights",
   "@monthlyInsights": {
     "description": "Title for the monthly insights screen"
@@ -713,6 +737,10 @@
   "newTransactionTitle": "New Transaction",
   "@newTransactionTitle": {
     "description": "AppBar title for creating new transaction"
+  },
+  "newWishlistItemTitle": "New Item",
+  "@newWishlistItemTitle": {
+    "description": "Wishlist: newWishlistItemTitle"
   },
   "nextOccurrenceLabel": "Next",
   "@nextOccurrenceLabel": {
@@ -763,6 +791,10 @@
         "example": "Jan 5"
       }
     }
+  },
+  "noWishlistItemsMessage": "Your wishlist is empty",
+  "@noWishlistItemsMessage": {
+    "description": "Wishlist: noWishlistItemsMessage"
   },
   "primaryColor": "Primary Color",
   "@primaryColor": {
@@ -884,6 +916,10 @@
   "@thisTransaction": {
     "description": "Fallback entity name for delete confirmation"
   },
+  "thisWishlistItem": "this item",
+  "@thisWishlistItem": {
+    "description": "Wishlist: thisWishlistItem"
+  },
   "timeLabel": "Time",
   "@timeLabel": {
     "description": "Time field label"
@@ -980,6 +1016,10 @@
   "@updateTransactionButton": {
     "description": "Button to update existing transaction"
   },
+  "updateWishlistItemButton": "Update Item",
+  "@updateWishlistItemButton": {
+    "description": "Wishlist: updateWishlistItemButton"
+  },
   "weekdayFri": "Fri",
   "@weekdayFri": {
     "description": "Short label for Friday in calendar header"
@@ -1007,6 +1047,120 @@
   "weekdayWed": "Wed",
   "@weekdayWed": {
     "description": "Short label for Wednesday in calendar header"
+  },
+  "wishlist": "Wishlist",
+  "@wishlist": {
+    "description": "Wishlist: wishlist"
+  },
+  "wishlistAffordable": "You can afford it",
+  "@wishlistAffordable": {
+    "description": "Wishlist: wishlistAffordable"
+  },
+  "wishlistCategoryLabel": "Category (optional)",
+  "@wishlistCategoryLabel": {
+    "description": "Wishlist: wishlistCategoryLabel"
+  },
+  "wishlistCoveredByGoal": "Covered by your \"{goal}\" savings",
+  "@wishlistCoveredByGoal": {
+    "description": "Wishlist: wishlistCoveredByGoal",
+    "placeholders": {
+      "goal": {
+        "type": "String",
+        "example": "New Car"
+      }
+    }
+  },
+  "wishlistCurrencyNoAccountsHint": "Add an account first to set the currency",
+  "@wishlistCurrencyNoAccountsHint": {
+    "description": "Wishlist: wishlistCurrencyNoAccountsHint"
+  },
+  "wishlistDeletedSuccess": "Item deleted",
+  "@wishlistDeletedSuccess": {
+    "description": "Wishlist: wishlistDeletedSuccess"
+  },
+  "wishlistGoalLabel": "Pay with savings goal (optional)",
+  "@wishlistGoalLabel": {
+    "description": "Wishlist: wishlistGoalLabel"
+  },
+  "wishlistInsufficientFunds": "You're missing {amount}",
+  "@wishlistInsufficientFunds": {
+    "description": "Wishlist: wishlistInsufficientFunds",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "$150.00"
+      }
+    }
+  },
+  "wishlistItemNameHint": "e.g. Headphones",
+  "@wishlistItemNameHint": {
+    "description": "Wishlist: wishlistItemNameHint"
+  },
+  "wishlistItemNameLabel": "What do you want?",
+  "@wishlistItemNameLabel": {
+    "description": "Wishlist: wishlistItemNameLabel"
+  },
+  "wishlistNone": "None",
+  "@wishlistNone": {
+    "description": "Wishlist: wishlistNone"
+  },
+  "wishlistOverBudget": "{amount} over this month's budget",
+  "@wishlistOverBudget": {
+    "description": "Wishlist: wishlistOverBudget",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "$150.00"
+      }
+    }
+  },
+  "wishlistPriceLabel": "Price",
+  "@wishlistPriceLabel": {
+    "description": "Wishlist: wishlistPriceLabel"
+  },
+  "wishlistPurchasedOn": "Bought on {date}",
+  "@wishlistPurchasedOn": {
+    "description": "Wishlist: wishlistPurchasedOn",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "Oct 14, 2026"
+      }
+    }
+  },
+  "wishlistPurchasedSection": "Bought",
+  "@wishlistPurchasedSection": {
+    "description": "Wishlist: wishlistPurchasedSection"
+  },
+  "wishlistPurchasedSuccess": "Marked as bought",
+  "@wishlistPurchasedSuccess": {
+    "description": "Wishlist: wishlistPurchasedSuccess"
+  },
+  "wishlistUseGoalConfirm": "Use Savings",
+  "@wishlistUseGoalConfirm": {
+    "description": "Wishlist: wishlistUseGoalConfirm"
+  },
+  "wishlistUseGoalPrompt": "Move {amount} from \"{goal}\" into this account to pay for it:",
+  "@wishlistUseGoalPrompt": {
+    "description": "Wishlist: wishlistUseGoalPrompt",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "$150.00"
+      },
+      "goal": {
+        "type": "String",
+        "example": "New Car"
+      }
+    }
+  },
+  "wishlistUseGoalSkip": "Don't Use",
+  "@wishlistUseGoalSkip": {
+    "description": "Wishlist: wishlistUseGoalSkip"
+  },
+  "wishlistUseGoalTitle": "Use Your Savings?",
+  "@wishlistUseGoalTitle": {
+    "description": "Wishlist: wishlistUseGoalTitle"
   },
   "withdrawFromGoal": "Withdraw",
   "@withdrawFromGoal": {

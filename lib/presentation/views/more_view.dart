@@ -64,6 +64,14 @@ class MoreView extends ConsumerWidget {
                   route: Routes.goals,
                   ref: ref,
                 ),
+                _buildSettingsCard(
+                  context,
+                  icon: Icons.shopping_bag_outlined,
+                  title: localizations.wishlist,
+                  subtitle: localizations.manageWishlist,
+                  route: Routes.wishlist,
+                  ref: ref,
+                ),
                 // _buildSettingsCard(
                 //   context,
                 //   icon: Icons.notifications_outlined,
