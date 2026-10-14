@@ -50,7 +50,7 @@ final class BudgetFormProvider
   }
 }
 
-String _$budgetFormHash() => r'dca377c285a605069c3fdfd9767b6584e0cc709b';
+String _$budgetFormHash() => r'33942ac68b5e8ef5016b0c724d627b36ce169962';
 
 final class BudgetFormFamily extends $Family
     with

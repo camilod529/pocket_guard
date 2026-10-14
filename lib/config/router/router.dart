@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:pocket_guard/config/router/routes.dart';
 import 'package:pocket_guard/presentation/screens/account_form_screen.dart';
 import 'package:pocket_guard/presentation/screens/budget_form_screen.dart';
+import 'package:pocket_guard/presentation/screens/goal_detail_screen.dart';
+import 'package:pocket_guard/presentation/screens/savings_goal_form_screen.dart';
 import 'package:pocket_guard/presentation/screens/category_form_screen.dart';
 import 'package:pocket_guard/presentation/screens/recurring_transaction_form_screen.dart';
 import 'package:pocket_guard/presentation/screens/settings/language_settings_screen.dart';
@@ -11,6 +13,7 @@ import 'package:pocket_guard/presentation/screens/stats/monthly_insights_screen.
 import 'package:pocket_guard/presentation/screens/transaction_form_screen.dart';
 import 'package:pocket_guard/presentation/views/account_view.dart';
 import 'package:pocket_guard/presentation/views/budget_view.dart';
+import 'package:pocket_guard/presentation/views/goal_view.dart';
 import 'package:pocket_guard/presentation/views/calendar_view.dart';
 import 'package:pocket_guard/presentation/views/category_view.dart';
 import 'package:pocket_guard/presentation/views/more_view.dart';
@@ -131,6 +134,27 @@ final appRouter = GoRouter(
         final id = state.pathParameters['id'];
         return BudgetFormScreen(budgetId: id ?? GlobalConstants.createId);
       },
+    ),
+    GoRoute(
+      path: Routes.goals,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const GoalView(),
+    ),
+    // Before goalDetail: '/goal/:id' would otherwise also match
+    // '/goal/form/...'.
+    GoRoute(
+      path: Routes.savingsGoalForm,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) {
+        final id = state.pathParameters['id'];
+        return SavingsGoalFormScreen(goalId: id ?? GlobalConstants.createId);
+      },
+    ),
+    GoRoute(
+      path: Routes.goalDetail,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) =>
+          GoalDetailScreen(goalId: state.pathParameters['id']!),
     ),
     GoRoute(
       path: Routes.themeSettings,

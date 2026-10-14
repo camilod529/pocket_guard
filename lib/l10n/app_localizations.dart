@@ -175,6 +175,12 @@ abstract class AppLocalizations {
   /// **'Add Budget'**
   String get addBudget;
 
+  /// Savings goals: addGoal
+  ///
+  /// In en, this message translates to:
+  /// **'Add Goal'**
+  String get addGoal;
+
   /// Tooltip for the button that creates a new recurring transaction
   ///
   /// In en, this message translates to:
@@ -204,6 +210,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Apply Filters'**
   String get applyFilters;
+
+  /// Savings goals: archivedGoalsSection
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get archivedGoalsSection;
 
   /// Title for the balance trend line chart
   ///
@@ -349,6 +361,30 @@ abstract class AppLocalizations {
   /// **'Clear All'**
   String get clearAll;
 
+  /// Savings goals: contributionAmountLabel
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get contributionAmountLabel;
+
+  /// Savings goals: contributionFromAccountLabel
+  ///
+  /// In en, this message translates to:
+  /// **'From account'**
+  String get contributionFromAccountLabel;
+
+  /// Savings goals: contributionNoteLabel
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get contributionNoteLabel;
+
+  /// Savings goals: contributionToAccountLabel
+  ///
+  /// In en, this message translates to:
+  /// **'To account'**
+  String get contributionToAccountLabel;
+
   /// Create action/button
   ///
   /// In en, this message translates to:
@@ -372,6 +408,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create Category'**
   String get createCategory;
+
+  /// Savings goals: createGoalButton
+  ///
+  /// In en, this message translates to:
+  /// **'Create Goal'**
+  String get createGoalButton;
 
   /// Button to create a new recurring transaction
   ///
@@ -481,6 +523,42 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to delete \"{entity}\"?'**
   String deleteConfirmationQuestion(String entity);
 
+  /// Savings goals: deleteContributionDescription
+  ///
+  /// In en, this message translates to:
+  /// **'The money goes back to the account it came from.'**
+  String get deleteContributionDescription;
+
+  /// Savings goals: deleteContributionTitle
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Movement'**
+  String get deleteContributionTitle;
+
+  /// Savings goals: deletedAccountLabel
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted account'**
+  String get deletedAccountLabel;
+
+  /// Savings goals: deleteGoalDescription
+  ///
+  /// In en, this message translates to:
+  /// **'The goal and its history will be deleted.'**
+  String get deleteGoalDescription;
+
+  /// Savings goals: deleteGoalRefundPrompt
+  ///
+  /// In en, this message translates to:
+  /// **'This goal holds {amount}. Choose the account that gets it back.'**
+  String deleteGoalRefundPrompt(String amount);
+
+  /// Savings goals: deleteGoalTitle
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Goal'**
+  String get deleteGoalTitle;
+
   /// Delete confirmation description for a recurring transaction rule
   ///
   /// In en, this message translates to:
@@ -504,6 +582,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete Transaction'**
   String get deleteTransactionTitle;
+
+  /// Savings goals: depositToGoal
+  ///
+  /// In en, this message translates to:
+  /// **'Add Money'**
+  String get depositToGoal;
 
   /// Description field hint text
   ///
@@ -534,6 +618,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Edit Category'**
   String get editCategory;
+
+  /// Savings goals: editGoalTitle
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Goal'**
+  String get editGoalTitle;
 
   /// AppBar title for editing an existing recurring transaction
   ///
@@ -697,6 +787,156 @@ abstract class AppLocalizations {
   /// **'From Account'**
   String get fromAccountLabel;
 
+  /// Savings goals: goalAmountError
+  ///
+  /// In en, this message translates to:
+  /// **'Amount must be greater than 0'**
+  String get goalAmountError;
+
+  /// Savings goals: goalArchivedLabel
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get goalArchivedLabel;
+
+  /// Savings goals: goalArchivedSubtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Hide it from the active goals'**
+  String get goalArchivedSubtitle;
+
+  /// Savings goals: goalCompleted
+  ///
+  /// In en, this message translates to:
+  /// **'Goal reached!'**
+  String get goalCompleted;
+
+  /// Savings goals: goalCurrencyLockedHint
+  ///
+  /// In en, this message translates to:
+  /// **'Locked: the goal already has money'**
+  String get goalCurrencyLockedHint;
+
+  /// Savings goals: goalCurrencyNoAccountsHint
+  ///
+  /// In en, this message translates to:
+  /// **'Add an account first to set the goal\'s currency'**
+  String get goalCurrencyNoAccountsHint;
+
+  /// Savings goals: goalDeletedSuccess
+  ///
+  /// In en, this message translates to:
+  /// **'Goal deleted'**
+  String get goalDeletedSuccess;
+
+  /// Savings goals: goalDepositSuccess
+  ///
+  /// In en, this message translates to:
+  /// **'Money added to the goal'**
+  String get goalDepositSuccess;
+
+  /// Savings goals: goalErrorAccountMissing
+  ///
+  /// In en, this message translates to:
+  /// **'This movement\'s account was deleted, so it can\'t be changed'**
+  String get goalErrorAccountMissing;
+
+  /// Savings goals: goalErrorCurrencyLocked
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t change the currency of a goal that already has money'**
+  String get goalErrorCurrencyLocked;
+
+  /// Savings goals: goalErrorCurrencyMismatch
+  ///
+  /// In en, this message translates to:
+  /// **'The account\'s currency doesn\'t match the goal\'s'**
+  String get goalErrorCurrencyMismatch;
+
+  /// Savings goals: goalErrorInsufficientAccountBalance
+  ///
+  /// In en, this message translates to:
+  /// **'The account doesn\'t have enough money'**
+  String get goalErrorInsufficientAccountBalance;
+
+  /// Savings goals: goalErrorInsufficientGoalBalance
+  ///
+  /// In en, this message translates to:
+  /// **'The goal doesn\'t have that much saved'**
+  String get goalErrorInsufficientGoalBalance;
+
+  /// Savings goals: goalErrorRefundAccountRequired
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an account to receive the saved money'**
+  String get goalErrorRefundAccountRequired;
+
+  /// Savings goals: goalHistory
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get goalHistory;
+
+  /// Savings goals: goalMonthlyNeeded
+  ///
+  /// In en, this message translates to:
+  /// **'Save {amount}/month to reach it by {date}'**
+  String goalMonthlyNeeded(String amount, String date);
+
+  /// Savings goals: goalNameHint
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. New car'**
+  String get goalNameHint;
+
+  /// Savings goals: goalNameLabel
+  ///
+  /// In en, this message translates to:
+  /// **'Goal name'**
+  String get goalNameLabel;
+
+  /// Savings goals: goalNameRequired
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name'**
+  String get goalNameRequired;
+
+  /// Savings goals: goalOverdue
+  ///
+  /// In en, this message translates to:
+  /// **'Target date passed'**
+  String get goalOverdue;
+
+  /// Savings goals: goals
+  ///
+  /// In en, this message translates to:
+  /// **'Savings Goals'**
+  String get goals;
+
+  /// Savings goals: goalSavedOf
+  ///
+  /// In en, this message translates to:
+  /// **'{saved} of {target}'**
+  String goalSavedOf(String saved, String target);
+
+  /// Savings goals: goalTargetAmountLabel
+  ///
+  /// In en, this message translates to:
+  /// **'Target amount'**
+  String get goalTargetAmountLabel;
+
+  /// Savings goals: goalTargetDateLabel
+  ///
+  /// In en, this message translates to:
+  /// **'Target date (optional)'**
+  String get goalTargetDateLabel;
+
+  /// Savings goals: goalWithdrawSuccess
+  ///
+  /// In en, this message translates to:
+  /// **'Money withdrawn from the goal'**
+  String get goalWithdrawSuccess;
+
   /// Button to go back from error screen
   ///
   /// In en, this message translates to:
@@ -739,6 +979,12 @@ abstract class AppLocalizations {
   /// **'Set monthly spending limits per category'**
   String get manageBudgets;
 
+  /// Savings goals: manageGoals
+  ///
+  /// In en, this message translates to:
+  /// **'Save money toward something you want'**
+  String get manageGoals;
+
   /// Subtitle for the Recurring Transactions entry on the More screen
   ///
   /// In en, this message translates to:
@@ -775,6 +1021,12 @@ abstract class AppLocalizations {
   /// **'New Budget'**
   String get newBudgetTitle;
 
+  /// Savings goals: newGoalTitle
+  ///
+  /// In en, this message translates to:
+  /// **'New Goal'**
+  String get newGoalTitle;
+
   /// AppBar title for creating a new recurring transaction
   ///
   /// In en, this message translates to:
@@ -805,6 +1057,12 @@ abstract class AppLocalizations {
   /// **'No budgets yet'**
   String get noBudgetsMessage;
 
+  /// Savings goals: noContributionsMessage
+  ///
+  /// In en, this message translates to:
+  /// **'No money added yet'**
+  String get noContributionsMessage;
+
   /// Message when there is no transaction data for the selected period
   ///
   /// In en, this message translates to:
@@ -828,6 +1086,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No expenses found'**
   String get noExpensesFound;
+
+  /// Savings goals: noGoalsMessage
+  ///
+  /// In en, this message translates to:
+  /// **'No savings goals yet'**
+  String get noGoalsMessage;
 
   /// Empty state message on the Recurring Transactions list screen
   ///
@@ -997,6 +1261,18 @@ abstract class AppLocalizations {
   /// **'this category'**
   String get thisCategory;
 
+  /// Savings goals: thisContribution
+  ///
+  /// In en, this message translates to:
+  /// **'this movement'**
+  String get thisContribution;
+
+  /// Savings goals: thisGoal
+  ///
+  /// In en, this message translates to:
+  /// **'this goal'**
+  String get thisGoal;
+
   /// Fallback entity name for delete confirmation
   ///
   /// In en, this message translates to:
@@ -1105,6 +1381,12 @@ abstract class AppLocalizations {
   /// **'Update Budget'**
   String get updateBudgetButton;
 
+  /// Savings goals: updateGoalButton
+  ///
+  /// In en, this message translates to:
+  /// **'Update Goal'**
+  String get updateGoalButton;
+
   /// Button to update an existing recurring transaction
   ///
   /// In en, this message translates to:
@@ -1158,6 +1440,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Wed'**
   String get weekdayWed;
+
+  /// Savings goals: withdrawFromGoal
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw'**
+  String get withdrawFromGoal;
 
   /// Color option: Yellow
   ///

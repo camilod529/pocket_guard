@@ -31,7 +31,15 @@ class Accounts extends Table {
 }
 
 @DriftDatabase(
-  tables: [Accounts, Categories, Transactions, RecurringTransactions, Budgets],
+  tables: [
+    Accounts,
+    Categories,
+    Transactions,
+    RecurringTransactions,
+    Budgets,
+    SavingsGoals,
+    GoalContributions,
+  ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
@@ -77,6 +85,11 @@ class AppDatabase extends _$AppDatabase {
             'budgets_category_currency_unique ON budgets (category_id, currency)',
           );
         }
+        if (from < 8) {
+          await m.createTable(savingsGoals);
+          await m.createTable(goalContributions);
+          await m.createIndex(goalContributionsGoalIndex);
+        }
       },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
@@ -87,7 +100,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   Future<double> getAccountBalance(String accountId) {
     return (select(accounts)..where((tbl) => tbl.id.equals(accountId)))
@@ -173,6 +186,36 @@ class Budgets extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+@TableIndex(name: 'goal_contributions_goal_index', columns: {#goalId})
+class GoalContributions extends Table {
+  // Nullable + setNull rather than cascade: money put into a jar has
+  // already left its source account, so deleting that account later must
+  // not silently erase it from the jar. A contribution whose account is
+  // gone can no longer be edited or deleted (there's nowhere to reverse its
+  // balance effect into) - withdraw from the jar instead.
+  TextColumn get accountId => text().nullable().references(
+    Accounts,
+    #id,
+    onDelete: KeyAction.setNull,
+  )();
+  // Signed: positive = deposit into the jar (subtracted from the account),
+  // negative = withdrawal from the jar (added back to the account). The
+  // jar's saved amount is always SUM(amount), never stored separately.
+  RealColumn get amount => real()();
+  DateTimeColumn get date => dateTime()();
+  // No onDelete: deleting a goal goes through
+  // SavingsGoalDriftDataSourceImpl.deleteGoal, which refunds the saved
+  // amount and removes contributions explicitly - a raw cascade would make
+  // the saved money vanish.
+  TextColumn get goalId => text().references(SavingsGoals, #id)();
+  TextColumn get id =>
+      text().clientDefault(() => _uuid.v4())(); // UUID v4 as text
+  TextColumn get note => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 class Categories extends Table {
   TextColumn get id =>
       text().clientDefault(() => _uuid.v4())(); // UUID v4 as text
@@ -241,6 +284,22 @@ class RecurringTransactions extends Table {
     #id,
     onDelete: KeyAction.cascade,
   )(); // set only for transfer rules
+}
+
+class SavingsGoals extends Table {
+  DateTimeColumn get createdAt => dateTime().clientDefault(DateTime.now)();
+  // Contributions must come from accounts in this same currency - jars
+  // don't convert currencies, same as budgets.
+  TextColumn get currency => text()();
+  TextColumn get id =>
+      text().clientDefault(() => _uuid.v4())(); // UUID v4 as text
+  BoolColumn get isArchived => boolean().withDefault(const Constant(false))();
+  TextColumn get name => text()();
+  RealColumn get targetAmount => real()();
+  DateTimeColumn get targetDate => dateTime().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {id};
 }
 
 @TableIndex(

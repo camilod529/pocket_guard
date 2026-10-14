@@ -22,11 +22,13 @@
     "accountTypeLabel": "Tipo de Cuenta",
     "activeLabel": "Activo",
     "addBudget": "Agregar Presupuesto",
+    "addGoal": "Agregar Meta",
     "addRecurringTransaction": "Agregar Transacción Recurrente",
     "allAccounts": "Todas las Cuentas",
     "amountHint": "0.00",
     "amountLabel": "Monto",
     "applyFilters": "Aplicar Filtros",
+    "archivedGoalsSection": "Archivadas",
     "balanceTrend": "Tendencia del Saldo",
     "blue": "Azul",
     "budgetCurrencyNoAccountsHint": "Agrega una cuenta primero para establecer la moneda del presupuesto",
@@ -51,10 +53,15 @@
     "categoryName": "Nombre de Categoría",
     "chooseYourAppColor": "Elige el color de tu aplicación",
     "clearAll": "Borrar Todo",
+    "contributionAmountLabel": "Monto",
+    "contributionFromAccountLabel": "Desde la cuenta",
+    "contributionNoteLabel": "Nota (opcional)",
+    "contributionToAccountLabel": "A la cuenta",
     "create": "Crear",
     "createAccount": "Crear Cuenta",
     "createBudgetButton": "Crear Presupuesto",
     "createCategory": "Crear Categoría",
+    "createGoalButton": "Crear Meta",
     "createRecurringTransactionButton": "Crear Transacción Recurrente",
     "createTransaction": "Crear Transacción",
     "createTransactionButton": "Crear Transacción",
@@ -91,15 +98,31 @@
     },
     "deleteCategoryTitle": "Eliminar Categoría",
     "deleteConfirmationQuestion": "¿Estás seguro de que deseas eliminar \"{entity}\"?",
+    "deleteContributionDescription": "El dinero vuelve a la cuenta de donde salió.",
+    "deleteContributionTitle": "Eliminar Movimiento",
+    "deletedAccountLabel": "Cuenta eliminada",
+    "deleteGoalDescription": "La meta y su historial se eliminarán.",
+    "deleteGoalRefundPrompt": "Esta meta tiene {amount}. Elige la cuenta que lo recibe de vuelta.",
+    "@deleteGoalRefundPrompt": {
+        "placeholders": {
+            "amount": {
+                "type": "String",
+                "example": "$250.00"
+            }
+        }
+    },
+    "deleteGoalTitle": "Eliminar Meta",
     "deleteRecurringTransactionDescription": "Esta acción no se puede deshacer. Las transacciones ya generadas por esta regla no se verán afectadas.",
     "deleteRecurringTransactionTitle": "Eliminar Transacción Recurrente",
     "deleteTransactionDescription": "Esta acción no se puede deshacer.",
     "deleteTransactionTitle": "Eliminar Transacción",
+    "depositToGoal": "Agregar Dinero",
     "descriptionHint": "Ingrese descripción de la transacción",
     "descriptionLabel": "Descripción",
     "edit": "Editar",
     "editBudgetTitle": "Editar Presupuesto",
     "editCategory": "Editar Categoría",
+    "editGoalTitle": "Editar Meta",
     "editRecurringTransactionTitle": "Editar Transacción Recurrente",
     "editTransactionTitle": "Editar Transacción",
     "endDateLabel": "Fecha de Finalización",
@@ -163,6 +186,55 @@
     "frequencyWeekly": "Semanal",
     "frequencyYearly": "Anual",
     "fromAccountLabel": "Cuenta de Origen",
+    "goalAmountError": "El monto debe ser mayor que 0",
+    "goalArchivedLabel": "Archivada",
+    "goalArchivedSubtitle": "Ocultarla de las metas activas",
+    "goalCompleted": "¡Meta alcanzada!",
+    "goalCurrencyLockedHint": "Bloqueada: la meta ya tiene dinero",
+    "goalCurrencyNoAccountsHint": "Agrega una cuenta primero para establecer la moneda de la meta",
+    "goalDeletedSuccess": "Meta eliminada",
+    "goalDepositSuccess": "Dinero agregado a la meta",
+    "goalErrorAccountMissing": "La cuenta de este movimiento fue eliminada, así que no se puede cambiar",
+    "goalErrorCurrencyLocked": "No puedes cambiar la moneda de una meta que ya tiene dinero",
+    "goalErrorCurrencyMismatch": "La moneda de la cuenta no coincide con la de la meta",
+    "goalErrorInsufficientAccountBalance": "La cuenta no tiene suficiente dinero",
+    "goalErrorInsufficientGoalBalance": "La meta no tiene ahorrado tanto",
+    "goalErrorRefundAccountRequired": "Elige una cuenta para recibir el dinero ahorrado",
+    "goalHistory": "Historial",
+    "goalMonthlyNeeded": "Ahorra {amount}/mes para lograrla antes del {date}",
+    "@goalMonthlyNeeded": {
+        "placeholders": {
+            "amount": {
+                "type": "String",
+                "example": "$200.00"
+            },
+            "date": {
+                "type": "String",
+                "example": "Sep 15, 2026"
+            }
+        }
+    },
+    "goalNameHint": "p. ej. Carro nuevo",
+    "goalNameLabel": "Nombre de la meta",
+    "goalNameRequired": "Ingresa un nombre",
+    "goalOverdue": "La fecha objetivo ya pasó",
+    "goals": "Metas de Ahorro",
+    "goalSavedOf": "{saved} de {target}",
+    "@goalSavedOf": {
+        "placeholders": {
+            "saved": {
+                "type": "String",
+                "example": "$250.00"
+            },
+            "target": {
+                "type": "String",
+                "example": "$1,000.00"
+            }
+        }
+    },
+    "goalTargetAmountLabel": "Monto objetivo",
+    "goalTargetDateLabel": "Fecha objetivo (opcional)",
+    "goalWithdrawSuccess": "Dinero retirado de la meta",
     "goBackAction": "Regresar",
     "income": "Ingreso",
     "incomeType": "Ingreso",
@@ -170,21 +242,25 @@
     "language": "Idioma",
     "lime": "Lima",
     "manageBudgets": "Establece límites de gasto mensuales por categoría",
+    "manageGoals": "Ahorra dinero para algo que quieras",
     "manageRecurringTransactions": "Administra suscripciones y pagos recurrentes",
     "monthlyInsights": "Perspectivas Mensuales",
     "monthlyLimitHint": "0.00",
     "monthlyLimitLabel": "Límite Mensual",
     "more": "Más",
     "newBudgetTitle": "Nuevo Presupuesto",
+    "newGoalTitle": "Nueva Meta",
     "newRecurringTransactionTitle": "Nueva Transacción Recurrente",
     "newTransactionTitle": "Nueva Transacción",
     "nextOccurrenceLabel": "Próxima",
     "noAccountInfo": "Sin información de cuenta",
     "noBudgetsMessage": "Aún no hay presupuestos",
+    "noContributionsMessage": "Aún no has agregado dinero",
     "noDataForPeriod": "No hay datos para este período",
     "noDescription": "Sin descripción",
     "noEndDateLabel": "Sin fecha de finalización",
     "noExpensesFound": "No se encontraron gastos",
+    "noGoalsMessage": "Aún no tienes metas de ahorro",
     "noRecurringTransactionsMessage": "Aún no hay transacciones recurrentes",
     "noTransactionsOnDate": "Sin transacciones el {date}",
     "@noTransactionsOnDate": {
@@ -222,6 +298,8 @@
     "thisAccount": "esta cuenta",
     "thisBudget": "este presupuesto",
     "thisCategory": "esta categoría",
+    "thisContribution": "este movimiento",
+    "thisGoal": "esta meta",
     "thisRecurringTransaction": "esta transacción recurrente",
     "thisTransaction": "esta transacción",
     "timeLabel": "Hora",
@@ -240,6 +318,7 @@
     "unknownCategory": "Desconocida",
     "update": "Actualizar",
     "updateBudgetButton": "Actualizar Presupuesto",
+    "updateGoalButton": "Actualizar Meta",
     "updateRecurringTransactionButton": "Actualizar Transacción Recurrente",
     "updateTransactionButton": "Actualizar Transacción",
     "weekdayFri": "Vie",
@@ -249,5 +328,6 @@
     "weekdayThu": "Jue",
     "weekdayTue": "Mar",
     "weekdayWed": "Mié",
+    "withdrawFromGoal": "Retirar",
     "yellow": "Amarillo"
 }

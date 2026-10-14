@@ -22,11 +22,13 @@
     "accountTypeLabel": "Type de compte",
     "activeLabel": "Actif",
     "addBudget": "Ajouter un Budget",
+    "addGoal": "Ajouter un Objectif",
     "addRecurringTransaction": "Ajouter une Transaction Récurrente",
     "allAccounts": "Tous les Comptes",
     "amountHint": "0,00",
     "amountLabel": "Somme",
     "applyFilters": "Appliquer les filtres",
+    "archivedGoalsSection": "Archivés",
     "balanceTrend": "Tendance du Solde",
     "blue": "Bleu",
     "budgetCurrencyNoAccountsHint": "Ajoutez d'abord un compte pour définir la devise du budget",
@@ -51,10 +53,15 @@
     "categoryName": "Nom de la catégorie",
     "chooseYourAppColor": "Choisissez la couleur de votre application",
     "clearAll": "Tout effacer",
+    "contributionAmountLabel": "Montant",
+    "contributionFromAccountLabel": "Depuis le compte",
+    "contributionNoteLabel": "Note (facultatif)",
+    "contributionToAccountLabel": "Vers le compte",
     "create": "Créer",
     "createAccount": "Créer un compte",
     "createBudgetButton": "Créer un Budget",
     "createCategory": "Créer une catégorie",
+    "createGoalButton": "Créer l'Objectif",
     "createRecurringTransactionButton": "Créer une Transaction Récurrente",
     "createTransaction": "Créer une transaction",
     "createTransactionButton": "Créer la transaction",
@@ -91,15 +98,31 @@
     },
     "deleteCategoryTitle": "Supprimer la catégorie",
     "deleteConfirmationQuestion": "Êtes-vous sûr de vouloir supprimer « {entity} » ?",
+    "deleteContributionDescription": "L'argent retourne sur le compte d'origine.",
+    "deleteContributionTitle": "Supprimer le Mouvement",
+    "deletedAccountLabel": "Compte supprimé",
+    "deleteGoalDescription": "L'objectif et son historique seront supprimés.",
+    "deleteGoalRefundPrompt": "Cet objectif contient {amount}. Choisissez le compte qui le récupère.",
+    "@deleteGoalRefundPrompt": {
+        "placeholders": {
+            "amount": {
+                "type": "String",
+                "example": "$250.00"
+            }
+        }
+    },
+    "deleteGoalTitle": "Supprimer l'Objectif",
     "deleteRecurringTransactionDescription": "Cette action est irréversible. Les transactions déjà générées par cette règle ne seront pas affectées.",
     "deleteRecurringTransactionTitle": "Supprimer la Transaction Récurrente",
     "deleteTransactionDescription": "Cette action est irréversible.",
     "deleteTransactionTitle": "Supprimer la transaction",
+    "depositToGoal": "Ajouter de l'Argent",
     "descriptionHint": "Entrez la description de la transaction",
     "descriptionLabel": "Description",
     "edit": "Modifier",
     "editBudgetTitle": "Modifier le Budget",
     "editCategory": "Modifier la catégorie",
+    "editGoalTitle": "Modifier l'Objectif",
     "editRecurringTransactionTitle": "Modifier la Transaction Récurrente",
     "editTransactionTitle": "Modifier la transaction",
     "endDateLabel": "Date de Fin",
@@ -163,6 +186,55 @@
     "frequencyWeekly": "Hebdomadaire",
     "frequencyYearly": "Annuel",
     "fromAccountLabel": "Compte source",
+    "goalAmountError": "Le montant doit être supérieur à 0",
+    "goalArchivedLabel": "Archivé",
+    "goalArchivedSubtitle": "Le masquer des objectifs actifs",
+    "goalCompleted": "Objectif atteint !",
+    "goalCurrencyLockedHint": "Verrouillée : l'objectif a déjà de l'argent",
+    "goalCurrencyNoAccountsHint": "Ajoutez d'abord un compte pour définir la devise de l'objectif",
+    "goalDeletedSuccess": "Objectif supprimé",
+    "goalDepositSuccess": "Argent ajouté à l'objectif",
+    "goalErrorAccountMissing": "Le compte de ce mouvement a été supprimé, il ne peut donc pas être modifié",
+    "goalErrorCurrencyLocked": "Vous ne pouvez pas changer la devise d'un objectif qui contient déjà de l'argent",
+    "goalErrorCurrencyMismatch": "La devise du compte ne correspond pas à celle de l'objectif",
+    "goalErrorInsufficientAccountBalance": "Le compte n'a pas assez d'argent",
+    "goalErrorInsufficientGoalBalance": "L'objectif n'a pas autant d'épargne",
+    "goalErrorRefundAccountRequired": "Choisissez un compte pour recevoir l'argent épargné",
+    "goalHistory": "Historique",
+    "goalMonthlyNeeded": "Épargnez {amount}/mois pour l'atteindre d'ici le {date}",
+    "@goalMonthlyNeeded": {
+        "placeholders": {
+            "amount": {
+                "type": "String",
+                "example": "$200.00"
+            },
+            "date": {
+                "type": "String",
+                "example": "Sep 15, 2026"
+            }
+        }
+    },
+    "goalNameHint": "ex. Nouvelle voiture",
+    "goalNameLabel": "Nom de l'objectif",
+    "goalNameRequired": "Saisissez un nom",
+    "goalOverdue": "Date cible dépassée",
+    "goals": "Objectifs d'Épargne",
+    "goalSavedOf": "{saved} sur {target}",
+    "@goalSavedOf": {
+        "placeholders": {
+            "saved": {
+                "type": "String",
+                "example": "$250.00"
+            },
+            "target": {
+                "type": "String",
+                "example": "$1,000.00"
+            }
+        }
+    },
+    "goalTargetAmountLabel": "Montant cible",
+    "goalTargetDateLabel": "Date cible (facultatif)",
+    "goalWithdrawSuccess": "Argent retiré de l'objectif",
     "goBackAction": "Retour",
     "income": "Revenu",
     "incomeType": "Revenu",
@@ -170,21 +242,25 @@
     "language": "Langue",
     "lime": "Citron vert",
     "manageBudgets": "Définissez des limites de dépenses mensuelles par catégorie",
+    "manageGoals": "Épargnez pour quelque chose que vous voulez",
     "manageRecurringTransactions": "Gérer les abonnements et paiements récurrents",
     "monthlyInsights": "Aperçus Mensuels",
     "monthlyLimitHint": "0,00",
     "monthlyLimitLabel": "Limite Mensuelle",
     "more": "Plus",
     "newBudgetTitle": "Nouveau Budget",
+    "newGoalTitle": "Nouvel Objectif",
     "newRecurringTransactionTitle": "Nouvelle Transaction Récurrente",
     "newTransactionTitle": "Nouvelle transaction",
     "nextOccurrenceLabel": "Prochaine",
     "noAccountInfo": "Aucune information de compte",
     "noBudgetsMessage": "Aucun budget pour le moment",
+    "noContributionsMessage": "Aucun argent ajouté pour l'instant",
     "noDataForPeriod": "Aucune donnée pour cette période",
     "noDescription": "Aucune description",
     "noEndDateLabel": "Pas de date de fin",
     "noExpensesFound": "Aucune dépense trouvée",
+    "noGoalsMessage": "Aucun objectif d'épargne pour l'instant",
     "noRecurringTransactionsMessage": "Aucune transaction récurrente pour le moment",
     "noTransactionsOnDate": "Aucune transaction le {date}",
     "@noTransactionsOnDate": {
@@ -222,6 +298,8 @@
     "thisAccount": "ce compte",
     "thisBudget": "ce budget",
     "thisCategory": "cette catégorie",
+    "thisContribution": "ce mouvement",
+    "thisGoal": "cet objectif",
     "thisRecurringTransaction": "cette transaction récurrente",
     "thisTransaction": "cette transaction",
     "timeLabel": "Heure",
@@ -240,6 +318,7 @@
     "unknownCategory": "Inconnue",
     "update": "Mettre à jour",
     "updateBudgetButton": "Mettre à Jour le Budget",
+    "updateGoalButton": "Mettre à jour l'Objectif",
     "updateRecurringTransactionButton": "Mettre à Jour la Transaction Récurrente",
     "updateTransactionButton": "Mettre à jour la transaction",
     "weekdayFri": "Ven",
@@ -249,5 +328,6 @@
     "weekdayThu": "Jeu",
     "weekdayTue": "Mar",
     "weekdayWed": "Mer",
+    "withdrawFromGoal": "Retirer",
     "yellow": "Jaune"
 }

@@ -50,6 +50,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get addBudget => 'Ajouter un Budget';
 
   @override
+  String get addGoal => 'Ajouter un Objectif';
+
+  @override
   String get addRecurringTransaction => 'Ajouter une Transaction Récurrente';
 
   @override
@@ -63,6 +66,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get applyFilters => 'Appliquer les filtres';
+
+  @override
+  String get archivedGoalsSection => 'Archivés';
 
   @override
   String get balanceTrend => 'Tendance du Solde';
@@ -139,6 +145,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get clearAll => 'Tout effacer';
 
   @override
+  String get contributionAmountLabel => 'Montant';
+
+  @override
+  String get contributionFromAccountLabel => 'Depuis le compte';
+
+  @override
+  String get contributionNoteLabel => 'Note (facultatif)';
+
+  @override
+  String get contributionToAccountLabel => 'Vers le compte';
+
+  @override
   String get create => 'Créer';
 
   @override
@@ -149,6 +167,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get createCategory => 'Créer une catégorie';
+
+  @override
+  String get createGoalButton => 'Créer l\'Objectif';
 
   @override
   String get createRecurringTransactionButton => 'Créer une Transaction Récurrente';
@@ -211,6 +232,26 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get deleteContributionDescription => 'L\'argent retourne sur le compte d\'origine.';
+
+  @override
+  String get deleteContributionTitle => 'Supprimer le Mouvement';
+
+  @override
+  String get deletedAccountLabel => 'Compte supprimé';
+
+  @override
+  String get deleteGoalDescription => 'L\'objectif et son historique seront supprimés.';
+
+  @override
+  String deleteGoalRefundPrompt(String amount) {
+    return 'Cet objectif contient $amount. Choisissez le compte qui le récupère.';
+  }
+
+  @override
+  String get deleteGoalTitle => 'Supprimer l\'Objectif';
+
+  @override
   String get deleteRecurringTransactionDescription => 'Cette action est irréversible. Les transactions déjà générées par cette règle ne seront pas affectées.';
 
   @override
@@ -221,6 +262,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get deleteTransactionTitle => 'Supprimer la transaction';
+
+  @override
+  String get depositToGoal => 'Ajouter de l\'Argent';
 
   @override
   String get descriptionHint => 'Entrez la description de la transaction';
@@ -236,6 +280,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get editCategory => 'Modifier la catégorie';
+
+  @override
+  String get editGoalTitle => 'Modifier l\'Objectif';
 
   @override
   String get editRecurringTransactionTitle => 'Modifier la Transaction Récurrente';
@@ -329,6 +376,85 @@ class AppLocalizationsFr extends AppLocalizations {
   String get fromAccountLabel => 'Compte source';
 
   @override
+  String get goalAmountError => 'Le montant doit être supérieur à 0';
+
+  @override
+  String get goalArchivedLabel => 'Archivé';
+
+  @override
+  String get goalArchivedSubtitle => 'Le masquer des objectifs actifs';
+
+  @override
+  String get goalCompleted => 'Objectif atteint !';
+
+  @override
+  String get goalCurrencyLockedHint => 'Verrouillée : l\'objectif a déjà de l\'argent';
+
+  @override
+  String get goalCurrencyNoAccountsHint => 'Ajoutez d\'abord un compte pour définir la devise de l\'objectif';
+
+  @override
+  String get goalDeletedSuccess => 'Objectif supprimé';
+
+  @override
+  String get goalDepositSuccess => 'Argent ajouté à l\'objectif';
+
+  @override
+  String get goalErrorAccountMissing => 'Le compte de ce mouvement a été supprimé, il ne peut donc pas être modifié';
+
+  @override
+  String get goalErrorCurrencyLocked => 'Vous ne pouvez pas changer la devise d\'un objectif qui contient déjà de l\'argent';
+
+  @override
+  String get goalErrorCurrencyMismatch => 'La devise du compte ne correspond pas à celle de l\'objectif';
+
+  @override
+  String get goalErrorInsufficientAccountBalance => 'Le compte n\'a pas assez d\'argent';
+
+  @override
+  String get goalErrorInsufficientGoalBalance => 'L\'objectif n\'a pas autant d\'épargne';
+
+  @override
+  String get goalErrorRefundAccountRequired => 'Choisissez un compte pour recevoir l\'argent épargné';
+
+  @override
+  String get goalHistory => 'Historique';
+
+  @override
+  String goalMonthlyNeeded(String amount, String date) {
+    return 'Épargnez $amount/mois pour l\'atteindre d\'ici le $date';
+  }
+
+  @override
+  String get goalNameHint => 'ex. Nouvelle voiture';
+
+  @override
+  String get goalNameLabel => 'Nom de l\'objectif';
+
+  @override
+  String get goalNameRequired => 'Saisissez un nom';
+
+  @override
+  String get goalOverdue => 'Date cible dépassée';
+
+  @override
+  String get goals => 'Objectifs d\'Épargne';
+
+  @override
+  String goalSavedOf(String saved, String target) {
+    return '$saved sur $target';
+  }
+
+  @override
+  String get goalTargetAmountLabel => 'Montant cible';
+
+  @override
+  String get goalTargetDateLabel => 'Date cible (facultatif)';
+
+  @override
+  String get goalWithdrawSuccess => 'Argent retiré de l\'objectif';
+
+  @override
   String get goBackAction => 'Retour';
 
   @override
@@ -350,6 +476,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get manageBudgets => 'Définissez des limites de dépenses mensuelles par catégorie';
 
   @override
+  String get manageGoals => 'Épargnez pour quelque chose que vous voulez';
+
+  @override
   String get manageRecurringTransactions => 'Gérer les abonnements et paiements récurrents';
 
   @override
@@ -368,6 +497,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get newBudgetTitle => 'Nouveau Budget';
 
   @override
+  String get newGoalTitle => 'Nouvel Objectif';
+
+  @override
   String get newRecurringTransactionTitle => 'Nouvelle Transaction Récurrente';
 
   @override
@@ -383,6 +515,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noBudgetsMessage => 'Aucun budget pour le moment';
 
   @override
+  String get noContributionsMessage => 'Aucun argent ajouté pour l\'instant';
+
+  @override
   String get noDataForPeriod => 'Aucune donnée pour cette période';
 
   @override
@@ -393,6 +528,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get noExpensesFound => 'Aucune dépense trouvée';
+
+  @override
+  String get noGoalsMessage => 'Aucun objectif d\'épargne pour l\'instant';
 
   @override
   String get noRecurringTransactionsMessage => 'Aucune transaction récurrente pour le moment';
@@ -481,6 +619,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get thisCategory => 'cette catégorie';
 
   @override
+  String get thisContribution => 'ce mouvement';
+
+  @override
+  String get thisGoal => 'cet objectif';
+
+  @override
   String get thisRecurringTransaction => 'cette transaction récurrente';
 
   @override
@@ -539,6 +683,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get updateBudgetButton => 'Mettre à Jour le Budget';
 
   @override
+  String get updateGoalButton => 'Mettre à jour l\'Objectif';
+
+  @override
   String get updateRecurringTransactionButton => 'Mettre à Jour la Transaction Récurrente';
 
   @override
@@ -564,6 +711,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get weekdayWed => 'Mer';
+
+  @override
+  String get withdrawFromGoal => 'Retirer';
 
   @override
   String get yellow => 'Jaune';
