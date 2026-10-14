@@ -1,0 +1,41 @@
+name: PR Checks
+
+# The same quality gate play_store_draft.yml runs before building, but on
+# pull requests - so analyze/test failures show up on the PR instead of
+# only after merging to main (where that workflow also builds and uploads
+# a Play Store draft). No secrets, no build, no upload.
+on:
+  pull_request:
+    branches:
+      - main
+
+# A new push to the same PR supersedes the previous run.
+concurrency:
+  group: pr-checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Same Flutter setup as play_store_draft.yml, so a PR is checked
+      # against the SDK the release build will use.
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.x"
+          channel: "stable"
+          cache: true
+
+      - name: Get Dependencies
+        run: flutter pub get
+
+      # --no-fatal-infos to match the release gate: info-level lints don't
+      # block, warnings/errors do.
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos
+
+      - name: Run tests
+        run: flutter test
