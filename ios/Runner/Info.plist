@@ -75,5 +75,57 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<!-- .pgbackup files (see BackupFileCodec): declared here so iOS names
+	     and routes them, and claimed so "Open in PocketGuard" works from
+	     Files, Drive, Mail, etc. The identifier must match
+	     LSItemContentTypes below. Opened files are copied into the app's
+	     Inbox (not opened in place) - see IncomingBackupFilePlugin in
+	     AppDelegate.swift. -->
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.pocketguard.backup</string>
+			<key>UTTypeDescription</key>
+			<string>PocketGuard Backup</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>pgbackup</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-pocketguard-backup</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>PocketGuard Backup</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.pocketguard.backup</string>
+			</array>
+		</dict>
+	</array>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<false/>
+	<!-- No deep links: keep Flutter from routing opened URLs (like a
+	     .pgbackup file URL) to go_router as pages - see
+	     flutter_deeplinking_enabled in AndroidManifest.xml. -->
+	<key>FlutterDeepLinkingEnabled</key>
+	<false/>
 </dict>
 </plist>

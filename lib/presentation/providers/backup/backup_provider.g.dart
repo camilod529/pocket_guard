@@ -55,6 +55,54 @@ final class BackupDataSourceProvider
 
 String _$backupDataSourceHash() => r'9d1acae6871da8ef07e49ea00974d7d793ab17cf';
 
+@ProviderFor(incomingBackupFileChannel)
+const incomingBackupFileChannelProvider = IncomingBackupFileChannelProvider._();
+
+final class IncomingBackupFileChannelProvider
+    extends
+        $FunctionalProvider<
+          IncomingBackupFileChannel,
+          IncomingBackupFileChannel,
+          IncomingBackupFileChannel
+        >
+    with $Provider<IncomingBackupFileChannel> {
+  const IncomingBackupFileChannelProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'incomingBackupFileChannelProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$incomingBackupFileChannelHash();
+
+  @$internal
+  @override
+  $ProviderElement<IncomingBackupFileChannel> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  IncomingBackupFileChannel create(Ref ref) {
+    return incomingBackupFileChannel(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(IncomingBackupFileChannel value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<IncomingBackupFileChannel>(value),
+    );
+  }
+}
+
+String _$incomingBackupFileChannelHash() =>
+    r'd22435a8336f27febcd03265b7f9be5f13755fec';
+
 @ProviderFor(backupRepository)
 const backupRepositoryProvider = BackupRepositoryProvider._();
 

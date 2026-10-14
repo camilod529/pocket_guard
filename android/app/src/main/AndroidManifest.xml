@@ -20,9 +20,31 @@
                 android:name="io.flutter.embedding.android.NormalTheme"
                 android:resource="@style/NormalTheme"
             />
+            <!-- The app has no deep links. Without this, Flutter's own deep
+                 linking also takes the VIEW intent below and hands the
+                 file's content:// URI to go_router as a route ("Page Not
+                 Found") - MainActivity handles those intents instead. -->
+            <meta-data
+                android:name="flutter_deeplinking_enabled"
+                android:value="false" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- Open .pgbackup files with PocketGuard (see MainActivity).
+                 Files apps and Drive mostly hand over content:// URIs with
+                 no file name to match on, so this matches by type: our
+                 own MIME type, plus the generic binary type most apps
+                 give unknown files. Anything that isn't actually a backup
+                 is rejected by its header when read. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:mimeType="application/x-pocketguard-backup" />
+                <data android:mimeType="application/octet-stream" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

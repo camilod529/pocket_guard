@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocket_guard/domain/data_sources/backup_data_source.dart';
 import 'package:pocket_guard/domain/repositories/backup_repository.dart';
 import 'package:pocket_guard/infrastructure/data_sources/backup_drift_data_source_impl.dart';
+import 'package:pocket_guard/infrastructure/platform/incoming_backup_file_channel.dart';
 import 'package:pocket_guard/infrastructure/repositories/backup_repository_impl.dart';
 import 'package:pocket_guard/presentation/providers/account/account_provider.dart';
 import 'package:pocket_guard/presentation/providers/account/accounts_provider.dart';
@@ -23,6 +24,11 @@ part 'backup_provider.g.dart';
 @Riverpod(keepAlive: true)
 BackupDataSource backupDataSource(Ref ref) {
   return BackupDriftDataSourceImpl();
+}
+
+@Riverpod(keepAlive: true)
+IncomingBackupFileChannel incomingBackupFileChannel(Ref ref) {
+  return IncomingBackupFileChannel();
 }
 
 @Riverpod(keepAlive: true)

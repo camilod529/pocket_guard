@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,11 @@ import 'package:pocket_guard/presentation/widgets/shared/forms/custom_form_field
 import 'package:share_plus/share_plus.dart';
 
 class BackupScreen extends ConsumerStatefulWidget {
-  const BackupScreen({super.key});
+  /// A backup the OS opened with the app (see IncomingBackupFileChannel):
+  /// read on arrival and taken straight into the restore flow.
+  final String? incomingFilePath;
+
+  const BackupScreen({super.key, this.incomingFilePath});
 
   @override
   ConsumerState<BackupScreen> createState() => _BackupScreenState();
@@ -29,6 +34,28 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
   final _shareButtonKey = GlobalKey();
 
   bool get _passwordsMatch => _password == _confirmation;
+
+  @override
+  void initState() {
+    super.initState();
+    final path = widget.incomingFilePath;
+    if (path != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (!mounted) return;
+        final l10n = AppLocalizations.of(context)!;
+        final file = File(path);
+        try {
+          final bytes = await file.readAsBytes();
+          await _open(bytes, l10n);
+        } on FileSystemException {
+          _showError(l10n.backupErrorNotABackup);
+        } finally {
+          // Our own temp copy - the original stays wherever it came from.
+          if (file.existsSync()) file.deleteSync();
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +165,12 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
   Future<void> _chooseFile(AppLocalizations l10n) async {
     final file = await FilePicker.pickFile();
     if (file == null || !mounted) return;
-    final bytes = await file.readAsBytes();
+    await _open(await file.readAsBytes(), l10n);
+  }
+
+  /// Picked or opened from elsewhere: unlock if needed, then preview.
+  Future<void> _open(Uint8List bytes, AppLocalizations l10n) async {
+    if (!mounted) return;
     final repository = ref.read(backupRepositoryProvider);
 
     try {

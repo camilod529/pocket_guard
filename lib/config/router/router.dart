@@ -181,7 +181,9 @@ final appRouter = GoRouter(
     GoRoute(
       path: Routes.backup,
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (context, state) => const BackupScreen(),
+      // extra: the path of a .pgbackup the OS opened with the app.
+      builder: (context, state) =>
+          BackupScreen(incomingFilePath: state.extra as String?),
     ),
     GoRoute(
       path: Routes.backupRestore,

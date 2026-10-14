@@ -5,6 +5,7 @@ import 'package:pocket_guard/config/theme/app_theme.dart';
 import 'package:pocket_guard/infrastructure/background/recurring_transaction_background_task.dart';
 import 'package:pocket_guard/presentation/providers/recurring_transaction/recurring_transaction_catch_up_provider.dart';
 import 'package:pocket_guard/presentation/providers/settings_providers.dart';
+import 'package:pocket_guard/presentation/widgets/backup/incoming_backup_file_listener.dart';
 import 'package:workmanager/workmanager.dart';
 
 import 'l10n/app_localizations.dart';
@@ -66,6 +67,9 @@ class MainApp extends ConsumerWidget {
       ),
       themeMode: ThemeMode.system,
       routerConfig: appRouter,
+      // Routes .pgbackup files opened with the app to Backup & Restore.
+      builder: (context, child) =>
+          IncomingBackupFileListener(child: child ?? const SizedBox.shrink()),
     );
   }
 }
