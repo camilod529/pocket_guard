@@ -805,11 +805,11 @@ class $TransactionsTable extends Transactions
   );
   static const VerificationMeta _dateMeta = const VerificationMeta('date');
   @override
-  late final GeneratedColumn<int> date = GeneratedColumn<int>(
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
     'date',
     aliasedName,
     false,
-    type: DriftSqlType.int,
+    type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
   static const VerificationMeta _descriptionMeta = const VerificationMeta(
@@ -944,7 +944,7 @@ class $TransactionsTable extends Transactions
         data['${effectivePrefix}category_id'],
       )!,
       date: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.dateTime,
         data['${effectivePrefix}date'],
       )!,
       description: attachedDatabase.typeMapping.read(
@@ -972,7 +972,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
   final String accountId;
   final double amount;
   final String categoryId;
-  final int date;
+  final DateTime date;
   final String? description;
   final String id;
   final String? toAccountId;
@@ -991,7 +991,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     map['account_id'] = Variable<String>(accountId);
     map['amount'] = Variable<double>(amount);
     map['category_id'] = Variable<String>(categoryId);
-    map['date'] = Variable<int>(date);
+    map['date'] = Variable<DateTime>(date);
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String>(description);
     }
@@ -1027,7 +1027,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       accountId: serializer.fromJson<String>(json['accountId']),
       amount: serializer.fromJson<double>(json['amount']),
       categoryId: serializer.fromJson<String>(json['categoryId']),
-      date: serializer.fromJson<int>(json['date']),
+      date: serializer.fromJson<DateTime>(json['date']),
       description: serializer.fromJson<String?>(json['description']),
       id: serializer.fromJson<String>(json['id']),
       toAccountId: serializer.fromJson<String?>(json['toAccountId']),
@@ -1040,7 +1040,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
       'accountId': serializer.toJson<String>(accountId),
       'amount': serializer.toJson<double>(amount),
       'categoryId': serializer.toJson<String>(categoryId),
-      'date': serializer.toJson<int>(date),
+      'date': serializer.toJson<DateTime>(date),
       'description': serializer.toJson<String?>(description),
       'id': serializer.toJson<String>(id),
       'toAccountId': serializer.toJson<String?>(toAccountId),
@@ -1051,7 +1051,7 @@ class Transaction extends DataClass implements Insertable<Transaction> {
     String? accountId,
     double? amount,
     String? categoryId,
-    int? date,
+    DateTime? date,
     Value<String?> description = const Value.absent(),
     String? id,
     Value<String?> toAccountId = const Value.absent(),
@@ -1123,7 +1123,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
   final Value<String> accountId;
   final Value<double> amount;
   final Value<String> categoryId;
-  final Value<int> date;
+  final Value<DateTime> date;
   final Value<String?> description;
   final Value<String> id;
   final Value<String?> toAccountId;
@@ -1142,7 +1142,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     required String accountId,
     required double amount,
     required String categoryId,
-    required int date,
+    required DateTime date,
     this.description = const Value.absent(),
     this.id = const Value.absent(),
     this.toAccountId = const Value.absent(),
@@ -1155,7 +1155,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Expression<String>? accountId,
     Expression<double>? amount,
     Expression<String>? categoryId,
-    Expression<int>? date,
+    Expression<DateTime>? date,
     Expression<String>? description,
     Expression<String>? id,
     Expression<String>? toAccountId,
@@ -1177,7 +1177,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
     Value<String>? accountId,
     Value<double>? amount,
     Value<String>? categoryId,
-    Value<int>? date,
+    Value<DateTime>? date,
     Value<String?>? description,
     Value<String>? id,
     Value<String?>? toAccountId,
@@ -1208,7 +1208,7 @@ class TransactionsCompanion extends UpdateCompanion<Transaction> {
       map['category_id'] = Variable<String>(categoryId.value);
     }
     if (date.present) {
-      map['date'] = Variable<int>(date.value);
+      map['date'] = Variable<DateTime>(date.value);
     }
     if (description.present) {
       map['description'] = Variable<String>(description.value);
@@ -4802,7 +4802,7 @@ typedef $$TransactionsTableCreateCompanionBuilder =
       required String accountId,
       required double amount,
       required String categoryId,
-      required int date,
+      required DateTime date,
       Value<String?> description,
       Value<String> id,
       Value<String?> toAccountId,
@@ -4813,7 +4813,7 @@ typedef $$TransactionsTableUpdateCompanionBuilder =
       Value<String> accountId,
       Value<double> amount,
       Value<String> categoryId,
-      Value<int> date,
+      Value<DateTime> date,
       Value<String?> description,
       Value<String> id,
       Value<String?> toAccountId,
@@ -4896,7 +4896,7 @@ class $$TransactionsTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get date => $composableBuilder(
+  ColumnFilters<DateTime> get date => $composableBuilder(
     column: $table.date,
     builder: (column) => ColumnFilters(column),
   );
@@ -4995,7 +4995,7 @@ class $$TransactionsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get date => $composableBuilder(
+  ColumnOrderings<DateTime> get date => $composableBuilder(
     column: $table.date,
     builder: (column) => ColumnOrderings(column),
   );
@@ -5092,7 +5092,7 @@ class $$TransactionsTableAnnotationComposer
   GeneratedColumn<double> get amount =>
       $composableBuilder(column: $table.amount, builder: (column) => column);
 
-  GeneratedColumn<int> get date =>
+  GeneratedColumn<DateTime> get date =>
       $composableBuilder(column: $table.date, builder: (column) => column);
 
   GeneratedColumn<String> get description => $composableBuilder(
@@ -5208,7 +5208,7 @@ class $$TransactionsTableTableManager
                 Value<String> accountId = const Value.absent(),
                 Value<double> amount = const Value.absent(),
                 Value<String> categoryId = const Value.absent(),
-                Value<int> date = const Value.absent(),
+                Value<DateTime> date = const Value.absent(),
                 Value<String?> description = const Value.absent(),
                 Value<String> id = const Value.absent(),
                 Value<String?> toAccountId = const Value.absent(),
@@ -5228,7 +5228,7 @@ class $$TransactionsTableTableManager
                 required String accountId,
                 required double amount,
                 required String categoryId,
-                required int date,
+                required DateTime date,
                 Value<String?> description = const Value.absent(),
                 Value<String> id = const Value.absent(),
                 Value<String?> toAccountId = const Value.absent(),

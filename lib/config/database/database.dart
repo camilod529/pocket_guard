@@ -94,6 +94,14 @@ class AppDatabase extends _$AppDatabase {
         if (from < 9) {
           await m.createTable(wishlistItems);
         }
+        if (from < 10) {
+          // Transactions.date moved from integer() epoch milliseconds to
+          // dateTime(), which Drift stores as unix seconds. Both are INTEGER
+          // columns, so only the values need converting - no table rebuild.
+          // SQLite integer division truncates the sub-second part, which
+          // nothing in the app ever displayed or compared on.
+          await customStatement('UPDATE transactions SET date = date / 1000');
+        }
       },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
@@ -104,7 +112,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => 10;
 
   Future<double> getAccountBalance(String accountId) {
     return (select(accounts)..where((tbl) => tbl.id.equals(accountId)))
@@ -315,7 +323,9 @@ class Transactions extends Table {
       text().references(Accounts, #id, onDelete: KeyAction.cascade)();
   RealColumn get amount => real()();
   TextColumn get categoryId => text().references(Categories, #id)();
-  IntColumn get date => integer()();
+  // Drift's default dateTime() storage: unix seconds in an INTEGER column.
+  // Was a plain integer() of epoch milliseconds before schema v10.
+  DateTimeColumn get date => dateTime()();
   TextColumn get description => text().nullable()();
   TextColumn get id =>
       text().clientDefault(() => _uuid.v4())(); // UUID v4 as text

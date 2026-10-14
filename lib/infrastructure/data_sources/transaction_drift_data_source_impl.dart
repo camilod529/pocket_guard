@@ -25,7 +25,7 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
             .insert(
               TransactionsCompanion(
                 amount: Value(transaction.amount),
-                date: Value(transaction.date.millisecondsSinceEpoch),
+                date: Value(transaction.date),
                 description: Value(transaction.description),
                 accountId: Value(transaction.accountId),
                 categoryId: Value(transaction.categoryId),
@@ -173,16 +173,12 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
 
           if (filter.startDate != null) {
             predicates.add(
-              tbl.date.isBiggerOrEqualValue(
-                filter.startDate!.millisecondsSinceEpoch,
-              ),
+              tbl.date.isBiggerOrEqualValue(filter.startDate!),
             );
           }
           if (filter.endDate != null) {
             predicates.add(
-              tbl.date.isSmallerOrEqualValue(
-                filter.endDate!.millisecondsSinceEpoch,
-              ),
+              tbl.date.isSmallerOrEqualValue(filter.endDate!),
             );
           }
           if (filter.searchQuery != null && filter.searchQuery!.isNotEmpty) {
@@ -209,7 +205,7 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
         return TransactionEntity(
           id: transaction.id,
           amount: transaction.amount,
-          date: DateTime.fromMillisecondsSinceEpoch(transaction.date),
+          date: transaction.date,
           description: transaction.description,
           accountId: transaction.accountId,
           categoryId: transaction.categoryId,
@@ -238,7 +234,7 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
       return TransactionEntity(
         id: transaction.id,
         amount: transaction.amount,
-        date: DateTime.fromMillisecondsSinceEpoch(transaction.date),
+        date: transaction.date,
         description: transaction.description,
         accountId: transaction.accountId,
         categoryId: transaction.categoryId,
@@ -269,7 +265,7 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
         return TransactionEntity(
           id: transaction.id,
           amount: transaction.amount,
-          date: DateTime.fromMillisecondsSinceEpoch(transaction.date),
+          date: transaction.date,
           description: transaction.description,
           accountId: transaction.accountId,
           categoryId: transaction.categoryId,
@@ -320,7 +316,7 @@ class TransactionDriftDataSourceImpl extends TransactionDataSource {
         )..where((tbl) => tbl.id.equals(id))).write(
           TransactionsCompanion(
             amount: Value(updatedTransaction.amount),
-            date: Value(updatedTransaction.date.millisecondsSinceEpoch),
+            date: Value(updatedTransaction.date),
             description: Value(updatedTransaction.description),
             accountId: Value(updatedTransaction.accountId),
             categoryId: Value(updatedTransaction.categoryId),
