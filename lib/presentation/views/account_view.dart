@@ -8,6 +8,7 @@ import 'package:pocket_guard/presentation/providers/account/accounts_provider.da
 import 'package:pocket_guard/presentation/widgets/shared/delete_confirmation_modal.dart';
 import 'package:pocket_guard/presentation/widgets/shared/refreshable_placeholder.dart';
 import 'package:pocket_guard/utils/constants/global_constants.dart';
+import 'package:pocket_guard/utils/shared/number_formatting.dart';
 import 'package:pocket_guard/utils/types/general_types.dart';
 
 class AccountView extends ConsumerWidget {
@@ -133,39 +134,54 @@ class AccountView extends ConsumerWidget {
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
       subtitle: Text(account.currency),
-      trailing: PopupMenuButton<DropdownActionType>(
-        icon: const Icon(Icons.more_vert),
-        onSelected: (value) => _onAccountAction(
-          context,
-          value,
-          account.id,
-          account.name,
-          ref,
-          localizations,
-        ),
-        itemBuilder: (context) => [
-          PopupMenuItem(
-            value: DropdownActionType.edit,
-            child: Row(
-              children: [
-                const Icon(Icons.edit, size: 20),
-                const SizedBox(width: 8),
-                Text(localizations.edit),
-              ],
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            NumberFormatting.formatCurrencyWithSymbol(
+              account.balance,
+              account.currency,
+            ),
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              color: account.balance < 0 ? colors.error : null,
             ),
           ),
-          PopupMenuItem(
-            value: DropdownActionType.delete,
-            child: Row(
-              children: [
-                const Icon(Icons.delete, size: 20, color: Colors.red),
-                const SizedBox(width: 8),
-                Text(
-                  localizations.delete,
-                  style: const TextStyle(color: Colors.red),
-                ),
-              ],
+          PopupMenuButton<DropdownActionType>(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (value) => _onAccountAction(
+              context,
+              value,
+              account.id,
+              account.name,
+              ref,
+              localizations,
             ),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: DropdownActionType.edit,
+                child: Row(
+                  children: [
+                    const Icon(Icons.edit, size: 20),
+                    const SizedBox(width: 8),
+                    Text(localizations.edit),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: DropdownActionType.delete,
+                child: Row(
+                  children: [
+                    const Icon(Icons.delete, size: 20, color: Colors.red),
+                    const SizedBox(width: 8),
+                    Text(
+                      localizations.delete,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
