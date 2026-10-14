@@ -198,5 +198,19 @@ void main() {
     await tapText(l10n.accounts);
     expect(find.text('USD700.00'), findsOneWidget);
     await shot('accounts_after_purchase');
+
+    // --- Insights: Checking's balance trend ends at today's 700 ---
+    await tapText(l10n.calendar);
+    await tester.tap(find.byIcon(Icons.bar_chart_rounded));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(ChoiceChip, 'Checking'));
+    await tester.pumpAndSettle();
+    // The page (first scroll view) - the chip rows scroll sideways too.
+    await tester.drag(
+      find.byType(SingleChildScrollView).first,
+      const Offset(0, -300),
+    );
+    expect(find.text(l10n.balanceTrend), findsOneWidget);
+    await shot('insights_balance_trend');
   });
 }

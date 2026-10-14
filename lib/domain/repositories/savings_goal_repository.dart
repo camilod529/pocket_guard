@@ -11,6 +11,9 @@ abstract class SavingsGoalRepository {
   Future<void> deleteGoal(String id, {String? refundAccountId});
   Future<List<SavingsGoalEntity>> getAllGoals();
   Future<List<GoalContributionEntity>> getContributionsForGoal(String goalId);
+
+  /// Every contribution, across all goals, dated on or after [since].
+  Future<List<GoalContributionEntity>> getContributionsSince(DateTime since);
   Future<SavingsGoalEntity?> getGoalById(String id);
 
   /// Saved amount per goal id. Goals with no contributions are absent.

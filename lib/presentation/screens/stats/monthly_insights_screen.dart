@@ -7,6 +7,7 @@ import 'package:pocket_guard/domain/entities/transaction.dart';
 import 'package:pocket_guard/l10n/app_localizations.dart';
 import 'package:pocket_guard/presentation/providers/account/accounts_provider.dart';
 import 'package:pocket_guard/presentation/providers/category/categories_provider.dart';
+import 'package:pocket_guard/presentation/providers/stats/balance_trend_provider.dart';
 import 'package:pocket_guard/presentation/providers/transaction/transactions_provider.dart';
 import 'package:pocket_guard/presentation/widgets/stats/stat_card.dart';
 import 'package:pocket_guard/utils/shared/number_formatting.dart';
@@ -47,7 +48,7 @@ class MonthlyInsightsScreen extends ConsumerWidget {
   }
 }
 
-class _InsightsContent extends StatefulWidget {
+class _InsightsContent extends ConsumerStatefulWidget {
   final List<TransactionEntity> transactions;
   final List<CategoryEntity> categories;
   final List<AccountEntity> accounts;
@@ -59,10 +60,11 @@ class _InsightsContent extends StatefulWidget {
   });
 
   @override
-  State<_InsightsContent> createState() => _InsightsContentState();
+  ConsumerState<_InsightsContent> createState() =>
+      _InsightsContentState();
 }
 
-class _InsightsContentState extends State<_InsightsContent> {
+class _InsightsContentState extends ConsumerState<_InsightsContent> {
   String? selectedCurrency;
   String? selectedAccountId;
 
@@ -130,7 +132,7 @@ class _InsightsContentState extends State<_InsightsContent> {
             currency: currentCurrency,
           ),
           const SizedBox(height: 24),
-          _buildLineChart(filteredTxs, currentCurrency),
+          _buildLineChart(currentCurrency),
           const SizedBox(height: 32),
           Text(
             l10n.expensesByCategory,
@@ -208,10 +210,15 @@ class _InsightsContentState extends State<_InsightsContent> {
     );
   }
 
-  Widget _buildLineChart(List<TransactionEntity> txs, String currency) {
+  Widget _buildLineChart(String currency) {
     final l10n = AppLocalizations.of(context)!;
-    final chartDate = txs.isNotEmpty ? txs.first.date : DateTime.now();
-    final spots = _generateDailySpots(txs, chartDate);
+    final balances =
+        ref.watch(balanceTrendProvider(currency, selectedAccountId)).value ??
+        const <double>[];
+    final spots = [
+      for (var i = 0; i < balances.length; i++)
+        FlSpot((i + 1).toDouble(), balances[i]),
+    ];
     final colors = Theme.of(context).colorScheme;
 
     if (spots.isEmpty) {
@@ -224,6 +231,10 @@ class _InsightsContentState extends State<_InsightsContent> {
     double maxY = spots.map((s) => s.y).reduce((a, b) => a > b ? a : b);
     double minY = spots.map((s) => s.y).reduce((a, b) => a < b ? a : b);
     double range = (maxY - minY).abs();
+    if (range == 0) {
+      // A flat month (no changes) still needs a non-empty y-axis.
+      range = maxY.abs() > 0 ? maxY.abs() * 0.1 : 1;
+    }
     maxY = maxY + (range * 0.1);
     minY = minY - (range * 0.1);
 
@@ -288,6 +299,10 @@ class _InsightsContentState extends State<_InsightsContent> {
                     showTitles: true,
                     reservedSize: 52,
                     interval: range > 0 ? range / 4 : 1,
+                    // Only the evenly spaced labels: the padded min/max
+                    // edges otherwise land right next to one and overlap.
+                    minIncluded: false,
+                    maxIncluded: false,
                     getTitlesWidget: (value, meta) => SideTitleWidget(
                       meta: meta,
                       space: 8,
@@ -323,6 +338,10 @@ class _InsightsContentState extends State<_InsightsContent> {
                 LineChartBarData(
                   spots: spots,
                   isCurved: true,
+                  // Balances often step (one big purchase); a plain curve
+                  // overshoots around a step, drawing balances that never
+                  // existed.
+                  preventCurveOverShooting: true,
                   color: colors.primary,
                   barWidth: 3,
                   dotData: const FlDotData(show: false),
@@ -439,33 +458,5 @@ class _InsightsContentState extends State<_InsightsContent> {
         ),
       ],
     );
-  }
-
-  List<FlSpot> _generateDailySpots(
-    List<TransactionEntity> txs,
-    DateTime month,
-  ) {
-    final lastDay = DateTime(month.year, month.month + 1, 0).day;
-    final Map<int, double> dailyChanges = {};
-
-    for (var tx in txs) {
-      final day = tx.date.day;
-      final isExpense =
-          widget.categories.firstWhere((c) => c.id == tx.categoryId).type ==
-          TransactionType.expense;
-      final amount = isExpense ? -tx.amount : tx.amount;
-
-      dailyChanges.update(day, (v) => v + amount, ifAbsent: () => amount);
-    }
-
-    double runningBalance =
-        0; //TODO: Simplified for V0.3.0: Change from start of month
-    List<FlSpot> spots = [];
-
-    for (int i = 1; i <= lastDay; i++) {
-      runningBalance += dailyChanges[i] ?? 0;
-      spots.add(FlSpot(i.toDouble(), runningBalance));
-    }
-    return spots;
   }
 }

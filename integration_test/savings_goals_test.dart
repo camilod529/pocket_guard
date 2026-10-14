@@ -36,12 +36,16 @@ void main() {
 
     app.main();
     await tester.pumpAndSettle(const Duration(seconds: 2));
-    final l10n = AppLocalizations.of(tester.element(find.byType(Scaffold).first))!;
+    final l10n = AppLocalizations.of(
+      tester.element(find.byType(Scaffold).first),
+    )!;
 
     var step = 0;
     Future<void> shot(String name) async {
       await tester.pumpAndSettle();
-      await binding.takeScreenshot('${(++step).toString().padLeft(2, '0')}_$name');
+      await binding.takeScreenshot(
+        '${(++step).toString().padLeft(2, '0')}_$name',
+      );
     }
 
     Future<void> tapText(String text) async {
@@ -56,7 +60,10 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    Future<void> moveMoney({required bool withdraw, required String amount}) async {
+    Future<void> moveMoney({
+      required bool withdraw,
+      required String amount,
+    }) async {
       await tester.tap(
         find.widgetWithText(
           withdraw ? OutlinedButton : FilledButton,
@@ -115,7 +122,9 @@ void main() {
       ).okButtonLabel,
     );
     await shot('goal_form_filled');
-    await tester.tap(find.widgetWithText(ElevatedButton, l10n.createGoalButton));
+    await tester.tap(
+      find.widgetWithText(ElevatedButton, l10n.createGoalButton),
+    );
     await tester.pumpAndSettle();
     expect(find.text('New Car'), findsOneWidget);
     await shot('goals_list_new_goal');
@@ -153,7 +162,9 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text(l10n.goalCurrencyLockedHint), findsOneWidget);
     await shot('edit_form_currency_locked');
-    await tester.tap(find.widgetWithText(ElevatedButton, l10n.updateGoalButton));
+    await tester.tap(
+      find.widgetWithText(ElevatedButton, l10n.updateGoalButton),
+    );
     await tester.pumpAndSettle();
     expect(find.text('Used Car'), findsWidgets);
     await shot('detail_after_rename');

@@ -74,6 +74,15 @@ class SavingsGoalRepositoryImpl extends SavingsGoalRepository {
   }
 
   @override
+  Future<List<GoalContributionEntity>> getContributionsSince(DateTime since) {
+    _logger.debug('Getting goal contributions since: $since');
+    return _run(
+      'get goal contributions since date',
+      () => _dataSource.getContributionsSince(since),
+    );
+  }
+
+  @override
   Future<SavingsGoalEntity?> getGoalById(String id) {
     _logger.debug('Getting savings goal by ID: $id');
     return _run('get savings goal', () => _dataSource.getGoalById(id));

@@ -179,6 +179,25 @@ class SavingsGoalDriftDataSourceImpl extends SavingsGoalDataSource {
   }
 
   @override
+  Future<List<GoalContributionEntity>> getContributionsSince(
+    DateTime since,
+  ) async {
+    try {
+      final rows = await (database.select(
+        database.goalContributions,
+      )..where((tbl) => tbl.date.isBiggerOrEqualValue(since))).get();
+      return rows.map(_toContributionEntity).toList();
+    } catch (e, stackTrace) {
+      throw _exceptionHandler.handleDriftException(
+        e,
+        stackTrace,
+        operation: 'get goal contributions since date',
+        entityName: 'goal contribution',
+      );
+    }
+  }
+
+  @override
   Future<SavingsGoalEntity?> getGoalById(String id) async {
     try {
       final row = await (database.select(
