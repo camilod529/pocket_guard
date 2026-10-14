@@ -46,6 +46,8 @@ class CategoryDriftDataSourceImpl extends CategoryDataSource {
         throw DataNotFoundException(entityName: 'category');
       }
     } catch (e, stackTrace) {
+      if (e is DataException) rethrow;
+
       throw _exceptionHandler.handleDriftException(
         e,
         stackTrace,
@@ -149,6 +151,8 @@ class CategoryDriftDataSourceImpl extends CategoryDataSource {
         throw DataNotFoundException(entityName: 'category');
       }
     } catch (e, stackTrace) {
+      if (e is DataException) rethrow;
+
       throw _exceptionHandler.handleDriftException(
         e,
         stackTrace,

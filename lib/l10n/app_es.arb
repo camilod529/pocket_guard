@@ -51,6 +51,7 @@
     "category_transfer": "Transferencia",
     "categoryDeletedSuccessfully": "Categoría eliminada con éxito",
     "categoryDeleteError": "Error al eliminar la categoría: {error}",
+    "categoryInUseError": "Esta categoría aún la usan transacciones, transacciones recurrentes o presupuestos, así que no se puede eliminar.",
     "categoryLabel": "Categoría",
     "categoryName": "Nombre de Categoría",
     "chooseYourAppColor": "Elige el color de tu aplicación",

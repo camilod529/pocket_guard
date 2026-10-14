@@ -28,6 +28,11 @@ CategoryRepository categoryRepository(Ref ref) {
   return CategoryRepositoryImpl(dataSource: dataSource);
 }
 
+// Same error contract as BudgetsNotifier: mutating methods revert to the
+// previous state and rethrow instead of setting `AsyncValue.error`. Setting
+// the error swallowed failures - deleting a category still used by
+// transactions showed "deleted successfully" - and replaced the whole list
+// with an error screen.
 @riverpod
 class CategoriesNotifier extends _$CategoriesNotifier {
   @override
@@ -36,31 +41,11 @@ class CategoriesNotifier extends _$CategoriesNotifier {
     return await repository.getAllCategories();
   }
 
-  Future<void> createCategory(CategoryEntity category) async {
-    if (!ref.mounted) return;
-    state = const AsyncLoading();
-    try {
-      final repository = ref.read(categoryRepositoryProvider);
-      await repository.createCategory(category);
-      if (!ref.mounted) return;
-      state = AsyncValue.data(await repository.getAllCategories());
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
-  }
+  Future<void> createCategory(CategoryEntity category) =>
+      _mutate((repository) => repository.createCategory(category));
 
-  Future<void> deleteCategory(String id) async {
-    if (!ref.mounted) return;
-    state = const AsyncLoading();
-    try {
-      final repository = ref.read(categoryRepositoryProvider);
-      await repository.deleteCategory(id);
-      if (!ref.mounted) return;
-      state = AsyncValue.data(await repository.getAllCategories());
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
-  }
+  Future<void> deleteCategory(String id) =>
+      _mutate((repository) => repository.deleteCategory(id));
 
   // Filter categories by type
   List<CategoryEntity> getCategoriesByType(TransactionType type) {
@@ -70,29 +55,25 @@ class CategoriesNotifier extends _$CategoriesNotifier {
     return categoriesData.where((cat) => cat.type == type).toList();
   }
 
-  Future<void> refresh() async {
-    if (!ref.mounted) return;
-    state = const AsyncLoading();
-    try {
-      final repository = ref.read(categoryRepositoryProvider);
-      final categories = await repository.getAllCategories();
-      if (!ref.mounted) return;
-      state = AsyncValue.data(categories);
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
-  }
+  Future<void> refresh() => _mutate((_) async {});
 
-  Future<void> updateCategory(String id, CategoryEntity category) async {
+  Future<void> updateCategory(String id, CategoryEntity category) =>
+      _mutate((repository) => repository.updateCategory(id, category));
+
+  Future<void> _mutate(
+    Future<void> Function(CategoryRepository repository) action,
+  ) async {
     if (!ref.mounted) return;
+    final previousState = state;
     state = const AsyncLoading();
     try {
       final repository = ref.read(categoryRepositoryProvider);
-      await repository.updateCategory(id, category);
+      await action(repository);
       if (!ref.mounted) return;
       state = AsyncValue.data(await repository.getAllCategories());
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
+    } catch (e) {
+      if (ref.mounted) state = previousState;
+      rethrow;
     }
   }
 }

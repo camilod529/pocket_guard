@@ -26,10 +26,16 @@ class CategoryRepositoryImpl extends CategoryRepository {
         error: e,
         stackTrace: stackTrace,
       );
+      rethrow;
     } catch (e, stackTrace) {
       _logger.error(
         'Failed to create category: $e',
         error: e,
+        stackTrace: stackTrace,
+      );
+      throw UnknownDataException(
+        message: 'Failed to create category: $e',
+        originalError: e,
         stackTrace: stackTrace,
       );
     }
@@ -47,10 +53,16 @@ class CategoryRepositoryImpl extends CategoryRepository {
         error: e,
         stackTrace: stackTrace,
       );
+      rethrow;
     } catch (e, stackTrace) {
       _logger.error(
         'Failed to delete category: $e',
         error: e,
+        stackTrace: stackTrace,
+      );
+      throw UnknownDataException(
+        message: 'Failed to delete category: $e',
+        originalError: e,
         stackTrace: stackTrace,
       );
     }
@@ -131,10 +143,16 @@ class CategoryRepositoryImpl extends CategoryRepository {
         error: e,
         stackTrace: stackTrace,
       );
+      rethrow;
     } catch (e, stackTrace) {
       _logger.error(
         'Failed to update category: $e',
         error: e,
+        stackTrace: stackTrace,
+      );
+      throw UnknownDataException(
+        message: 'Failed to update category: $e',
+        originalError: e,
         stackTrace: stackTrace,
       );
     }

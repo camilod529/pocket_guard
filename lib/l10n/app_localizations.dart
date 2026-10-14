@@ -349,6 +349,12 @@ abstract class AppLocalizations {
   /// **'Failed to delete category: {error}'**
   String categoryDeleteError(String error);
 
+  /// Shown when deleting a category that other records still reference
+  ///
+  /// In en, this message translates to:
+  /// **'This category is still used by transactions, recurring transactions or budgets, so it can\'t be deleted.'**
+  String get categoryInUseError;
+
   /// Category selector label
   ///
   /// In en, this message translates to:

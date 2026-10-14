@@ -19,6 +19,10 @@ AccountRepository accountRepository(Ref ref) {
   return AccountRepositoryImpl(dataSource: dataSource);
 }
 
+// Same error contract as BudgetsNotifier: mutating methods revert to the
+// previous state and rethrow instead of setting `AsyncValue.error`. Setting
+// the error swallowed failures - the account form reported a failed save as
+// a success - and replaced the whole list with an error screen.
 @riverpod
 class AccountsNotifier extends _$AccountsNotifier {
   @override
@@ -28,53 +32,25 @@ class AccountsNotifier extends _$AccountsNotifier {
     return accounts;
   }
 
-  Future<void> createAccount(AccountEntity account) async {
-    if (!ref.mounted) return;
-    state = const AsyncLoading();
-    try {
-      final repository = ref.read(accountRepositoryProvider);
-      await repository.createAccount(account);
-      if (!ref.mounted) return;
-      state = AsyncValue.data(await repository.getAllAccounts());
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
-  }
+  Future<void> createAccount(AccountEntity account) =>
+      _mutate((repository) => repository.createAccount(account));
 
   Future<void> deleteAccount(String id) async {
-    state = const AsyncLoading();
-    try {
-      if (!ref.mounted) return;
-      final repository = ref.read(accountRepositoryProvider);
-      await repository.deleteAccount(id);
-      if (!ref.mounted) return;
-      state = AsyncValue.data(await repository.getAllAccounts());
-      ref.invalidate(transactionsProvider);
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
+    await _mutate((repository) => repository.deleteAccount(id));
+    // Deleting an account cascades to its transactions.
+    ref.invalidate(transactionsProvider);
   }
 
-  Future<void> refresh() async {
-    if (!ref.mounted) return;
-    state = const AsyncLoading();
-    try {
-      final repository = ref.read(accountRepositoryProvider);
-      final accounts = await repository.getAllAccounts();
-      if (!ref.mounted) return;
-      state = AsyncValue.data(accounts);
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
-  }
+  Future<void> refresh() => _mutate((_) async {});
 
+  /// [newIndex] is the item's final position, already adjusted for its
+  /// removal from [oldIndex] - what ReorderableListView.onReorderItem
+  /// passes (the deprecated onReorder passed the pre-removal index).
   Future<void> reorderAccounts(
     int oldIndex,
     int newIndex,
     List<AccountEntity> categoryAccounts,
   ) async {
-    if (newIndex > oldIndex) newIndex -= 1;
-
     final items = [...categoryAccounts];
     final movedItem = items.removeAt(oldIndex);
     items.insert(newIndex, movedItem);
@@ -85,7 +61,7 @@ class AccountsNotifier extends _$AccountsNotifier {
       await repository.updateAccount(updatedAccount.id, updatedAccount);
     }
 
-    refresh();
+    await refresh();
   }
 
   Future<List<AccountEntity>> searchAccounts(String query) async {
@@ -94,16 +70,23 @@ class AccountsNotifier extends _$AccountsNotifier {
     return repository.searchAccounts(query);
   }
 
-  Future<void> updateAccount(String id, AccountEntity account) async {
+  Future<void> updateAccount(String id, AccountEntity account) =>
+      _mutate((repository) => repository.updateAccount(id, account));
+
+  Future<void> _mutate(
+    Future<void> Function(AccountRepository repository) action,
+  ) async {
+    if (!ref.mounted) return;
+    final previousState = state;
     state = const AsyncLoading();
     try {
-      if (!ref.mounted) return;
       final repository = ref.read(accountRepositoryProvider);
-      await repository.updateAccount(id, account);
+      await action(repository);
       if (!ref.mounted) return;
       state = AsyncValue.data(await repository.getAllAccounts());
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
+    } catch (e) {
+      if (ref.mounted) state = previousState;
+      rethrow;
     }
   }
 }

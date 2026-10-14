@@ -51,6 +51,7 @@
     "category_transfer": "Virement",
     "categoryDeletedSuccessfully": "Catégorie supprimée avec succès",
     "categoryDeleteError": "Erreur lors de la suppression de la catégorie : {error}",
+    "categoryInUseError": "Cette catégorie est encore utilisée par des transactions, des transactions récurrentes ou des budgets, elle ne peut donc pas être supprimée.",
     "categoryLabel": "Catégorie",
     "categoryName": "Nom de la catégorie",
     "chooseYourAppColor": "Choisissez la couleur de votre application",

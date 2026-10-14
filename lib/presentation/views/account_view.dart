@@ -86,7 +86,7 @@ class AccountView extends ConsumerWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: typeAccounts.length,
-                onReorder: (oldIndex, newIndex) {
+                onReorderItem: (oldIndex, newIndex) {
                   ref
                       .read(accountsProvider.notifier)
                       .reorderAccounts(oldIndex, newIndex, typeAccounts);

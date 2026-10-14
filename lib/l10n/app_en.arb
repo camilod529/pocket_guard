@@ -180,6 +180,10 @@
       }
     }
   },
+  "categoryInUseError": "This category is still used by transactions, recurring transactions or budgets, so it can't be deleted.",
+  "@categoryInUseError": {
+    "description": "Shown when deleting a category that other records still reference"
+  },
   "categoryLabel": "Category",
   "@categoryLabel": {
     "description": "Category selector label"

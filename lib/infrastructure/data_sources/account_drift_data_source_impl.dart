@@ -49,6 +49,8 @@ class AccountDriftDataSourceImpl extends AccountDataSource {
         throw DataNotFoundException(entityName: 'account');
       }
     } catch (e, stackTrace) {
+      if (e is DataException) rethrow;
+
       throw _exceptionHandler.handleDriftException(
         e,
         stackTrace,

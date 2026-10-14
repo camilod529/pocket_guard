@@ -139,6 +139,9 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get categoryInUseError => 'Cette catégorie est encore utilisée par des transactions, des transactions récurrentes ou des budgets, elle ne peut donc pas être supprimée.';
+
+  @override
   String get categoryLabel => 'Catégorie';
 
   @override
