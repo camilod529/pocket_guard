@@ -71,4 +71,4 @@ All user-facing strings go through `AppLocalizations` (`lib/l10n/app_localizatio
 
 - `.github/workflows/pr_checks.yml` runs `flutter analyze --no-fatal-infos` and `flutter test` on every pull request into `main`.
 - `.github/workflows/play_store_draft.yml` runs the same two checks, then builds a release App Bundle and uploads it as a Play Store draft, on every push to `main`. Each upload needs a higher build number (`version: x.y.z+N` in `pubspec.yaml`) than the last, or Play rejects it.
-- Both use Flutter `3.x` stable, so CI picks up new Flutter releases on its own. Warnings fail the analyze step; infos don't. The `integration_test/` simulator tests are not run by CI.
+- Both pin Flutter to an exact version (currently `3.47.7`); upgrading Flutter means bumping it in both workflows, matching what you run locally. Warnings fail the analyze step; infos don't. The `integration_test/` simulator tests are not run by CI.

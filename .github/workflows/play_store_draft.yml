@@ -22,7 +22,11 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.x" # Or your specific version
+          # Pinned, not "3.x": a floating version let a Flutter release
+          # change analyzer behavior under CI with no code change (3.47's
+          # legacy-plugin warning). Bump deliberately, in both workflows,
+          # to whatever `flutter --version` reports locally.
+          flutter-version: "3.47.7"
           channel: "stable"
           cache: true
 
