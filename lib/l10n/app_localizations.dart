@@ -223,6 +223,180 @@ abstract class AppLocalizations {
   /// **'Archived'**
   String get archivedGoalsSection;
 
+  /// Backup: backupAndRestore
+  ///
+  /// In en, this message translates to:
+  /// **'Backup & Restore'**
+  String get backupAndRestore;
+
+  /// Backup: backupAndRestoreSubtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Save your data to a file or bring it back'**
+  String get backupAndRestoreSubtitle;
+
+  /// Backup: backupCreatedOn
+  ///
+  /// In en, this message translates to:
+  /// **'Created {date}'**
+  String backupCreatedOn(String date);
+
+  /// Backup: backupErrorCorrupted
+  ///
+  /// In en, this message translates to:
+  /// **'This backup is damaged and can\'t be restored.'**
+  String get backupErrorCorrupted;
+
+  /// Backup: backupErrorNewerFormat
+  ///
+  /// In en, this message translates to:
+  /// **'This backup was made by a newer version of PocketGuard. Update the app to restore it.'**
+  String get backupErrorNewerFormat;
+
+  /// Backup: backupErrorNotABackup
+  ///
+  /// In en, this message translates to:
+  /// **'This file isn\'t a PocketGuard backup.'**
+  String get backupErrorNotABackup;
+
+  /// Backup: backupErrorWrongPassword
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong password, or the file was changed.'**
+  String get backupErrorWrongPassword;
+
+  /// Backup: backupFailed
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t create the backup'**
+  String get backupFailed;
+
+  /// Backup: backupItemCount
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Empty} =1{1 item} other{{count} items}}'**
+  String backupItemCount(int count);
+
+  /// Backup: backupPasswordConfirmLabel
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat password'**
+  String get backupPasswordConfirmLabel;
+
+  /// Backup: backupPasswordHelper
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypts the file so only you can open it'**
+  String get backupPasswordHelper;
+
+  /// Backup: backupPasswordLabel
+  ///
+  /// In en, this message translates to:
+  /// **'Password (optional)'**
+  String get backupPasswordLabel;
+
+  /// Backup: backupPasswordMismatch
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords don\'t match'**
+  String get backupPasswordMismatch;
+
+  /// Backup: backupPasswordPrompt
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the password this backup was created with.'**
+  String get backupPasswordPrompt;
+
+  /// Backup: backupPasswordPromptTitle
+  ///
+  /// In en, this message translates to:
+  /// **'Protected Backup'**
+  String get backupPasswordPromptTitle;
+
+  /// Backup: backupPasswordWarning
+  ///
+  /// In en, this message translates to:
+  /// **'If you forget this password, the backup can\'t be restored.'**
+  String get backupPasswordWarning;
+
+  /// Backup: backupSectionBudgets
+  ///
+  /// In en, this message translates to:
+  /// **'Budgets'**
+  String get backupSectionBudgets;
+
+  /// Backup: backupSectionBudgetsDescription
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly limits per category'**
+  String get backupSectionBudgetsDescription;
+
+  /// Backup: backupSectionCategories
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get backupSectionCategories;
+
+  /// Backup: backupSectionCategoriesDescription
+  ///
+  /// In en, this message translates to:
+  /// **'Your income and expense categories'**
+  String get backupSectionCategoriesDescription;
+
+  /// Backup: backupSectionMoney
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts & Money'**
+  String get backupSectionMoney;
+
+  /// Backup: backupSectionMoneyDescription
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts, transactions, recurring transactions and savings goals'**
+  String get backupSectionMoneyDescription;
+
+  /// Backup: backupSectionRequired
+  ///
+  /// In en, this message translates to:
+  /// **'Needed by the other sections you chose'**
+  String get backupSectionRequired;
+
+  /// Backup: backupSectionSettings
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get backupSectionSettings;
+
+  /// Backup: backupSectionSettingsDescription
+  ///
+  /// In en, this message translates to:
+  /// **'Theme and language'**
+  String get backupSectionSettingsDescription;
+
+  /// Backup: backupSectionWishlist
+  ///
+  /// In en, this message translates to:
+  /// **'Wishlist'**
+  String get backupSectionWishlist;
+
+  /// Backup: backupSectionWishlistDescription
+  ///
+  /// In en, this message translates to:
+  /// **'Things you want to buy'**
+  String get backupSectionWishlistDescription;
+
+  /// Backup: backupUnlockButton
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock'**
+  String get backupUnlockButton;
+
+  /// Backup: backupWorking
+  ///
+  /// In en, this message translates to:
+  /// **'Working…'**
+  String get backupWorking;
+
   /// Title for the balance trend line chart
   ///
   /// In en, this message translates to:
@@ -367,6 +541,12 @@ abstract class AppLocalizations {
   /// **'Category Name'**
   String get categoryName;
 
+  /// Backup: chooseBackupFileButton
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Backup File'**
+  String get chooseBackupFileButton;
+
   /// Subtitle for the theme settings section
   ///
   /// In en, this message translates to:
@@ -414,6 +594,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create Account'**
   String get createAccount;
+
+  /// Backup: createBackupButton
+  ///
+  /// In en, this message translates to:
+  /// **'Create Backup'**
+  String get createBackupButton;
+
+  /// Backup: createBackupDescription
+  ///
+  /// In en, this message translates to:
+  /// **'Choose what to include. You can then save the file to Google Drive, Files or anywhere else.'**
+  String get createBackupDescription;
+
+  /// Backup: createBackupTitle
+  ///
+  /// In en, this message translates to:
+  /// **'Create a Backup'**
+  String get createBackupTitle;
 
   /// Button to create a new budget
   ///
@@ -1200,6 +1398,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remaining'**
   String get remainingLabel;
+
+  /// Backup: restoreBackupDescription
+  ///
+  /// In en, this message translates to:
+  /// **'Open a .pgbackup file and choose what to bring back.'**
+  String get restoreBackupDescription;
+
+  /// Backup: restoreBackupTitle
+  ///
+  /// In en, this message translates to:
+  /// **'Restore a Backup'**
+  String get restoreBackupTitle;
+
+  /// Backup: restoreButton
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get restoreButton;
+
+  /// Backup: restoreChooseSections
+  ///
+  /// In en, this message translates to:
+  /// **'What do you want to restore?'**
+  String get restoreChooseSections;
+
+  /// Backup: restoreConfirmMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Your current data in the chosen sections will be replaced by the backup. This can\'t be undone.'**
+  String get restoreConfirmMessage;
+
+  /// Backup: restoreConfirmTitle
+  ///
+  /// In en, this message translates to:
+  /// **'Replace Your Data?'**
+  String get restoreConfirmTitle;
+
+  /// Backup: restoreFailed
+  ///
+  /// In en, this message translates to:
+  /// **'Restore failed. Nothing was changed.'**
+  String get restoreFailed;
+
+  /// Backup: restoreReplaceNote
+  ///
+  /// In en, this message translates to:
+  /// **'The sections you choose replace what\'s on this phone now. Categories are added, never removed.'**
+  String get restoreReplaceNote;
+
+  /// Backup: restoreSuccess
+  ///
+  /// In en, this message translates to:
+  /// **'Backup restored'**
+  String get restoreSuccess;
 
   /// Validation error when a transfer's from and to accounts are the same
   ///

@@ -24,6 +24,21 @@ enum BackupSection {
     categories || settings => const {},
   };
 
+  /// The tables this section carries, by their name in the backup file.
+  List<String> get tables => switch (this) {
+    categories => const ['categories'],
+    money => const [
+      'accounts',
+      'savingsGoals',
+      'goalContributions',
+      'transactions',
+      'recurringTransactions',
+    ],
+    budgets => const ['budgets'],
+    wishlist => const ['wishlistItems'],
+    settings => const [],
+  };
+
   /// [sections] plus everything they require.
   static Set<BackupSection> withRequirements(Set<BackupSection> sections) => {
     ...sections,

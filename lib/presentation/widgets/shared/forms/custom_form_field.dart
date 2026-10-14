@@ -20,6 +20,7 @@ class CustomFormField extends StatefulWidget {
   final int maxLines;
   final int? minLines;
   final bool readOnly;
+  final bool obscureText;
   final BorderRadius borderRadius;
   final VoidCallback? onTap;
 
@@ -36,6 +37,7 @@ class CustomFormField extends StatefulWidget {
     super.key,
     required this.label,
     this.readOnly = false,
+    this.obscureText = false,
     this.inputFormatters,
     this.hintText,
     this.controller,
@@ -79,6 +81,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
       controller: widget.selectAllOnFocus ? _controller : widget.controller,
       focusNode: widget.selectAllOnFocus ? _focusNode : null,
       readOnly: widget.readOnly,
+      obscureText: widget.obscureText,
       inputFormatters: widget.inputFormatters,
       validator: widget.validator,
       keyboardType: widget.keyboardType,

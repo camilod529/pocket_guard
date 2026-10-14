@@ -74,6 +74,104 @@ class AppLocalizationsFr extends AppLocalizations {
   String get archivedGoalsSection => 'Archivés';
 
   @override
+  String get backupAndRestore => 'Sauvegarde et Restauration';
+
+  @override
+  String get backupAndRestoreSubtitle => 'Enregistrez vos données dans un fichier ou récupérez-les';
+
+  @override
+  String backupCreatedOn(String date) {
+    return 'Créée le $date';
+  }
+
+  @override
+  String get backupErrorCorrupted => 'Cette sauvegarde est endommagée et ne peut pas être restaurée.';
+
+  @override
+  String get backupErrorNewerFormat => 'Cette sauvegarde a été créée par une version plus récente de PocketGuard. Mettez l\'application à jour pour la restaurer.';
+
+  @override
+  String get backupErrorNotABackup => 'Ce fichier n\'est pas une sauvegarde PocketGuard.';
+
+  @override
+  String get backupErrorWrongPassword => 'Mot de passe incorrect, ou le fichier a été modifié.';
+
+  @override
+  String get backupFailed => 'Impossible de créer la sauvegarde';
+
+  @override
+  String backupItemCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count éléments',
+      one: '1 élément',
+      zero: 'Vide',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get backupPasswordConfirmLabel => 'Répétez le mot de passe';
+
+  @override
+  String get backupPasswordHelper => 'Chiffre le fichier pour que vous seul puissiez l\'ouvrir';
+
+  @override
+  String get backupPasswordLabel => 'Mot de passe (facultatif)';
+
+  @override
+  String get backupPasswordMismatch => 'Les mots de passe ne correspondent pas';
+
+  @override
+  String get backupPasswordPrompt => 'Saisissez le mot de passe utilisé pour créer cette sauvegarde.';
+
+  @override
+  String get backupPasswordPromptTitle => 'Sauvegarde Protégée';
+
+  @override
+  String get backupPasswordWarning => 'Si vous oubliez ce mot de passe, la sauvegarde ne pourra pas être restaurée.';
+
+  @override
+  String get backupSectionBudgets => 'Budgets';
+
+  @override
+  String get backupSectionBudgetsDescription => 'Limites mensuelles par catégorie';
+
+  @override
+  String get backupSectionCategories => 'Catégories';
+
+  @override
+  String get backupSectionCategoriesDescription => 'Vos catégories de revenus et de dépenses';
+
+  @override
+  String get backupSectionMoney => 'Comptes et Argent';
+
+  @override
+  String get backupSectionMoneyDescription => 'Comptes, transactions, transactions récurrentes et objectifs d\'épargne';
+
+  @override
+  String get backupSectionRequired => 'Requise par les autres sections choisies';
+
+  @override
+  String get backupSectionSettings => 'Paramètres';
+
+  @override
+  String get backupSectionSettingsDescription => 'Thème et langue';
+
+  @override
+  String get backupSectionWishlist => 'Liste d\'Envies';
+
+  @override
+  String get backupSectionWishlistDescription => 'Ce que vous voulez acheter';
+
+  @override
+  String get backupUnlockButton => 'Déverrouiller';
+
+  @override
+  String get backupWorking => 'En cours…';
+
+  @override
   String get balanceTrend => 'Tendance du Solde';
 
   @override
@@ -148,6 +246,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get categoryName => 'Nom de la catégorie';
 
   @override
+  String get chooseBackupFileButton => 'Choisir un Fichier';
+
+  @override
   String get chooseYourAppColor => 'Choisissez la couleur de votre application';
 
   @override
@@ -170,6 +271,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get createAccount => 'Créer un compte';
+
+  @override
+  String get createBackupButton => 'Créer la Sauvegarde';
+
+  @override
+  String get createBackupDescription => 'Choisissez quoi inclure. Vous pourrez ensuite enregistrer le fichier sur Google Drive, Fichiers ou ailleurs.';
+
+  @override
+  String get createBackupTitle => 'Créer une Sauvegarde';
 
   @override
   String get createBudgetButton => 'Créer un Budget';
@@ -587,6 +697,33 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get remainingLabel => 'Restant';
+
+  @override
+  String get restoreBackupDescription => 'Ouvrez un fichier .pgbackup et choisissez ce que vous voulez récupérer.';
+
+  @override
+  String get restoreBackupTitle => 'Restaurer une Sauvegarde';
+
+  @override
+  String get restoreButton => 'Restaurer';
+
+  @override
+  String get restoreChooseSections => 'Que voulez-vous restaurer ?';
+
+  @override
+  String get restoreConfirmMessage => 'Vos données actuelles dans les sections choisies seront remplacées par la sauvegarde. Action irréversible.';
+
+  @override
+  String get restoreConfirmTitle => 'Remplacer vos Données ?';
+
+  @override
+  String get restoreFailed => 'La restauration a échoué. Rien n\'a été modifié.';
+
+  @override
+  String get restoreReplaceNote => 'Les sections choisies remplacent ce qui se trouve actuellement sur ce téléphone. Les catégories sont ajoutées, jamais supprimées.';
+
+  @override
+  String get restoreSuccess => 'Sauvegarde restaurée';
 
   @override
   String get sameTransferAccountError => 'Les comptes source et destination doivent être différents';

@@ -90,6 +90,133 @@
   "@archivedGoalsSection": {
     "description": "Savings goals: archivedGoalsSection"
   },
+  "backupAndRestore": "Backup & Restore",
+  "@backupAndRestore": {
+    "description": "Backup: backupAndRestore"
+  },
+  "backupAndRestoreSubtitle": "Save your data to a file or bring it back",
+  "@backupAndRestoreSubtitle": {
+    "description": "Backup: backupAndRestoreSubtitle"
+  },
+  "backupCreatedOn": "Created {date}",
+  "@backupCreatedOn": {
+    "description": "Backup: backupCreatedOn",
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "Oct 14, 2026"
+      }
+    }
+  },
+  "backupErrorCorrupted": "This backup is damaged and can't be restored.",
+  "@backupErrorCorrupted": {
+    "description": "Backup: backupErrorCorrupted"
+  },
+  "backupErrorNewerFormat": "This backup was made by a newer version of PocketGuard. Update the app to restore it.",
+  "@backupErrorNewerFormat": {
+    "description": "Backup: backupErrorNewerFormat"
+  },
+  "backupErrorNotABackup": "This file isn't a PocketGuard backup.",
+  "@backupErrorNotABackup": {
+    "description": "Backup: backupErrorNotABackup"
+  },
+  "backupErrorWrongPassword": "Wrong password, or the file was changed.",
+  "@backupErrorWrongPassword": {
+    "description": "Backup: backupErrorWrongPassword"
+  },
+  "backupFailed": "Couldn't create the backup",
+  "@backupFailed": {
+    "description": "Backup: backupFailed"
+  },
+  "backupItemCount": "{count, plural, =0{Empty} =1{1 item} other{{count} items}}",
+  "@backupItemCount": {
+    "description": "Backup: backupItemCount",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "backupPasswordConfirmLabel": "Repeat password",
+  "@backupPasswordConfirmLabel": {
+    "description": "Backup: backupPasswordConfirmLabel"
+  },
+  "backupPasswordHelper": "Encrypts the file so only you can open it",
+  "@backupPasswordHelper": {
+    "description": "Backup: backupPasswordHelper"
+  },
+  "backupPasswordLabel": "Password (optional)",
+  "@backupPasswordLabel": {
+    "description": "Backup: backupPasswordLabel"
+  },
+  "backupPasswordMismatch": "Passwords don't match",
+  "@backupPasswordMismatch": {
+    "description": "Backup: backupPasswordMismatch"
+  },
+  "backupPasswordPrompt": "Enter the password this backup was created with.",
+  "@backupPasswordPrompt": {
+    "description": "Backup: backupPasswordPrompt"
+  },
+  "backupPasswordPromptTitle": "Protected Backup",
+  "@backupPasswordPromptTitle": {
+    "description": "Backup: backupPasswordPromptTitle"
+  },
+  "backupPasswordWarning": "If you forget this password, the backup can't be restored.",
+  "@backupPasswordWarning": {
+    "description": "Backup: backupPasswordWarning"
+  },
+  "backupSectionBudgets": "Budgets",
+  "@backupSectionBudgets": {
+    "description": "Backup: backupSectionBudgets"
+  },
+  "backupSectionBudgetsDescription": "Monthly limits per category",
+  "@backupSectionBudgetsDescription": {
+    "description": "Backup: backupSectionBudgetsDescription"
+  },
+  "backupSectionCategories": "Categories",
+  "@backupSectionCategories": {
+    "description": "Backup: backupSectionCategories"
+  },
+  "backupSectionCategoriesDescription": "Your income and expense categories",
+  "@backupSectionCategoriesDescription": {
+    "description": "Backup: backupSectionCategoriesDescription"
+  },
+  "backupSectionMoney": "Accounts & Money",
+  "@backupSectionMoney": {
+    "description": "Backup: backupSectionMoney"
+  },
+  "backupSectionMoneyDescription": "Accounts, transactions, recurring transactions and savings goals",
+  "@backupSectionMoneyDescription": {
+    "description": "Backup: backupSectionMoneyDescription"
+  },
+  "backupSectionRequired": "Needed by the other sections you chose",
+  "@backupSectionRequired": {
+    "description": "Backup: backupSectionRequired"
+  },
+  "backupSectionSettings": "Settings",
+  "@backupSectionSettings": {
+    "description": "Backup: backupSectionSettings"
+  },
+  "backupSectionSettingsDescription": "Theme and language",
+  "@backupSectionSettingsDescription": {
+    "description": "Backup: backupSectionSettingsDescription"
+  },
+  "backupSectionWishlist": "Wishlist",
+  "@backupSectionWishlist": {
+    "description": "Backup: backupSectionWishlist"
+  },
+  "backupSectionWishlistDescription": "Things you want to buy",
+  "@backupSectionWishlistDescription": {
+    "description": "Backup: backupSectionWishlistDescription"
+  },
+  "backupUnlockButton": "Unlock",
+  "@backupUnlockButton": {
+    "description": "Backup: backupUnlockButton"
+  },
+  "backupWorking": "Working…",
+  "@backupWorking": {
+    "description": "Backup: backupWorking"
+  },
   "balanceTrend": "Balance Trend",
   "@balanceTrend": {
     "description": "Title for the balance trend line chart"
@@ -192,6 +319,10 @@
   "@categoryName": {
     "description": "Label for category name input"
   },
+  "chooseBackupFileButton": "Choose Backup File",
+  "@chooseBackupFileButton": {
+    "description": "Backup: chooseBackupFileButton"
+  },
   "chooseYourAppColor": "Choose your app color",
   "@chooseYourAppColor": {
     "description": "Subtitle for the theme settings section"
@@ -223,6 +354,18 @@
   "createAccount": "Create Account",
   "@createAccount": {
     "description": "Button to create a new account"
+  },
+  "createBackupButton": "Create Backup",
+  "@createBackupButton": {
+    "description": "Backup: createBackupButton"
+  },
+  "createBackupDescription": "Choose what to include. You can then save the file to Google Drive, Files or anywhere else.",
+  "@createBackupDescription": {
+    "description": "Backup: createBackupDescription"
+  },
+  "createBackupTitle": "Create a Backup",
+  "@createBackupTitle": {
+    "description": "Backup: createBackupTitle"
   },
   "createBudgetButton": "Create Budget",
   "@createBudgetButton": {
@@ -827,6 +970,42 @@
   "remainingLabel": "Remaining",
   "@remainingLabel": {
     "description": "Label for a budget's remaining (unspent) amount this month"
+  },
+  "restoreBackupDescription": "Open a .pgbackup file and choose what to bring back.",
+  "@restoreBackupDescription": {
+    "description": "Backup: restoreBackupDescription"
+  },
+  "restoreBackupTitle": "Restore a Backup",
+  "@restoreBackupTitle": {
+    "description": "Backup: restoreBackupTitle"
+  },
+  "restoreButton": "Restore",
+  "@restoreButton": {
+    "description": "Backup: restoreButton"
+  },
+  "restoreChooseSections": "What do you want to restore?",
+  "@restoreChooseSections": {
+    "description": "Backup: restoreChooseSections"
+  },
+  "restoreConfirmMessage": "Your current data in the chosen sections will be replaced by the backup. This can't be undone.",
+  "@restoreConfirmMessage": {
+    "description": "Backup: restoreConfirmMessage"
+  },
+  "restoreConfirmTitle": "Replace Your Data?",
+  "@restoreConfirmTitle": {
+    "description": "Backup: restoreConfirmTitle"
+  },
+  "restoreFailed": "Restore failed. Nothing was changed.",
+  "@restoreFailed": {
+    "description": "Backup: restoreFailed"
+  },
+  "restoreReplaceNote": "The sections you choose replace what's on this phone now. Categories are added, never removed.",
+  "@restoreReplaceNote": {
+    "description": "Backup: restoreReplaceNote"
+  },
+  "restoreSuccess": "Backup restored",
+  "@restoreSuccess": {
+    "description": "Backup: restoreSuccess"
   },
   "sameTransferAccountError": "From and To accounts must be different",
   "@sameTransferAccountError": {

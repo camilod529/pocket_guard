@@ -27,7 +27,7 @@ flutter test                    # unit + widget tests under test/ (CI runs this)
 # End-to-end runs of the real app on a simulator (they write to the app's
 # real database), with a screenshot per step in build/goal_screenshots/.
 # Not run by CI. iOS needs CocoaPods. Targets: savings_goals_test.dart,
-# wishlist_test.dart.
+# wishlist_test.dart, backup_test.dart.
 flutter drive --driver=test_driver/integration_test.dart \
   --target=integration_test/<name>_test.dart -d <device-id>
 ```

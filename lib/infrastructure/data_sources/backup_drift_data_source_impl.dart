@@ -11,21 +11,6 @@ class BackupDriftDataSourceImpl extends BackupDataSource {
   BackupDriftDataSourceImpl({AppDatabase? database})
     : database = database ?? db.database;
 
-  /// Which tables each section carries, by their name in the backup file.
-  static const tablesBySection = <BackupSection, List<String>>{
-    BackupSection.categories: ['categories'],
-    BackupSection.money: [
-      'accounts',
-      'savingsGoals',
-      'goalContributions',
-      'transactions',
-      'recurringTransactions',
-    ],
-    BackupSection.budgets: ['budgets'],
-    BackupSection.wishlist: ['wishlistItems'],
-    BackupSection.settings: [],
-  };
-
   final AppDatabase database;
   final DriftExceptionHandler _exceptionHandler = DriftExceptionHandler();
 

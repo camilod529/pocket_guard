@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pocket_guard/config/router/routes.dart';
+import 'package:pocket_guard/domain/entities/backup.dart';
 import 'package:pocket_guard/presentation/screens/account_form_screen.dart';
+import 'package:pocket_guard/presentation/screens/backup_restore_screen.dart';
+import 'package:pocket_guard/presentation/screens/backup_screen.dart';
 import 'package:pocket_guard/presentation/screens/budget_form_screen.dart';
 import 'package:pocket_guard/presentation/screens/goal_detail_screen.dart';
 import 'package:pocket_guard/presentation/screens/savings_goal_form_screen.dart';
@@ -174,6 +177,18 @@ final appRouter = GoRouter(
         final id = state.pathParameters['id'];
         return WishlistFormScreen(itemId: id ?? GlobalConstants.createId);
       },
+    ),
+    GoRoute(
+      path: Routes.backup,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const BackupScreen(),
+    ),
+    GoRoute(
+      path: Routes.backupRestore,
+      parentNavigatorKey: _rootNavigatorKey,
+      // Only reachable from BackupScreen, which passes the decoded backup.
+      builder: (context, state) =>
+          BackupRestoreScreen(contents: state.extra! as BackupContents),
     ),
     GoRoute(
       path: Routes.themeSettings,

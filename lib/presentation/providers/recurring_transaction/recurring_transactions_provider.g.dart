@@ -140,7 +140,7 @@ final class RecurringTransactionsNotifierProvider
 }
 
 String _$recurringTransactionsNotifierHash() =>
-    r'5b4a19cabfdc7975ef253cfc1378ca82127b80c6';
+    r'c384cfaa551a6b9b305cfef89c2050daf21f433a';
 
 abstract class _$RecurringTransactionsNotifier
     extends $AsyncNotifier<List<RecurringTransactionEntity>> {

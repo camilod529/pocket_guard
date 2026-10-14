@@ -211,7 +211,7 @@ final class CategoriesNotifierProvider
 }
 
 String _$categoriesNotifierHash() =>
-    r'073638789e50b7fca93773cbc8218fce197ad4ad';
+    r'70be1c20847019d58e35dc8309fcbd0a8f0c579f';
 
 abstract class _$CategoriesNotifier
     extends $AsyncNotifier<List<CategoryEntity>> {

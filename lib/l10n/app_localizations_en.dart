@@ -74,6 +74,104 @@ class AppLocalizationsEn extends AppLocalizations {
   String get archivedGoalsSection => 'Archived';
 
   @override
+  String get backupAndRestore => 'Backup & Restore';
+
+  @override
+  String get backupAndRestoreSubtitle => 'Save your data to a file or bring it back';
+
+  @override
+  String backupCreatedOn(String date) {
+    return 'Created $date';
+  }
+
+  @override
+  String get backupErrorCorrupted => 'This backup is damaged and can\'t be restored.';
+
+  @override
+  String get backupErrorNewerFormat => 'This backup was made by a newer version of PocketGuard. Update the app to restore it.';
+
+  @override
+  String get backupErrorNotABackup => 'This file isn\'t a PocketGuard backup.';
+
+  @override
+  String get backupErrorWrongPassword => 'Wrong password, or the file was changed.';
+
+  @override
+  String get backupFailed => 'Couldn\'t create the backup';
+
+  @override
+  String backupItemCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items',
+      one: '1 item',
+      zero: 'Empty',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get backupPasswordConfirmLabel => 'Repeat password';
+
+  @override
+  String get backupPasswordHelper => 'Encrypts the file so only you can open it';
+
+  @override
+  String get backupPasswordLabel => 'Password (optional)';
+
+  @override
+  String get backupPasswordMismatch => 'Passwords don\'t match';
+
+  @override
+  String get backupPasswordPrompt => 'Enter the password this backup was created with.';
+
+  @override
+  String get backupPasswordPromptTitle => 'Protected Backup';
+
+  @override
+  String get backupPasswordWarning => 'If you forget this password, the backup can\'t be restored.';
+
+  @override
+  String get backupSectionBudgets => 'Budgets';
+
+  @override
+  String get backupSectionBudgetsDescription => 'Monthly limits per category';
+
+  @override
+  String get backupSectionCategories => 'Categories';
+
+  @override
+  String get backupSectionCategoriesDescription => 'Your income and expense categories';
+
+  @override
+  String get backupSectionMoney => 'Accounts & Money';
+
+  @override
+  String get backupSectionMoneyDescription => 'Accounts, transactions, recurring transactions and savings goals';
+
+  @override
+  String get backupSectionRequired => 'Needed by the other sections you chose';
+
+  @override
+  String get backupSectionSettings => 'Settings';
+
+  @override
+  String get backupSectionSettingsDescription => 'Theme and language';
+
+  @override
+  String get backupSectionWishlist => 'Wishlist';
+
+  @override
+  String get backupSectionWishlistDescription => 'Things you want to buy';
+
+  @override
+  String get backupUnlockButton => 'Unlock';
+
+  @override
+  String get backupWorking => 'Working…';
+
+  @override
   String get balanceTrend => 'Balance Trend';
 
   @override
@@ -148,6 +246,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryName => 'Category Name';
 
   @override
+  String get chooseBackupFileButton => 'Choose Backup File';
+
+  @override
   String get chooseYourAppColor => 'Choose your app color';
 
   @override
@@ -170,6 +271,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createAccount => 'Create Account';
+
+  @override
+  String get createBackupButton => 'Create Backup';
+
+  @override
+  String get createBackupDescription => 'Choose what to include. You can then save the file to Google Drive, Files or anywhere else.';
+
+  @override
+  String get createBackupTitle => 'Create a Backup';
 
   @override
   String get createBudgetButton => 'Create Budget';
@@ -587,6 +697,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get remainingLabel => 'Remaining';
+
+  @override
+  String get restoreBackupDescription => 'Open a .pgbackup file and choose what to bring back.';
+
+  @override
+  String get restoreBackupTitle => 'Restore a Backup';
+
+  @override
+  String get restoreButton => 'Restore';
+
+  @override
+  String get restoreChooseSections => 'What do you want to restore?';
+
+  @override
+  String get restoreConfirmMessage => 'Your current data in the chosen sections will be replaced by the backup. This can\'t be undone.';
+
+  @override
+  String get restoreConfirmTitle => 'Replace Your Data?';
+
+  @override
+  String get restoreFailed => 'Restore failed. Nothing was changed.';
+
+  @override
+  String get restoreReplaceNote => 'The sections you choose replace what\'s on this phone now. Categories are added, never removed.';
+
+  @override
+  String get restoreSuccess => 'Backup restored';
 
   @override
   String get sameTransferAccountError => 'From and To accounts must be different';

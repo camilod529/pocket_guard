@@ -21,6 +21,8 @@ abstract class Routes {
   static const String savingsGoalForm = '/goal/form/:id';
   static const String wishlist = '/wishlist';
   static const String wishlistForm = '/wishlist/form/:id';
+  static const String backup = '/backup';
+  static const String backupRestore = '/backup/restore';
 
   // Settings
   static const String themeSettings = '/settings/theme';
